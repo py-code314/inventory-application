@@ -1,9 +1,10 @@
 const express = require('express')
 const authorsRouter = express.Router()
+const {authors_list_get} = require('../controllers/authorsController')
 
 
 // Show books
-authorsRouter.get('/', (req, res) => res.send('List all authors'))
+authorsRouter.get('/', authors_list_get)
 
 // Search for a book
 authorsRouter.get('/search', (req, res) => res.send('Show searched author'))
