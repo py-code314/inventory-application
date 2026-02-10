@@ -8,9 +8,9 @@ const path = require('node:path')
 // Import routers
 const indexRouter = require('./routes/indexRoutes')
 const genresRouter = require('./routes/genresRoutes')
-const addGenreRouter = require('./routes/addGenreRoutes')
-
-// const booksRouter = require('./routes/booksRoutes')
+// const addGenreRouter = require('./routes/addGenreRoutes')
+const booksRouter = require('./routes/booksRoutes')
+// const addBookRouter = require('./routes/addBookRoutes')
 
 
 
@@ -41,10 +41,9 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/', indexRouter)
 app.use('/genres', genresRouter)
-app.use('/new-genre', addGenreRouter)
-
-// app.use('/books', booksRouter)
-
+// app.use('/new-genre', addGenreRouter)
+app.use('/books', booksRouter)
+// app.use('/new-book', addBookRouter)
 
 
 
