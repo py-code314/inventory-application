@@ -1,27 +1,30 @@
 const express = require('express')
 const authorsRouter = express.Router()
-const {authors_list_get} = require('../controllers/authorsController')
+const {
+  authors_list_get,
+  author_search_get,
+} = require('../controllers/authorsController')
 
 
-// Show books
+// Show authors
 authorsRouter.get('/', authors_list_get)
 
-// Search for a book
-authorsRouter.get('/search', (req, res) => res.send('Show searched author'))
+// Search for a author
+authorsRouter.get('/search', author_search_get)
 
-// Add a new book
+// Add a new author
 authorsRouter.get('/new', (req, res) => res.send('Show form to add an author'))
 authorsRouter.post('/new', (req, res) => res.redirect('/authors'))
 
-// Show book
+// Show author
 authorsRouter.get('/:id', (req, res) => res.send('Single author'))
 
 
-// Update a book
+// Update a author
 authorsRouter.get('/:id/update', (req, res) => res.send('Show pre-populated author form'))
 authorsRouter.post('/:id/update', (req, res) => res.redirect('/authors'))
 
-// Delete a book
+// Delete a author
 authorsRouter.post('/:id/delete', (req, res) => res.redirect('/authors'))
 
 
