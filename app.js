@@ -25,7 +25,9 @@ const assetsPath = path.join(__dirname, 'public')
 app.use(express.static(assetsPath))
 
 // Middleware to process request body
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
 
 // Routes
 app.use('/', indexRouter)

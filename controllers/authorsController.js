@@ -5,21 +5,40 @@ const {
   validationResult,
   matchedData,
 } = require('express-validator')
-const { getAllAuthors, getAuthors } = require('../db/queries')
+const { getAllAuthors, getAuthors, addAuthor } = require('../db/queries')
 
 // Error messages
 const alphaErr = 'must only contain letters.'
 const emptyErr = 'must not be empty.'
+const dateErr = 'must be in a valid format.'
 
 // Validate author search query
 const validateSearch = [
-  query('authorName')
+  query('name')
     .trim()
     .notEmpty()
     .withMessage(`Name ${emptyErr}`)
     .bail()
-    .isAlpha()
+    .isAlpha('en-US', { ignore: ' -' })
     .withMessage(`Name ${alphaErr}`),
+]
+
+// Validate author data
+const validateAuthor = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage(`Name ${emptyErr}`)
+    .bail()
+    .isAlpha('en-US', {ignore: " -"})
+    .withMessage(`Name ${alphaErr}`),
+  body('date')
+    .trim()
+    .notEmpty()
+    .withMessage(`Name ${emptyErr}`)
+    .bail()
+    .isDate()
+    .withMessage(`Date ${dateErr}`),
 ]
 
 // Get all authors
@@ -45,8 +64,8 @@ const author_search_get = [
       return
     }
 
-    const { authorName } = matchedData(req)
-    const filteredAuthors = await getAuthors(authorName)
+    const { name } = matchedData(req)
+    const filteredAuthors = await getAuthors(name)
 
 
     if (filteredAuthors.length > 0) {
@@ -57,7 +76,37 @@ const author_search_get = [
   },
 ]
 
+// Show new author form
+async function author_create_get(req, res) {
+  res.send('Show new author form')
+}
+
+// Validate and add new author
+const author_create_post = [
+  validateAuthor,
+  async (req, res) => {
+    console.log('request:', req)
+    // Validate request
+    const errors = validationResult(req)
+    console.log('errors:', errors)
+   
+
+    // Show errors if validation fails
+    if (!errors.isEmpty()) {
+      res.send('Error message')
+      return
+    }
+
+    const { name, date } = matchedData(req)
+    // console.log('message in controller:', message)
+    await addAuthor(name, date)
+    res.send('Author added successfully')
+  }
+]
+
 module.exports = {
   authors_list_get,
   author_search_get,
+  author_create_get,
+  author_create_post,
 }
