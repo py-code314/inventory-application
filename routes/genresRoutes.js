@@ -1,27 +1,24 @@
 const express = require('express')
 const genresRouter = express.Router()
-
+const {
+  genres_list_get,
+  genre_search_get,
+  genre_create_get,
+  genre_create_post,
+  genre_details_get,
+  genre_update_get,
+  genre_update_post,
+  genre_delete_post,
+} = require('../controllers/genresController')
 
 // Show genres
-genresRouter.get('/', (req, res) => res.send('All genres'))
-
-// Search for a genre
-genresRouter.get('/search', (req, res) => res.send('Show searched genre'))
-
-// Add a new genre
-genresRouter.get('/new', (req, res) => res.send('Show form to add a genre'))
-genresRouter.post('/new', (req, res) => res.redirect('/genres'))
-
-// Show genre
-genresRouter.get('/:id', (req, res) => res.send('Single genre'))
+genresRouter.get('/', genres_list_get)
 
 
-// Update a genre
-genresRouter.get('/:id/update', (req, res) => res.send('Show pre-populated genre form'))
-genresRouter.post('/:id/update', (req, res) => res.redirect('/genres'))
 
-// Delete a genre
-genresRouter.post('/:id/delete', (req, res) => res.redirect('/genres'))
+
+
+
 
 
 

@@ -15,9 +15,9 @@ const {
 } = require('../db/queries/books')
 
 // Error messages
-const alphaErr = 'must only contain letters.'
+// const alphaErr = 'must only contain letters.'
 const emptyErr = 'must not be empty.'
-const dateErr = 'must be in a valid format.'
+// const dateErr = 'must be in a valid format.'
 
 // Validate book search query
 const validateSearch = [

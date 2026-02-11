@@ -1,4 +1,4 @@
-const db = require('../db/queries/authors')
+// const db = require('../db/queries/authors')
 const {
   body,
   query,
