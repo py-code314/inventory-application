@@ -6,10 +6,15 @@ async function getAllGenres() {
   return rows
 }
 
+// Add genre to db
+async function addGenre(type) {
+  await pool.query('INSERT INTO genre (name) VALUES ($1)', [type])
+}
+
 module.exports = {
   getAllGenres,
   // getGenres,
-  // addGenre,
+  addGenre,
   // getGenreDetails,
   // updateGenre,
   // deleteGenre,

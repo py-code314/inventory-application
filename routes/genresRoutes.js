@@ -14,6 +14,10 @@ const {
 // Show genres
 genresRouter.get('/', genres_list_get)
 
+// Add a new genre
+genresRouter.get('/new', genre_create_get)
+genresRouter.post('/new', genre_create_post)
+
 
 
 
