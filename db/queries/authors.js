@@ -1,4 +1,4 @@
-const pool = require('./pool')
+const pool = require('../pool')
 
 // Get all authors from db
 async function getAllAuthors() {
@@ -39,9 +39,7 @@ async function updateAuthor(id, name, date) {
 
 // Delete author
 async function deleteAuthor(id) {
-  await pool.query(
-    'DELETE FROM author WHERE id = $1', [id]
-  )
+  await pool.query('DELETE FROM author WHERE id = $1', [id])
 }
 
 module.exports = {
@@ -50,5 +48,5 @@ module.exports = {
   addAuthor,
   getAuthorDetails,
   updateAuthor,
-  deleteAuthor
+  deleteAuthor,
 }

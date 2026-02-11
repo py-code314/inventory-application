@@ -25,7 +25,6 @@ authorsRouter.post('/new', author_create_post)
 // Show author
 authorsRouter.get('/:id', author_details_get)
 
-
 // Update a author
 authorsRouter.get('/:id/update', author_update_get)
 authorsRouter.post('/:id/update', author_update_post)

@@ -1,27 +1,26 @@
 const express = require('express')
 const booksRouter = express.Router()
+const {
+  books_list_get,
+  book_search_get,
+  book_create_get,
+  book_create_post,
+  book_details_get,
+  book_update_get,
+  book_update_post,
+  book_delete_post,
+} = require('../controllers/booksController')
 
 
-// Show books
-booksRouter.get('/', (req, res) => res.send('All books'))
+// Show all books
+booksRouter.get('/', books_list_get)
 
-// Search for a book
-booksRouter.get('/search', (req, res) => res.send('Show searched book'))
 
-// Add a new book
-booksRouter.get('/new', (req, res) => res.send('Show form to add a book'))
-booksRouter.post('/new', (req, res) => res.redirect('/books'))
 
 // Show book
-booksRouter.get('/:id', (req, res) => res.send('Single book'))
+booksRouter.get('/:id', book_details_get)
 
 
-// Update a book
-booksRouter.get('/:id/update', (req, res) => res.send('Show pre-populated book form'))
-booksRouter.post('/:id/update', (req, res) => res.redirect('/books'))
-
-// Delete a book
-booksRouter.post('/:id/delete', (req, res) => res.redirect('/books'))
 
 
 module.exports = booksRouter

@@ -1,4 +1,4 @@
-const db = require('../db/queries')
+const db = require('../db/queries/authors')
 const {
   body,
   query,
@@ -11,8 +11,8 @@ const {
   addAuthor,
   getAuthorDetails,
   updateAuthor,
-  deleteAuthor
-} = require('../db/queries')
+  deleteAuthor,
+} = require('../db/queries/authors')
 
 // Error messages
 const alphaErr = 'must only contain letters.'
@@ -37,7 +37,7 @@ const validateAuthor = [
     .notEmpty()
     .withMessage(`Name ${emptyErr}`)
     .bail()
-    .isAlpha('en-US', {ignore: " -"})
+    .isAlpha('en-US', { ignore: ' -' })
     .withMessage(`Name ${alphaErr}`),
   body('date')
     .trim()
@@ -56,7 +56,6 @@ async function authors_list_get(req, res) {
   res.send('List all authors')
 }
 
-
 // Search for author by name
 const author_search_get = [
   validateSearch,
@@ -73,7 +72,6 @@ const author_search_get = [
 
     const { name } = matchedData(req)
     const filteredAuthors = await getAuthors(name)
-
 
     if (filteredAuthors.length > 0) {
       res.send('Author search success')
@@ -95,7 +93,6 @@ const author_create_post = [
     // Validate request
     const errors = validationResult(req)
     // console.log('errors:', errors)
-   
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
@@ -107,7 +104,7 @@ const author_create_post = [
     // console.log('message in controller:', message)
     await addAuthor(name, date)
     res.send('Author added successfully')
-  }
+  },
 ]
 
 // Show author details
@@ -145,11 +142,11 @@ const author_update_post = [
     await updateAuthor(id, name, date)
     // TODO Redirect to author details page
     res.send('Author details updated successfully')
-  }
+  },
 ]
 
 // Delete author
-async function author_delete_post (req, res) {
+async function author_delete_post(req, res) {
   const id = Number(req.params.id)
   await deleteAuthor(id)
   res.send('Author deleted successfully')
