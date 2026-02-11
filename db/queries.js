@@ -29,9 +29,18 @@ async function getAuthorDetails(id) {
   return rows
 }
 
+// Update author details
+async function updateAuthor(id, name, date) {
+  await pool.query(
+    'UPDATE author SET full_name = $1, birth_date = $2 WHERE id = $3',
+    [name, date, id],
+  )
+}
+
 module.exports = {
   getAllAuthors,
   getAuthors,
   addAuthor,
   getAuthorDetails,
+  updateAuthor,
 }

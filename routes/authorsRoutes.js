@@ -6,6 +6,8 @@ const {
   author_create_get,
   author_create_post,
   author_details_get,
+  author_update_get,
+  author_update_post,
 } = require('../controllers/authorsController')
 
 
@@ -24,8 +26,8 @@ authorsRouter.get('/:id', author_details_get)
 
 
 // Update a author
-authorsRouter.get('/:id/update', (req, res) => res.send('Show pre-populated author form'))
-authorsRouter.post('/:id/update', (req, res) => res.redirect('/authors'))
+authorsRouter.get('/:id/update', author_update_get)
+authorsRouter.post('/:id/update', author_update_post)
 
 // Delete a author
 authorsRouter.post('/:id/delete', (req, res) => res.redirect('/authors'))

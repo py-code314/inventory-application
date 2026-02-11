@@ -10,6 +10,7 @@ const {
   getAuthors,
   addAuthor,
   getAuthorDetails,
+  updateAuthor
 } = require('../db/queries')
 
 // Error messages
@@ -116,10 +117,42 @@ async function author_details_get(req, res) {
   res.send(details)
 }
 
+// Show author details in a pre-populated form
+async function author_update_get(req, res) {
+  const id = Number(req.params.id)
+  const details = await getAuthorDetails(id)
+
+  res.send(details)
+}
+
+// Validate and update author
+const author_update_post = [
+  validateAuthor,
+  async (req, res) => {
+    // Validate request
+    const errors = validationResult(req)
+    // console.log('errors:', errors)
+
+    // Show errors if validation fails
+    if (!errors.isEmpty()) {
+      res.send('Error message')
+      return
+    }
+
+    const id = Number(req.params.id)
+    const { name, date } = matchedData(req)
+    await updateAuthor(id, name, date)
+    // TODO Redirect to author details page
+    res.send('Author details updated successfully')
+  }
+]
+
 module.exports = {
   authors_list_get,
   author_search_get,
   author_create_get,
   author_create_post,
   author_details_get,
+  author_update_get,
+  author_update_post,
 }
