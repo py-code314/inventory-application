@@ -5,7 +5,12 @@ const {
   validationResult,
   matchedData,
 } = require('express-validator')
-const { getAllAuthors, getAuthors, addAuthor } = require('../db/queries')
+const {
+  getAllAuthors,
+  getAuthors,
+  addAuthor,
+  getAuthorDetails,
+} = require('../db/queries')
 
 // Error messages
 const alphaErr = 'must only contain letters.'
@@ -85,10 +90,9 @@ async function author_create_get(req, res) {
 const author_create_post = [
   validateAuthor,
   async (req, res) => {
-    console.log('request:', req)
     // Validate request
     const errors = validationResult(req)
-    console.log('errors:', errors)
+    // console.log('errors:', errors)
    
 
     // Show errors if validation fails
@@ -104,9 +108,18 @@ const author_create_post = [
   }
 ]
 
+// Show author details
+async function author_details_get(req, res) {
+  const id = Number(req.params.id)
+  const details = await getAuthorDetails(id)
+
+  res.send(details)
+}
+
 module.exports = {
   authors_list_get,
   author_search_get,
   author_create_get,
   author_create_post,
+  author_details_get,
 }

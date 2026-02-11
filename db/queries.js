@@ -23,8 +23,15 @@ async function addAuthor(name, date) {
   )
 }
 
+// Get author details
+async function getAuthorDetails(id) {
+  const { rows } = await pool.query('SELECT * FROM author WHERE id =  $1', [id])
+  return rows
+}
+
 module.exports = {
   getAllAuthors,
   getAuthors,
   addAuthor,
+  getAuthorDetails,
 }

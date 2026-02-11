@@ -5,6 +5,7 @@ const {
   author_search_get,
   author_create_get,
   author_create_post,
+  author_details_get,
 } = require('../controllers/authorsController')
 
 
@@ -19,7 +20,7 @@ authorsRouter.get('/new', author_create_get)
 authorsRouter.post('/new', author_create_post)
 
 // Show author
-authorsRouter.get('/:id', (req, res) => res.send('Single author'))
+authorsRouter.get('/:id', author_details_get)
 
 
 // Update a author
