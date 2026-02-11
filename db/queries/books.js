@@ -6,17 +6,31 @@ async function getAllBooks() {
   return rows
 }
 
-// Get author details
+// Get book details
 async function getBookDetails(id) {
   const { rows } = await pool.query('SELECT * FROM book WHERE id =  $1', [id])
   return rows
 }
 
+// Get books by name
+async function getBooks(title) {
+  const { rows } = await pool.query(
+    "SELECT * FROM book WHERE title ILIKE '%' || $1 || '%'",
+    [title],
+  )
+  return rows
+}
+
+// Delete book
+async function deleteBook(id) {
+  await pool.query('DELETE FROM book WHERE id = $1', [id])
+}
+
 module.exports = {
   getAllBooks,
-  // getBooks,
+  getBooks,
   // addBook,
   getBookDetails,
   // updateBook,
-  // deleteBook,
+  deleteBook,
 }
