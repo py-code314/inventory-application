@@ -8,6 +8,7 @@ const {
   author_details_get,
   author_update_get,
   author_update_post,
+  author_delete_post,
 } = require('../controllers/authorsController')
 
 
@@ -30,7 +31,7 @@ authorsRouter.get('/:id/update', author_update_get)
 authorsRouter.post('/:id/update', author_update_post)
 
 // Delete a author
-authorsRouter.post('/:id/delete', (req, res) => res.redirect('/authors'))
+authorsRouter.post('/:id/delete', author_delete_post)
 
 
 module.exports = authorsRouter

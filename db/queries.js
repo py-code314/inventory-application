@@ -37,10 +37,18 @@ async function updateAuthor(id, name, date) {
   )
 }
 
+// Delete author
+async function deleteAuthor(id) {
+  await pool.query(
+    'DELETE FROM author WHERE id = $1', [id]
+  )
+}
+
 module.exports = {
   getAllAuthors,
   getAuthors,
   addAuthor,
   getAuthorDetails,
   updateAuthor,
+  deleteAuthor
 }

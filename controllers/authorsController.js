@@ -10,7 +10,8 @@ const {
   getAuthors,
   addAuthor,
   getAuthorDetails,
-  updateAuthor
+  updateAuthor,
+  deleteAuthor
 } = require('../db/queries')
 
 // Error messages
@@ -147,6 +148,13 @@ const author_update_post = [
   }
 ]
 
+// Delete author
+async function author_delete_post (req, res) {
+  const id = Number(req.params.id)
+  await deleteAuthor(id)
+  res.send('Author deleted successfully')
+}
+
 module.exports = {
   authors_list_get,
   author_search_get,
@@ -155,4 +163,5 @@ module.exports = {
   author_details_get,
   author_update_get,
   author_update_post,
+  author_delete_post,
 }
