@@ -5,7 +5,7 @@ const {
   genre_search_get,
   genre_create_get,
   genre_create_post,
-  genre_details_get,
+  // genre_details_get,
   genre_update_get,
   genre_update_post,
   genre_delete_post,
