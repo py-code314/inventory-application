@@ -8,16 +8,58 @@ async function getAllBooks() {
 
 // Get book details
 async function getBookDetails(id) {
-  const { rows } = await pool.query('SELECT * FROM book WHERE id =  $1', [id])
+  const text = `
+  SELECT
+    title,
+    plot_summary,
+    name AS genreType,
+    isbn,
+    format,
+    total_pages,
+    price,
+    publish_date,
+    edition,
+    stock,
+    date_added,
+    date_updated
+  FROM book_copy
+  JOIN book
+  ON book_copy.book_id = book.id
+  JOIN genre
+  ON book.genre_id = genre.id
+  WHERE book.id = $1;`
+  const values = [id]
+
+  const { rows } = await pool.query(text, values)
+  // console.log('bookDetails:', rows)
   return rows
 }
 
 // Get books by name
 async function getBooks(title) {
-  const { rows } = await pool.query(
-    "SELECT * FROM book WHERE title ILIKE '%' || $1 || '%'",
-    [title],
-  )
+  const text = `
+  SELECT
+    title,
+    plot_summary,
+    name AS genreType,
+    isbn,
+    format,
+    total_pages,
+    price,
+    publish_date,
+    edition,
+    stock,
+    date_added,
+    date_updated
+  FROM book_copy
+  JOIN book
+  ON book_copy.book_id = book.id
+  JOIN genre
+  ON book.genre_id = genre.id
+  WHERE book.title ILIKE '%' || $1 || '%';`
+  const values = [title]
+
+  const { rows } = await pool.query(text, values)
   return rows
 }
 

@@ -3,12 +3,12 @@ const { argv } = require('node:process')
 
 // Create tables and add some initial data
 const SQL = `
-CREATE TABLE genre (
+CREATE TABLE IF NOT EXISTS genre (
 	id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	name TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE book (
+CREATE TABLE IF NOT EXISTS book (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   title TEXT NOT NULL,
   plot_summary TEXT,
@@ -19,7 +19,7 @@ CREATE TABLE book (
 	  ON DELETE RESTRICT
 );
 
-CREATE TABLE author (
+CREATE TABLE IF NOT EXISTS author (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   full_name TEXT NOT NULL,
   birth_date DATE NOT NULL,
@@ -27,13 +27,13 @@ CREATE TABLE author (
 	CONSTRAINT unique_author UNIQUE (full_name, birth_date)
 );
 
-CREATE TABLE publisher (
+CREATE TABLE IF NOT EXISTS publisher (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name TEXT UNIQUE NOT NULL,
 	email TEXT UNIQUE NOT NULL
 );
 
-CREATE TABLE book_copy (
+CREATE TABLE IF NOT EXISTS book_copy (
 	id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	isbn VARCHAR (13) UNIQUE NOT NULL,
 	format TEXT NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE book_copy (
 
 
 
-CREATE TABLE written_by (
+CREATE TABLE IF NOT EXISTS written_by (
   book_id INTEGER NOT NULL,
   author_id INTEGER NOT NULL,
   CONSTRAINT pk_written_by
