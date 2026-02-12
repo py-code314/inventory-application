@@ -17,11 +17,20 @@ async function addPublisher(name, email) {
   await pool.query('INSERT INTO publisher (name, email) VALUES ($1, $2)', [name, email])
 }
 
+// Update publisher details
+async function updatePublisher(id, name, email) {
+  await pool.query('UPDATE publisher SET name = $1, email = $2 WHERE id = $3', [
+    name,
+    email,
+    id,
+  ])
+}
+
 module.exports = {
   getAllPublishers,
   // getPublisher,
   addPublisher,
   getPublisherDetails,
-  // updatePublisher,
+  updatePublisher,
   // deletePublisher,
 }

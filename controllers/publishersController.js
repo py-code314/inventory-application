@@ -67,13 +67,45 @@ const publisher_create_post = [
   },
 ]
 
+// Show publisher details in a pre-populated form
+async function publisher_update_get(req, res) {
+  const id = Number(req.params.id)
+  const details = await getPublisherDetails(id)
+
+  res.send(details)
+}
+
+// Validate and update publisher
+const publisher_update_post = [
+  validatePublisher,
+  async (req, res) => {
+    // Validate request
+    const errors = validationResult(req)
+    console.log('errors:', errors)
+
+    // Show errors if validation fails
+    if (!errors.isEmpty()) {
+      res.send('Error message')
+      return
+    }
+
+    const id = Number(req.params.id)
+    const { name, email } = matchedData(req)
+    await updatePublisher(id, name, email)
+    // TODO Redirect to publisher details page
+    res.send('publisher details updated successfully')
+  },
+]
+
+
+
 module.exports = {
   publishers_list_get,
   // publisher_search_get,
   publisher_create_get,
   publisher_create_post,
   publisher_details_get,
-  // publisher_update_get,
-  // publisher_update_post,
+  publisher_update_get,
+  publisher_update_post,
   // publisher_delete_post,
 }

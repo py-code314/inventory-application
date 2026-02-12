@@ -26,8 +26,8 @@ publishersRouter.get('/:id', publisher_details_get)
 
 
 // Update a publisher
-// publishersRouter.get('/:id/update', (req, res) => res.send('Show pre-populated publisher form'))
-// publishersRouter.post('/:id/update', (req, res) => res.redirect('/publishers'))
+publishersRouter.get('/:id/update', publisher_update_get)
+publishersRouter.post('/:id/update', publisher_update_post)
 
 // Delete a publisher
 // publishersRouter.post('/:id/delete', (req, res) => res.redirect('/publishers'))
