@@ -11,25 +11,25 @@ const {
   publisher_delete_post,
 } = require('../controllers/publishersController')
 
-// Show books
+// Show publishers
 publishersRouter.get('/', publishers_list_get)
 
-// Search for a book
+// Search for a publisher
 // publishersRouter.get('/search', (req, res) => res.send('Show searched publisher'))
 
-// Add a new book
-// publishersRouter.get('/new', (req, res) => res.send('Show form to add an publisher'))
-// publishersRouter.post('/new', (req, res) => res.redirect('/publishers'))
+// Add a new publisher
+publishersRouter.get('/new', publisher_create_get)
+publishersRouter.post('/new', publisher_create_post)
 
-// Show book
+// Show publisher
 publishersRouter.get('/:id', publisher_details_get)
 
 
-// Update a book
+// Update a publisher
 // publishersRouter.get('/:id/update', (req, res) => res.send('Show pre-populated publisher form'))
 // publishersRouter.post('/:id/update', (req, res) => res.redirect('/publishers'))
 
-// Delete a book
+// Delete a publisher
 // publishersRouter.post('/:id/delete', (req, res) => res.redirect('/publishers'))
 
 

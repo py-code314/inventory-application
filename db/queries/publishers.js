@@ -12,10 +12,15 @@ async function getPublisherDetails(id) {
   return rows
 }
 
+// Add publisher to db
+async function addPublisher(name, email) {
+  await pool.query('INSERT INTO publisher (name, email) VALUES ($1, $2)', [name, email])
+}
+
 module.exports = {
   getAllPublishers,
   // getPublisher,
-  // addPublisher,
+  addPublisher,
   getPublisherDetails,
   // updatePublisher,
   // deletePublisher,
