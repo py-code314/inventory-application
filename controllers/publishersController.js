@@ -29,6 +29,14 @@ const validatePublisher = [
     .withMessage(`Email ${emailErr}`),
 ]
 
+// Validate publisher search query
+const validateSearch = [
+  query('name')
+    .trim()
+    .notEmpty()
+    .withMessage(`Name ${emptyErr}`)
+]
+
 // Get all publishers
 async function publishers_list_get(req, res) {
   const publishers = await getAllPublishers()
@@ -97,15 +105,45 @@ const publisher_update_post = [
   },
 ]
 
+// Search for publisher by name
+const publisher_search_get = [
+  validateSearch,
 
+  async (req, res) => {
+    // Validate request
+    const errors = validationResult(req)
+
+    // Show errors if validation fails
+    if (!errors.isEmpty()) {
+      res.send('Error message')
+      return
+    }
+
+    const { name } = matchedData(req)
+    const filteredPublishers = await getPublisher(name)
+
+    if (filteredPublishers.length > 0) {
+      res.send(filteredPublishers)
+    } else {
+      res.send('publisher not found')
+    }
+  },
+]
+
+// Delete publisher
+async function publisher_delete_post(req, res) {
+  const id = Number(req.params.id)
+  await deletePublisher(id)
+  res.send('publisher deleted successfully')
+}
 
 module.exports = {
   publishers_list_get,
-  // publisher_search_get,
+  publisher_search_get,
   publisher_create_get,
   publisher_create_post,
   publisher_details_get,
   publisher_update_get,
   publisher_update_post,
-  // publisher_delete_post,
+  publisher_delete_post,
 }

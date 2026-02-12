@@ -15,7 +15,7 @@ const {
 publishersRouter.get('/', publishers_list_get)
 
 // Search for a publisher
-// publishersRouter.get('/search', (req, res) => res.send('Show searched publisher'))
+publishersRouter.get('/search', publisher_search_get)
 
 // Add a new publisher
 publishersRouter.get('/new', publisher_create_get)
@@ -30,7 +30,7 @@ publishersRouter.get('/:id/update', publisher_update_get)
 publishersRouter.post('/:id/update', publisher_update_post)
 
 // Delete a publisher
-// publishersRouter.post('/:id/delete', (req, res) => res.redirect('/publishers'))
+publishersRouter.post('/:id/delete', publisher_delete_post)
 
 
 module.exports = publishersRouter

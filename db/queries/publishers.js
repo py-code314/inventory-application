@@ -26,11 +26,25 @@ async function updatePublisher(id, name, email) {
   ])
 }
 
+// Get publisher by name
+async function getPublisher(name) {
+  const { rows } = await pool.query(
+    "SELECT * FROM publisher WHERE name ILIKE '%' || $1 || '%'",
+    [name],
+  )
+  return rows
+}
+
+// Delete publisher
+async function deletePublisher(id) {
+  await pool.query('DELETE FROM publisher WHERE id = $1', [id])
+}
+
 module.exports = {
   getAllPublishers,
-  // getPublisher,
+  getPublisher,
   addPublisher,
   getPublisherDetails,
   updatePublisher,
-  // deletePublisher,
+  deletePublisher,
 }
