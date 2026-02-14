@@ -3,6 +3,16 @@ const { argv } = require('node:process')
 
 // Create tables and add some initial data
 const SQL = `
+/* WARNING: Use this only during development */
+
+DROP TABLE IF EXISTS written_by CASCADE;
+DROP TABLE IF EXISTS book_copy CASCADE;
+DROP TABLE IF EXISTS book CASCADE;
+DROP TABLE IF EXISTS genre CASCADE;
+DROP TABLE IF EXISTS author CASCADE;
+DROP TABLE IF EXISTS publisher CASCADE;
+
+
 CREATE TABLE IF NOT EXISTS genre (
 	id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	name TEXT NOT NULL UNIQUE
@@ -55,6 +65,21 @@ CREATE TABLE IF NOT EXISTS book_copy (
 		REFERENCES publisher (id)
 		ON DELETE RESTRICT
 );
+
+CREATE OR REPLACE FUNCTION update_date_updated()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.date_updated = current_timestamp;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS book_copy_date_updated_trigger ON book_copy;
+
+CREATE TRIGGER book_copy_date_updated_trigger
+BEFORE UPDATE ON book_copy
+FOR EACH ROW
+EXECUTE FUNCTION update_date_updated();
 
 
 
