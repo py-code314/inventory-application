@@ -1,9 +1,10 @@
 const express = require('express')
 const indexRouter = express.Router()
+const {home_page_get} = require('../controllers/indexController')
 
 
 // Homepage route
-indexRouter.get('/', (req, res) => res.send('Home page'))
+indexRouter.get('/', home_page_get)
 
 
 
