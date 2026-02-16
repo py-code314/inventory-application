@@ -6,6 +6,20 @@ async function getAllBooks() {
   return rows
 }
 
+// Get inventory stats for books
+async function getInventoryStats() {
+  const query = `
+    SELECT 
+      COUNT(*) AS "totalBooks",
+      COUNT(*) FILTER (WHERE stock = 0) AS "outOfStock",
+      COUNT(*) FILTER (WHERE stock > 0 AND stock <= 5) AS "lowStock"
+    FROM book_copy;
+  `
+  const { rows } = await pool.query(query)
+  // console.log('rows:', rows[0])
+  return rows[0]
+}
+
 // Get book details
 async function getBookDetails(id) {
   const text = `
@@ -188,4 +202,5 @@ module.exports = {
   getBookDetails,
   updateBook,
   deleteBook,
+  getInventoryStats,
 }

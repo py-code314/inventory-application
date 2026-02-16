@@ -2,18 +2,164 @@
 <html lang="en">
   <!-- Head -->
   <%- include('../partials/head.ejs') %>
-<body>
-  <!-- Header -->
-  <%- include('../partials/header.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../partials/header.ejs') %>
 
-  <!-- Sidebar -->
-  <%- include('../partials/sidebar.ejs') %>
-  
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
 
-  <!-- Footer -->
-  <%- include('../partials/footer.ejs') %>
-  
-</body>
+    <!-- Main content-->
+    <main class="dashboard">
+      <!-- Summary -->
+      <section class="stats">
+        <h2 class="stats__title">Recent Activity</h2>
+        <ul class="stats__list">
+          <li class="stats__card">
+            <p class="stats__value">174</p>
+            <p class="stats__label">New Items</p>
+          </li>
+          <li class="stats__card">
+            <p class="stats__value">23</p>
+            <p class="stats__label">New Orders</p>
+          </li>
+          <li class="stats__card">
+            <p class="stats__value">12</p>
+            <p class="stats__label">Refunds</p>
+          </li>
+          <li class="stats__card">
+            <p class="stats__value">2</p>
+            <p class="stats__label">New Messages</p>
+          </li>
+        </ul>
+      </section>
 
+      <!-- Top Sellers -->
+      <section class="top-sellers">
+        <h2 class="top-sellers__title">Top Selling Books</h2>
+        <ul class="top-sellers__list">
+          <li class="top-sellers__item">
+            <p class="top-sellers__title">A Tale of Two Cities</p>
+            <p class="top-sellers__author">Charles Dickens</p>
+          </li>
+          <li class="top-sellers__item">
+            <p class="top-sellers__title">The Little Prince</p>
+            <p class="top-sellers__author">Antoine de Saint-Exupéry</p>
+          </li>
+          <li class="top-sellers__item">
+            <p class="top-sellers__title">
+              Harry Potter and the Philosopher's Stone
+            </p>
+            <p class="top-sellers__author">J.K. Rowling</p>
+          </li>
+          <li class="top-sellers__item">
+            <p class="top-sellers__title">And Then There Were None</p>
+            <p class="top-sellers__author">Agatha Christie</p>
+          </li>
+          <li class="top-sellers__item">
+            <p class="top-sellers__title">The Hobbit</p>
+            <p class="top-sellers__author">J.R.R. Tolkien</p>
+          </li>
+        </ul>
+      </section>
 
+      <!-- Trending -->
+      <section class="trending-books">
+        <h2 class="trending-books__title">Trending This Month</h2>
+        <ul class="trending-books__list">
+          <li class="trending-books__item">
+            <p class="trending-books__title">
+              The Seven Husbands of Evelyn Hugo
+            </p>
+            <p class="trending-books__author">Taylor Jenkins Reid</p>
+          </li>
+          <li class="trending-books__item">
+            <p class="trending-books__title">Project Hail Mary</p>
+            <p class="trending-books__author">Andy Weir</p>
+          </li>
+          <li class="trending-books__item">
+            <p class="trending-books__title">
+              Tomorrow, and Tomorrow, and Tomorrow
+            </p>
+            <p class="trending-books__author">Gabrielle Zevin</p>
+          </li>
+          <li class="trending-books__item">
+            <p class="trending-books__title">Fourth Wing</p>
+            <p class="trending-books__author">Rebecca Yarros</p>
+          </li>
+          <li class="trending-books__item">
+            <p class="trending-books__title">Demon Copperhead</p>
+            <p class="trending-books__author">Barbara Kingsolver</p>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Stock -->
+      <section class="stock">
+        <h2 class="stock__title">Stock Numbers</h2>
+        <ul class="stock__list">
+          <li class="stock__item">
+            <p class="stock__label">Total Books</p>
+            <p class="stock__value"><%= totalBooks %></p>
+          </li>
+          <li class="stock__item">
+            <p class="stock__label">Low Stock Items</p>
+            <p class="stock__value"><%= lowStock %></p>
+          </li>
+          <li class="stock__item">
+            <p class="stock__label">Out of Stock Items</p>
+            <p class="stock__value"><%= outOfStock %></p>
+          </li>
+          <li class="stock__item">
+            <p class="stock__label">Total Genres</p>
+            <p class="stock__value"><%= genresTotal %></p>
+          </li>
+          <li class="stock__item">
+            <p class="stock__label">Refunded Items</p>
+            <p class="stock__value">2</p>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Stores -->
+       <section class="warehouse">
+        <h2 class="warehouse__title">Regional Distribution</h2>
+        <ul class="warehouse__list">
+          <li class="warehouse__item">
+            <p class="warehouse__location">London, UK</p>
+            <p class="warehouse__employees">35 employees</p>
+            <p class="warehouse__stock">510 items</p>
+            <p class="warehouse__orders">21 orders</p>
+          </li>
+          <li class="warehouse__item">
+            <p class="warehouse__location">Manchester, UK</p>
+            <p class="warehouse__employees">23 employees</p>   
+            <p class="warehouse__stock">308 items</p>
+            <p class="warehouse__orders">2 orders</p>
+          </li>
+          <li class="warehouse__item">
+            <p class="warehouse__location">Yorkshire, UK</p>
+            <p class="warehouse__employees">11 employees</p>
+            <p class="warehouse__stock">291 items</p>
+            <p class="warehouse__orders">15 orders</p>
+          </li>
+          <li class="warehouse__item">
+            <p class="warehouse__location">Hall, UK</p>
+            <p class="warehouse__employees">5 employees</p>
+            <p class="warehouse__stock">41 items</p>
+            <p class="warehouse__orders">11 orders</p>
+          </li>
+          <li class="warehouse__item">
+            <p class="warehouse__location">Leicester, UK</p>
+            <p class="warehouse__employees">16 employees</p>
+            <p class="warehouse__stock">261 items</p>
+            <p class="warehouse__orders">8 orders</p>
+          </li>
+        </ul>
+       </section>
+    </main>
+
+    <!-- Footer -->
+    <%- include('../partials/footer.ejs') %>
+  </body>
 </html>

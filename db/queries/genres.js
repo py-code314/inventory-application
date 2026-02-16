@@ -6,6 +6,13 @@ async function getAllGenres() {
   return rows
 }
 
+// Get genres count
+async function getGenresTotal() {
+  const { rows } = await pool.query('SELECT COUNT(*) FROM genre')
+  console.log('genresTotal:', rows[0])
+  return rows[0]
+}
+
 // Add genre to db
 async function addGenre(type) {
   await pool.query('INSERT INTO genre (name) VALUES ($1)', [type])
@@ -46,4 +53,5 @@ module.exports = {
   getGenreDetails,
   updateGenre,
   deleteGenre,
+  getGenresTotal
 }
