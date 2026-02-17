@@ -2,20 +2,28 @@ const pool = require('../pool')
 
 // Get all books from db
 async function getAllBooks() {
-  const { rows } = await pool.query('SELECT * FROM book')
+  const text = `
+    SELECT title, full_name, plot_summary, type
+    FROM book
+    JOIN genre ON genre.id = book.genre_id
+    JOIN written_by ON written_by.book_id = book.id
+    JOIN author ON author.id = written_by.author_id
+  `
+  const { rows } = await pool.query(text)
+  console.log('allBooks:', rows)
   return rows
 }
 
 // Get inventory stats for books
 async function getInventoryStats() {
-  const query = `
+  const text = `
     SELECT 
       COUNT(*) AS "totalBooks",
       COUNT(*) FILTER (WHERE stock = 0) AS "outOfStock",
       COUNT(*) FILTER (WHERE stock > 0 AND stock <= 5) AS "lowStock"
     FROM book_copy;
   `
-  const { rows } = await pool.query(query)
+  const { rows } = await pool.query(text)
   // console.log('rows:', rows[0])
   return rows[0]
 }

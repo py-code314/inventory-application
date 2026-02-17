@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <%- include('../partials/head.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Main content-->
+    <main class="books">
+      <h2>Books</h2>
+      <form action="/books/new" method="get">
+        <button type="submit">Add Book</button>
+      </form>
+
+      <% if (books.length > 0) { %>
+        <% books.forEach(book => { %>
+          <a href="/books/<%= book.id %>" >
+            <h3><%= book.title %></h3>
+            <p><%= book.full_name %></p>
+            
+            <p><%= book.plot_summary %></p>
+            <p><%= book.type %></p>
+          </a>
+          <hr>
+        <% }) %>
+      <% } %>
+      
+    </main>
+
+    <!-- Footer -->
+    <%- include('../partials/footer.ejs') %>
+  </body>
+</html>

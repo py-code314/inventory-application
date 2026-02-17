@@ -115,7 +115,8 @@ const validateBook = [
 // Get all books
 async function books_list_get(req, res) {
   const books = await getAllBooks()
-  res.send(books)
+  // console.log('books:', books)
+  res.render('pages/books', {title: 'Books', books})
 }
 
 // Show book details
