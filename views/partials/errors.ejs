@@ -1,0 +1,10 @@
+<!-- Show errors -->
+<% if (locals.errors) {%>
+  <ul>
+    <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+    <% }); %>
+  </ul>
+<% } %>
+
+<a href="/books">Back to Books</a>

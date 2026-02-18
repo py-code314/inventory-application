@@ -12,11 +12,38 @@
     <!-- Main content-->
     <main class="books">
       <h2>Books</h2>
+
+      <!-- Show validation errors -->
+      <%- include("../partials/errors.ejs") %>
+
+      <form action="/books/search" method="get">
+        <label class="visually-hidden" for="search">
+          Search for a Book
+        </label>
+        <input type="search" name="query" id="search">
+        <button type="submit">Search</button>
+      </form>
       <form action="/books/new" method="get">
         <button type="submit">Add Book</button>
       </form>
 
-      <% if (books.length > 0) { %>
+      <% if (locals.filteredBooks) { %>
+        <h3>Search Results</h3>
+        <% filteredBooks.forEach(book => { %>
+          <a href="/books/<%= book.id %>" >
+            <h3><%= book.title %></h3>
+            <p><%= book.full_name %></p>
+            <p><%= book.plot_summary %></p>
+            <p><%= book.type %></p>
+          </a>
+          <hr>
+        <% }) %>
+        <a href="/books">Back to Books</a>
+      <% } %>
+
+      <% if (locals.books) { %>
+        <% if (books.length > 0) { %>
+        <h3>All Books List</h3>
         <% books.forEach(book => { %>
           <a href="/books/<%= book.id %>" >
             <h3><%= book.title %></h3>
@@ -27,7 +54,13 @@
           </a>
           <hr>
         <% }) %>
+        <% } else { %>
+          <p>Start by adding some books</p>
+        <% } %>
+
       <% } %>
+
+      
       
     </main>
 

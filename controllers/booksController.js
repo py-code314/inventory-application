@@ -30,7 +30,7 @@ const publisherErr = 'must be in Publishers list.'
 
 // Validate book search query
 const validateSearch = [
-  query('title').trim().notEmpty().withMessage(`Title ${emptyErr}`),
+  query('query').trim().notEmpty().withMessage(`Query ${emptyErr}`),
 ]
 
 // Validate book data
@@ -115,8 +115,7 @@ const validateBook = [
 // Get all books
 async function books_list_get(req, res) {
   const books = await getAllBooks()
-  // console.log('books:', books)
-  res.render('pages/books', {title: 'Books', books})
+  res.render('pages/books', { title: 'Books', books })
 }
 
 // Show book details
@@ -134,22 +133,21 @@ const book_search_get = [
   async (req, res) => {
     // Validate request
     const errors = validationResult(req)
-    console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/books', {
+        title: 'Search Results',
+        errors: errors.array(),
+        // books
+      })
     }
 
-    const { title } = matchedData(req)
-    const filteredBooks = await getBooks(title)
+    const { query } = matchedData(req)
+    const filteredBooks = await getBooks(query)
+    console.log('filteredBooks:', filteredBooks)
 
-    if (filteredBooks.length > 0) {
-      res.send(filteredBooks)
-    } else {
-      res.send('Book not found')
-    }
+    res.render('pages/books', { title: 'Search Results', filteredBooks })
   },
 ]
 

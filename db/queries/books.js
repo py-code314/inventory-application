@@ -66,28 +66,36 @@ async function getBookDetails(id) {
 }
 
 // Get books by name
-async function getBooks(title) {
+async function getBooks(query) {
+  // const text = `
+  // SELECT
+  //   title,
+  //   plot_summary,
+  //   type AS genre,
+  //   isbn,
+  //   format,
+  //   total_pages,
+  //   price,
+  //   publish_date,
+  //   edition,
+  //   stock,
+  //   date_added,
+  //   date_updated
+  // FROM book_copy
+  // JOIN book
+  // ON book_copy.book_id = book.id
+  // JOIN genre
+  // ON book.genre_id = genre.id
+  // WHERE book.title ILIKE '%' || $1 || '%';`
   const text = `
-  SELECT
-    title,
-    plot_summary,
-    name AS genre,
-    isbn,
-    format,
-    total_pages,
-    price,
-    publish_date,
-    edition,
-    stock,
-    date_added,
-    date_updated
-  FROM book_copy
-  JOIN book
-  ON book_copy.book_id = book.id
-  JOIN genre
-  ON book.genre_id = genre.id
-  WHERE book.title ILIKE '%' || $1 || '%';`
-  const values = [title]
+    SELECT title, full_name, plot_summary, type
+    FROM book
+    JOIN genre ON genre.id = book.genre_id
+    JOIN written_by ON written_by.book_id = book.id
+    JOIN author ON author.id = written_by.author_id
+    WHERE book.title ILIKE '%' || $1 || '%';
+  `
+  const values = [query]
 
   const { rows } = await pool.query(text, values)
   return rows
