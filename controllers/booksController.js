@@ -12,6 +12,7 @@ const {
   updateBook,
   deleteBook,
 } = require('../db/queries/books')
+const { getAllAuthors } = require('../db/queries/authors')
 
 // Error messages
 const alphaErr = 'must only contain letters.'
@@ -37,30 +38,38 @@ const validateSearch = [
 const validateBook = [
   body('title').trim().notEmpty().withMessage(`Title ${emptyErr}`),
   body('summary').trim().optional({ values: 'falsy' }),
-  body('authorId')
+  // body('authorId')
+  //   .trim()
+  //   .notEmpty()
+  //   .withMessage(`Author ${emptyErr}`)
+  //   .bail()
+  //   .isInt({ min: 1 })
+  //   .withMessage(`Author ${authorErr}`)
+  //   .toInt(),
+  body('author')
     .trim()
     .notEmpty()
     .withMessage(`Author ${emptyErr}`)
-    .bail()
-    .isInt({ min: 1 })
-    .withMessage(`Author ${authorErr}`)
-    .toInt(),
-  body('genreId')
+    .isAlpha('en-US', { ignore: ' -' })
+    .withMessage(`Author ${alphaErr}`),
+  body('genre')
     .trim()
     .notEmpty()
     .withMessage(`Genre ${emptyErr}`)
     .bail()
-    .isInt({ min: 1 })
-    .withMessage(`Genre ${genreErr}`)
-    .toInt(),
-  body('publisherId')
+    .isAlpha('en-US', { ignore: ' &-' })
+    .withMessage(`Author ${alphaErr}`),
+    // .isInt({ min: 1 })
+    // .withMessage(`Genre ${genreErr}`)
+    // .toInt(),
+  body('publisher')
     .trim()
     .notEmpty()
-    .withMessage(`Publisher ${emptyErr}`)
-    .bail()
-    .isInt({ min: 1 })
-    .withMessage(`Publisher ${publisherErr}`)
-    .toInt(),
+    .withMessage(`Publisher ${emptyErr}`),
+    // .bail()
+    // .isInt({ min: 1 })
+    // .withMessage(`Publisher ${publisherErr}`)
+    // .toInt(),
   body('isbn')
     .trim()
     .notEmpty()
@@ -160,7 +169,8 @@ async function book_delete_post(req, res) {
 
 // Show new book form
 async function book_create_get(req, res) {
-  res.send('Show new book form')
+  const authors = await getAllAuthors()
+  res.render('pages/newBook', { title: 'Add Book', authors })
 }
 
 // Validate and add new book
