@@ -40,6 +40,25 @@ async function deletePublisher(id) {
   await pool.query('DELETE FROM publisher WHERE id = $1', [id])
 }
 
+async function findOrCreatePublisher(name) {
+  // Check if author exists
+  const existing = await pool.query(
+    'SELECT id FROM publisher WHERE name ILIKE $1',
+    [name],
+  )
+
+  if (existing.rows.length > 0) {
+    return existing.rows[0].id
+  } else {
+    // Create new author if they don't exist
+    const result = await pool.query(
+      'INSERT INTO publisher (name) VALUES ($1) RETURNING id',
+      [name],
+    )
+    return result.rows[0].id
+  }
+}
+
 module.exports = {
   getAllPublishers,
   getPublisher,
@@ -47,4 +66,5 @@ module.exports = {
   getPublisherDetails,
   updatePublisher,
   deletePublisher,
+  findOrCreatePublisher,
 }

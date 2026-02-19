@@ -10,7 +10,7 @@ async function getAllBooks() {
     JOIN author ON author.id = written_by.author_id
   `
   const { rows } = await pool.query(text)
-  console.log('allBooks:', rows)
+  // console.log('allBooks:', rows)
   return rows
 }
 
@@ -67,26 +67,6 @@ async function getBookDetails(id) {
 
 // Get books by name
 async function getBooks(query) {
-  // const text = `
-  // SELECT
-  //   title,
-  //   plot_summary,
-  //   type AS genre,
-  //   isbn,
-  //   format,
-  //   total_pages,
-  //   price,
-  //   publish_date,
-  //   edition,
-  //   stock,
-  //   date_added,
-  //   date_updated
-  // FROM book_copy
-  // JOIN book
-  // ON book_copy.book_id = book.id
-  // JOIN genre
-  // ON book.genre_id = genre.id
-  // WHERE book.title ILIKE '%' || $1 || '%';`
   const text = `
     SELECT title, full_name, plot_summary, type
     FROM book
@@ -172,7 +152,6 @@ async function updateBook(
   edition,
   publisherId,
 ) {
-  
   const text = `
     WITH updated_book AS(
       UPDATE book
@@ -211,6 +190,21 @@ async function updateBook(
   await pool.query(text, values)
 }
 
+async function checkDuplicate(title, id) {
+  const text = `
+    SELECT book.id
+    FROM book
+    JOIN written_by
+    ON written_by.book_id = book.id
+    WHERE book.title = $1
+    AND written_by.author_id = $2
+  `
+  const values = [title, id]
+  const  {rows}  = await pool.query(text, values)
+  // console.log('rows:', rows)
+  return rows
+}
+
 module.exports = {
   getAllBooks,
   getBooks,
@@ -219,4 +213,5 @@ module.exports = {
   updateBook,
   deleteBook,
   getInventoryStats,
+  checkDuplicate
 }

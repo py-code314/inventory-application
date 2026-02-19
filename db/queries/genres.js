@@ -46,6 +46,25 @@ async function deleteGenre(id) {
   await pool.query('DELETE FROM genre WHERE id = $1', [id])
 }
 
+async function findOrCreateGenre(type) {
+  // Check if genre exists
+  const existing = await pool.query(
+    'SELECT id FROM genre WHERE type ILIKE $1',
+    [type],
+  )
+
+  if (existing.rows.length > 0) {
+    return existing.rows[0].id
+  } else {
+    // Create new genre if they don't exist
+    const result = await pool.query(
+      'INSERT INTO genre (type) VALUES ($1) RETURNING id',
+      [type],
+    )
+    return result.rows[0].id
+  }
+}
+
 module.exports = {
   getAllGenres,
   getGenre,
@@ -53,5 +72,6 @@ module.exports = {
   getGenreDetails,
   updateGenre,
   deleteGenre,
-  getGenresTotal
+  getGenresTotal,
+  findOrCreateGenre,
 }
