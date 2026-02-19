@@ -32,6 +32,7 @@ async function getInventoryStats() {
 async function getBookDetails(id) {
   const text = `
   SELECT
+    book.id AS id,
     title,
     plot_summary,
     genre.type AS genre,

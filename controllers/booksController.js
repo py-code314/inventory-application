@@ -40,7 +40,7 @@ const validateSearch = [
 // Validate book data
 const validateBook = [
   body('title').trim().notEmpty().withMessage(`Title ${emptyErr}`),
-  body('summary').trim().optional({ values: 'falsy' }),
+  body('plot_summary').trim().optional({ values: 'falsy' }),
   // body('authorId')
   //   .trim()
   //   .notEmpty()
@@ -49,13 +49,13 @@ const validateBook = [
   //   .isInt({ min: 1 })
   //   .withMessage(`Author ${authorErr}`)
   //   .toInt(),
-  body('authorName')
+  body('full_name')
     .trim()
     .notEmpty()
     .withMessage(`Author ${emptyErr}`)
     .isAlpha('en-US', { ignore: ' -' })
     .withMessage(`Author ${alphaErr}`),
-  body('genreName')
+  body('genre')
     .trim()
     .notEmpty()
     .withMessage(`Genre ${emptyErr}`)
@@ -65,7 +65,7 @@ const validateBook = [
   // .isInt({ min: 1 })
   // .withMessage(`Genre ${genreErr}`)
   // .toInt(),
-  body('publisherName').trim().notEmpty().withMessage(`Publisher ${emptyErr}`),
+  body('publisher').trim().notEmpty().withMessage(`Publisher ${emptyErr}`),
   // .bail()
   // .isInt({ min: 1 })
   // .withMessage(`Publisher ${publisherErr}`)
@@ -87,7 +87,7 @@ const validateBook = [
     .withMessage(`Format ${alphaErr}`)
     .isLength({ max: 50 })
     .withMessage(`Format ${lengthErr}`),
-  body('totalPages')
+  body('total_pages')
     .trim()
     .notEmpty()
     .withMessage(`Total pages ${emptyErr}`)
@@ -113,7 +113,7 @@ const validateBook = [
     .isInt({ allow_leading_zeroes: false, min: 0 })
     .withMessage(`Stock ${intErr}`)
     .toInt(),
-  body('publishDate')
+  body('publish_date')
     .trim()
     .optional({ values: 'falsy' })
     .isDate()
@@ -130,9 +130,10 @@ async function books_list_get(req, res) {
 // Show book details
 async function book_details_get(req, res) {
   const id = Number(req.params.id)
-  const books = await getBookDetails(id)
+  const [rows] = await getBookDetails(id)
+  // console.log('rows:', rows)
 
-  res.render('pages/book-details', { title: 'Book Details', books })
+  res.render('pages/book-details', { title: 'Book Details', book: rows })
 }
 
 // Search for book by name
@@ -189,20 +190,20 @@ const book_create_post = [
     try {
       const {
       title,
-      summary,
-      authorName,
-      genreName,
+      plot_summary,
+      full_name,
+      genre,
       isbn,
       format,
-      totalPages,
+      total_pages,
       price,
       stock,
-      publishDate,
+      publish_date,
       edition,
-      publisherName,
+      publisher,
       } = matchedData(req)
 
-      const authorId = await findOrCreateAuthor(authorName)
+      const authorId = await findOrCreateAuthor(full_name)
 
       // Duplicate check
       const duplicate = await checkDuplicate(title, authorId)
@@ -217,21 +218,21 @@ const book_create_post = [
         })
       }
 
-      const genreId = await findOrCreateGenre(genreName)
-      const publisherId = await findOrCreatePublisher(publisherName)
+      const genreId = await findOrCreateGenre(genre)
+      const publisherId = await findOrCreatePublisher(publisher)
       // console.log('ids:', authorId, genreId, publisherId)
       
       await addBook(
       title,
-      summary,
+      plot_summary,
       authorId,
       genreId,
       isbn,
       format,
-      totalPages,
+      total_pages,
       price,
       stock,
-      publishDate,
+      publish_date,
       edition,
       publisherId,
       )
@@ -254,9 +255,10 @@ const book_create_post = [
 // Show book details in a pre-populated form
 async function book_update_get(req, res) {
   const id = Number(req.params.id)
-  const details = await getBookDetails(id)
+  const [rows] = await getBookDetails(id)
+  // console.log('book:', rows)
 
-  res.send(details)
+  res.render('pages/book-form', { title: 'Update book', book: rows, isUpdate: true })
 }
 
 // Validate and update book
@@ -275,32 +277,32 @@ const book_update_post = [
     const id = Number(req.params.id)
     const {
       title,
-      summary,
-      authorId,
-      genreId,
+      plot_summary,
+      full_name,
+      genre,
       isbn,
       format,
-      totalPages,
+      total_pages,
       price,
       stock,
-      publishDate,
+      publish_date,
       edition,
-      publisherId,
+      publisher,
     } = matchedData(req)
     await updateBook(
       id,
       title,
-      summary,
-      authorId,
-      genreId,
+      plot_summary,
+      full_name,
+      genre,
       isbn,
       format,
-      totalPages,
+      total_pages,
       price,
       stock,
-      publishDate,
+      publish_date,
       edition,
-      publisherId,
+      publisher,
     )
     // TODO Redirect to book details page
     res.send('Book details updated successfully')
