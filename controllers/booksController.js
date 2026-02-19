@@ -62,23 +62,20 @@ const validateBook = [
     .bail()
     .isAlpha('en-US', { ignore: ' &-' })
     .withMessage(`Author ${alphaErr}`),
-    // .isInt({ min: 1 })
-    // .withMessage(`Genre ${genreErr}`)
-    // .toInt(),
-  body('publisherName')
-    .trim()
-    .notEmpty()
-    .withMessage(`Publisher ${emptyErr}`),
-    // .bail()
-    // .isInt({ min: 1 })
-    // .withMessage(`Publisher ${publisherErr}`)
-    // .toInt(),
+  // .isInt({ min: 1 })
+  // .withMessage(`Genre ${genreErr}`)
+  // .toInt(),
+  body('publisherName').trim().notEmpty().withMessage(`Publisher ${emptyErr}`),
+  // .bail()
+  // .isInt({ min: 1 })
+  // .withMessage(`Publisher ${publisherErr}`)
+  // .toInt(),
   body('isbn')
     .trim()
     .notEmpty()
     .withMessage(`ISBN number ${emptyErr}`)
     .bail()
-    .customSanitizer(value => value.replace(/[ -]/g, ''))
+    .customSanitizer((value) => value.replace(/[ -]/g, ''))
     .isISBN()
     .withMessage(`ISBN number ${isbnErr}`),
   body('format')
@@ -118,8 +115,7 @@ const validateBook = [
     .toInt(),
   body('publishDate')
     .trim()
-    .notEmpty()
-    .withMessage(`Publish date ${emptyErr}`)
+    .optional({ values: 'falsy' })
     .isDate()
     .withMessage(`Publish date ${dateErr}`),
   body('edition').trim().optional({ values: 'falsy' }),
@@ -134,9 +130,9 @@ async function books_list_get(req, res) {
 // Show book details
 async function book_details_get(req, res) {
   const id = Number(req.params.id)
-  const details = await getBookDetails(id)
+  const books = await getBookDetails(id)
 
-  res.send(details)
+  res.render('pages/book-details', { title: 'Book Details', books })
 }
 
 // Search for book by name

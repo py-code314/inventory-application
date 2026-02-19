@@ -3,7 +3,7 @@ const pool = require('../pool')
 // Get all books from db
 async function getAllBooks() {
   const text = `
-    SELECT title, full_name, plot_summary, type
+    SELECT book.id AS id, title, full_name, plot_summary, type
     FROM book
     JOIN genre ON genre.id = book.genre_id
     JOIN written_by ON written_by.book_id = book.id
@@ -34,7 +34,7 @@ async function getBookDetails(id) {
   SELECT
     title,
     plot_summary,
-    genre.name AS genre,
+    genre.type AS genre,
     full_name,
     publisher.name AS publisher,
     isbn,

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <%- include('../partials/head.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Main content-->
+    <main>
+      <h2>Book Details</h2>
+
+      <% if (locals.books) { %>
+        <% books.forEach(book => { %>
+          <div class="book">
+            <h3 class="book__title"><%= book.title %></h3>
+            <p class="book__summary">Summary: <%= book.plot_summary %></p>
+            <p class="book__author">
+              Author: <%= book.full_name %>
+            </p>
+            <p class="book__genre">
+              Genre: <%= book.genre %>
+            </p>
+            <p class="book__price">
+              Price: $<%= book.price %>
+            </p>
+            <p class="book__pages">
+              Total pages: <%= book.total_pages %>
+            </p>
+            <p class="book__format">
+              Format: <%= book.format %>
+            </p>
+            <p class="book__edition">
+              Edition: <%= book.edition %>
+            </p>
+            <p class="book__stock">
+              Stock: <%= book.stock %>
+            </p>
+            <p class="book__publish-date">
+              <% if (book.publish_date) { %>
+                <% const date = new Date(book.publish_date) %>
+                <time datetime="<%= date.toISOString().split('T')[0] %>">
+                Publish date: 
+                <%= date.toLocaleDateString()  %>
+              </time>
+              <% } else { %>
+                Publish date: Unknown
+              <% } %>
+            </p>
+            <p class="book__publisher">
+              Publisher: <%= book.publisher %>
+            </p>
+            <p class="book__isbn">
+              ISBN: <%= book.isbn %>
+            </p>
+            <p class="book__date-added">
+                <% const dateAdded = new Date(book.date_added) %>
+                <time datetime="<%= dateAdded.toISOString().split('T')[0] %>">
+                Date added: 
+                <%= dateAdded.toLocaleDateString()  %>
+              </time>             
+            </p>
+            <p class="book__date-updated">
+                <% const dateUpdated = new Date(book.date_updated) %>
+                <time datetime="<%= dateUpdated.toISOString().split('T')[0] %>">
+                Date updated: 
+                <%= dateUpdated.toLocaleDateString()  %>
+              </time>             
+            </p>           
+          </div>
+        <% }) %>       
+      <% } %>
+      
+    </main>
+
+    <!-- Footer -->
+    <%- include('../partials/footer.ejs') %>
+  </body>
+</html>
