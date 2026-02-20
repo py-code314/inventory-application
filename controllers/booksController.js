@@ -183,8 +183,11 @@ const book_create_post = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.render('pages/book-form', {
+        title: 'Add Book',
+        book: req.body,
+        errors: errors.array(),
+      })
     }
 
     try {
@@ -214,7 +217,7 @@ const book_create_post = [
         return res.render('pages/book-form', {
           title: 'Add Book',
           book: req.body,
-          errorMsg: 'Book and Author combination already exists.',
+          errors: [{ msg: 'Book and Author combination already exists.' }],
         })
       }
 
@@ -245,7 +248,7 @@ const book_create_post = [
         return res.render('pages/book-form', {
           title: 'Add Book',
           book: req.body,
-          errorMsg: 'ISBN number must be unique.'
+          errors: [{ msg: 'ISBN number must be unique.' }]
         })
       }
     }
@@ -258,7 +261,7 @@ async function book_update_get(req, res) {
   const [rows] = await getBookDetails(id)
   // console.log('book:', rows)
 
-  res.render('pages/book-form', { title: 'Update book', book: rows, isUpdate: true })
+  res.render('pages/book-form', { title: 'Update Book', book: rows, isUpdate: true })
 }
 
 // Validate and update book
@@ -270,31 +273,42 @@ const book_update_post = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/book-form', {
+        title: 'Update Book',
+        book: req.body,
+        errors: errors.array(),
+        isUpdate: true
+      })
     }
 
-    const id = Number(req.params.id)
-    const {
-      title,
-      plot_summary,
-      full_name,
-      genre,
-      isbn,
-      format,
-      total_pages,
-      price,
-      stock,
-      publish_date,
-      edition,
-      publisher,
-    } = matchedData(req)
-    await updateBook(
+
+    try {
+      const id = Number(req.params.id)
+      const {
+        title,
+        plot_summary,
+        full_name,
+        genre,
+        isbn,
+        format,
+        total_pages,
+        price,
+        stock,
+        publish_date,
+        edition,
+        publisher,
+      } = matchedData(req)
+
+      const authorId = await findOrCreateAuthor(full_name)
+      const genreId = await findOrCreateGenre(genre)
+      const publisherId = await findOrCreatePublisher(publisher)
+
+      await updateBook(
       id,
       title,
       plot_summary,
-      full_name,
-      genre,
+      authorId,
+      genreId,
       isbn,
       format,
       total_pages,
@@ -302,10 +316,20 @@ const book_update_post = [
       stock,
       publish_date,
       edition,
-      publisher,
-    )
-    // TODO Redirect to book details page
-    res.send('Book details updated successfully')
+      publisherId,
+      )
+      
+      res.redirect(`/books/${id}`)
+
+    } catch (err) {
+      console.error(err)
+      res.render('pages/book-form', {
+        title: 'Update Book',
+        book: req.body,
+        errors: [{ msg: 'Failed to update the book. Please try again.' }],
+        isUpdate: true
+      })
+    }
   },
 ]
 

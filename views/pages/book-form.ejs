@@ -15,11 +15,6 @@
       <!-- Show validation errors -->
       <%- include("../partials/errors.ejs") %>
 
-      <!-- Unique error -->
-       <% if (locals.errorMsg) { %>
-         <p><%= errorMsg %></p>
-       <% } %>
-
       <!-- New book form -->
       <form action="<%= locals.isUpdate ? '/books/' + book.id + '/update' : '/books/new' %>" method="post" class="form">
       <label for="title"> Title </label>
@@ -60,7 +55,7 @@
       <label for="edition">Edition</label>
       <input type="text" name="edition" id="edition"
       value="<%= locals.book?.edition || '' %>">
-      <button>Add</button>
+      <button><%= locals.isUpdate ? 'Update' : 'Add' %></button>
     </form>
 
 

@@ -8,6 +8,7 @@ async function getAllBooks() {
     JOIN genre ON genre.id = book.genre_id
     JOIN written_by ON written_by.book_id = book.id
     JOIN author ON author.id = written_by.author_id
+    ORDER BY id DESC;
   `
   const { rows } = await pool.query(text)
   // console.log('allBooks:', rows)
