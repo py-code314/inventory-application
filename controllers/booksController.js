@@ -6,16 +6,19 @@ const {
 } = require('express-validator')
 const {
   getAllBooks,
-  getBooks,
+  searchBooks,
   addBook,
   getBookDetails,
   updateBook,
   deleteBook,
-  checkDuplicate
+  checkDuplicate,
+  deleteBookCopy,
+  checkBookAuthorCombo,
 } = require('../db/queries/books')
 const { getAllAuthors, findOrCreateAuthor } = require('../db/queries/authors')
 const { findOrCreateGenre } = require('../db/queries/genres')
-const {findOrCreatePublisher} = require('../db/queries/publishers')
+const { findOrCreatePublisher } = require('../db/queries/publishers')
+const { copy } = require('../routes/booksRoutes')
 
 // Error messages
 const alphaErr = 'must only contain letters.'
@@ -24,7 +27,7 @@ const isbnErr = 'must be valid 10 or 13 digit number.'
 const totalPagesErr =
   'must be a number greater than 0. Leading zeroes are not allowed.'
 const priceErr = 'must be a number between 0.01 and 99999999.99.'
-const decimalErr = 'must have two decimal places.'
+// const decimalErr = 'must have two decimal places.'
 const lengthErr = 'must be below 50 characters in length.'
 const dateErr = 'must be in a valid format.'
 const intErr = 'must be a number.'
@@ -41,19 +44,11 @@ const validateSearch = [
 const validateBook = [
   body('title').trim().notEmpty().withMessage(`Title ${emptyErr}`),
   body('plot_summary').trim().optional({ values: 'falsy' }),
-  // body('authorId')
-  //   .trim()
-  //   .notEmpty()
-  //   .withMessage(`Author ${emptyErr}`)
-  //   .bail()
-  //   .isInt({ min: 1 })
-  //   .withMessage(`Author ${authorErr}`)
-  //   .toInt(),
-  body('full_name')
+  body('authors')
     .trim()
     .notEmpty()
     .withMessage(`Author ${emptyErr}`)
-    .isAlpha('en-US', { ignore: ' -' })
+    .isAlpha('en-US', { ignore: ' -,' })
     .withMessage(`Author ${alphaErr}`),
   body('genre')
     .trim()
@@ -62,14 +57,7 @@ const validateBook = [
     .bail()
     .isAlpha('en-US', { ignore: ' &-' })
     .withMessage(`Author ${alphaErr}`),
-  // .isInt({ min: 1 })
-  // .withMessage(`Genre ${genreErr}`)
-  // .toInt(),
   body('publisher').trim().notEmpty().withMessage(`Publisher ${emptyErr}`),
-  // .bail()
-  // .isInt({ min: 1 })
-  // .withMessage(`Publisher ${publisherErr}`)
-  // .toInt(),
   body('isbn')
     .trim()
     .notEmpty()
@@ -103,8 +91,6 @@ const validateBook = [
     .isFloat({ min: 0.01, max: 99999999.99 })
     .withMessage(`Price ${priceErr}`)
     .bail()
-    .isDecimal({ decimal_digits: 2 })
-    .withMessage(`Price ${decimalErr}`)
     .toFloat(),
   body('stock')
     .trim()
@@ -127,15 +113,6 @@ async function books_list_get(req, res) {
   res.render('pages/books', { title: 'Books', books })
 }
 
-// Show book details
-async function book_details_get(req, res) {
-  const id = Number(req.params.id)
-  const [rows] = await getBookDetails(id)
-  // console.log('rows:', rows)
-
-  res.render('pages/book-details', { title: 'Book Details', book: rows })
-}
-
 // Search for book by name
 const book_search_get = [
   validateSearch,
@@ -153,24 +130,15 @@ const book_search_get = [
     }
 
     const { query } = matchedData(req)
-    const filteredBooks = await getBooks(query)
-    // console.log('filteredBooks:', filteredBooks)
+    const filteredBooks = await searchBooks(query)
 
     res.render('pages/books', { title: 'Search Results', filteredBooks })
   },
 ]
 
-// Delete book
-async function book_delete_post(req, res) {
-  const id = Number(req.params.id)
-  await deleteBook(id)
-  res.send('Book deleted successfully')
-}
-
 // Show new book form
 async function book_create_get(req, res) {
-  const authors = await getAllAuthors()
-  res.render('pages/book-form', { title: 'Add Book', authors })
+  res.render('pages/book-form', { title: 'Add Book' })
 }
 
 // Validate and add new book
@@ -179,11 +147,10 @@ const book_create_post = [
   async (req, res) => {
     // Validate request
     const errors = validationResult(req)
-    // console.log('add book errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      return res.render('pages/book-form', {
+      return res.status(400).render('pages/book-form', {
         title: 'Add Book',
         book: req.body,
         errors: errors.array(),
@@ -191,83 +158,129 @@ const book_create_post = [
     }
 
     try {
-      const {
-      title,
-      plot_summary,
-      full_name,
-      genre,
-      isbn,
-      format,
-      total_pages,
-      price,
-      stock,
-      publish_date,
-      edition,
-      publisher,
-      } = matchedData(req)
+      const  bookData  = matchedData(req)
+      // console.log('authors:', bookData.authors)
 
-      const authorId = await findOrCreateAuthor(full_name)
+      const authorArr = bookData.authors.split(/,\s*/)
+      const authorIdArr = await findOrCreateAuthor(authorArr)
 
-      // Duplicate check
-      const duplicate = await checkDuplicate(title, authorId)
-      // console.log('duplicate:', duplicate)
+      // Duplicate book check
+      const duplicate = await checkDuplicate(
+        bookData.title,
+        authorIdArr,
+        bookData.format,
+        bookData.edition,
+      )
 
-
-      if (duplicate.length > 0) {
-        return res.render('pages/book-form', {
+      if (duplicate) {
+        return res.status(409).render('pages/book-form', {
           title: 'Add Book',
           book: req.body,
-          errors: [{ msg: 'Book and Author combination already exists.' }],
+          errors: [{ msg: 'This book combination already exists in the database.' }],
         })
       }
 
-      const genreId = await findOrCreateGenre(genre)
-      const publisherId = await findOrCreatePublisher(publisher)
-      // console.log('ids:', authorId, genreId, publisherId)
-      
+      const genreId = await findOrCreateGenre(bookData.genre)
+      const publisherId = await findOrCreatePublisher(bookData.publisher)
+
+      // Check if book title and author combo already exists in db
+      const bookId = await checkBookAuthorCombo(bookData.title, authorIdArr)
+
+
       await addBook(
-      title,
-      plot_summary,
-      authorId,
-      genreId,
-      isbn,
-      format,
-      total_pages,
-      price,
-      stock,
-      publish_date,
-      edition,
-      publisherId,
+        bookData.title,
+        bookData.plot_summary,
+        authorIdArr,
+        genreId,
+        bookData.total_pages,
+        bookData.price,
+        bookData.stock,
+        bookData.format,
+        bookData.publish_date,
+        publisherId,
+        bookData.edition,
+        bookData.isbn,
+        bookId,
       )
-      
+
       res.redirect('/books')
     } catch (err) {
+      console.error(err)
       // Check for UNIQUE constraint violation
       if (err.code === '23505') {
-        // console.log('add book form:', req.body)
-        return res.render('pages/book-form', {
+        return res.status(409).render('pages/book-form', {
           title: 'Add Book',
           book: req.body,
-          errors: [{ msg: 'ISBN number must be unique.' }]
+          errors: [{ msg: 'ISBN number must be unique.' }],
+        })
+      } else {
+        return res.status(500).render('pages/book-form', {
+          title: 'Add Book',
+          book: req.body,
+          errors: [
+            { msg: 'A database error occurred. Please try again later.' },
+          ],
         })
       }
     }
   },
 ]
 
-// Show book details in a pre-populated form
-async function book_update_get(req, res) {
-  const id = Number(req.params.id)
-  const [rows] = await getBookDetails(id)
-  // console.log('book:', rows)
+// Show book details
+async function book_details_get(req, res) {
+  const bookId = Number(req.params.id)
+  const copyId = Number(req.params.copyId)
+  const [rows] = await getBookDetails(bookId, copyId)
+  // console.log('book details:', rows)
 
-  res.render('pages/book-form', { title: 'Update Book', book: rows, isUpdate: true })
+  res.render('pages/book-details', { title: 'Book Details', book: rows })
+}
+
+// * Add status codes for errors
+// * Check other functions to add try...catch
+// Delete book copy
+async function book_copy_delete_post(req, res) {
+  const bookId = Number(req.params.id)
+  const copyId = Number(req.params.copyId)
+
+  try {
+    await deleteBookCopy(bookId, copyId)
+    res.redirect('/books')
+  } catch (err) {
+    console.error(err)
+    // Fetch book details again
+    const [rows] = await getBookDetails(bookId, copyId)
+    res.status(500).render('pages/book-details', {
+      title: 'Book Details',
+      book: rows,
+      errors: [{msg: 'Failed to delete the book. Please try again.'}]
+    })
+  }
+}
+
+// Show book details form with filled in book data
+async function book_update_get(req, res) {
+  const bookId = Number(req.params.id)
+  const copyId = Number(req.params.copyId)
+  const [rows] = await getBookDetails(bookId, copyId)
+  console.log('update book form:', rows)
+
+  res.render('pages/book-form', {
+    title: 'Update Book',
+    book: rows,
+    isUpdate: true,
+  })
 }
 
 // Validate and update book
 const book_update_post = [
   validateBook,
   async (req, res) => {
+    const bookId = Number(req.params.id)
+    const copyId = Number(req.params.copyId)
+    const existingBookData = await getBookDetails(bookId, copyId)
+    console.log('existing book data:', existingBookData)
+
     // Validate request
     const errors = validationResult(req)
 
@@ -275,63 +288,84 @@ const book_update_post = [
     if (!errors.isEmpty()) {
       return res.status(400).render('pages/book-form', {
         title: 'Update Book',
-        book: req.body,
+        book: existingBookData[0],
         errors: errors.array(),
-        isUpdate: true
+        isUpdate: true,
       })
     }
 
-
     try {
-      const id = Number(req.params.id)
-      const {
-        title,
-        plot_summary,
-        full_name,
-        genre,
-        isbn,
-        format,
-        total_pages,
-        price,
-        stock,
-        publish_date,
-        edition,
-        publisher,
-      } = matchedData(req)
+      // const bookId = Number(req.params.id)
+      // const copyId = Number(req.params.copyId)
+      const bookData = matchedData(req)
+      console.log('book data:', bookData)
+      // const existingBookData = await getBookDetails(bookId, copyId)
+      // console.log('existing book data:', existingBookData)
 
-      const authorId = await findOrCreateAuthor(full_name)
-      const genreId = await findOrCreateGenre(genre)
-      const publisherId = await findOrCreatePublisher(publisher)
+      if (bookData.title !== existingBookData[0].title ||
+        bookData.authors !== existingBookData[0].authors
+      ) {
+        return res.status(500).render('pages/book-form', {
+          title: 'Update Book',
+          book: existingBookData[0],
+          errors: [{ msg: 'You can not change title or authors.' }],
+          isUpdate: true,
+        })
+      }
+
+      const genreId = await findOrCreateGenre(bookData.genre)
+      const publisherId = await findOrCreatePublisher(bookData.publisher)
 
       await updateBook(
-      id,
-      title,
-      plot_summary,
-      authorId,
-      genreId,
-      isbn,
-      format,
-      total_pages,
-      price,
-      stock,
-      publish_date,
-      edition,
-      publisherId,
+        bookId,
+        copyId,
+        bookData.plot_summary,
+        genreId,
+        bookData.total_pages,
+        bookData.price,
+        bookData.stock,
+        bookData.format,
+        bookData.publish_date,
+        publisherId,
+        bookData.edition,
+        bookData.isbn,
       )
-      
-      res.redirect(`/books/${id}`)
 
+      res.redirect(`/books/${bookId}/copy/${copyId}`)
     } catch (err) {
       console.error(err)
-      res.render('pages/book-form', {
-        title: 'Update Book',
-        book: req.body,
-        errors: [{ msg: 'Failed to update the book. Please try again.' }],
-        isUpdate: true
-      })
+      // Check for UNIQUE constraint violation
+      if (err.code === '23505') {
+        return res.status(409).render('pages/book-form', {
+          title: 'Update Book',
+          book: req.body,
+          errors: [{ msg: 'ISBN number must be unique.' }],
+          isUpdate: true
+        })
+      } else {
+        return res.status(500).render('pages/book-form', {
+          title: 'Update Book',
+          book: req.body,
+          errors: [{ msg: 'Failed to update the book. Please try again.' }],
+          isUpdate: true
+        })
+      }
     }
   },
 ]
+
+
+// Delete book
+async function book_delete_post(req, res) {
+  const id = Number(req.params.id)
+  await deleteBook(id)
+  res.redirect('/books')
+}
+
+
+
+
+
 
 module.exports = {
   books_list_get,
@@ -342,4 +376,5 @@ module.exports = {
   book_update_get,
   book_update_post,
   book_delete_post,
+  book_copy_delete_post,
 }

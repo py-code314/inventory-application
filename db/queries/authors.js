@@ -42,26 +42,29 @@ async function deleteAuthor(id) {
   await pool.query('DELETE FROM author WHERE id = $1', [id])
 }
 
-async function findOrCreateAuthor(name) {
-  // Check if author exists
-  const existing = await pool.query(
-    'SELECT id FROM author WHERE full_name ILIKE $1',
-    [name],
-  )
-  console.log('existing author:', existing)
+async function findOrCreateAuthor(authorArr) {
+  const authorIdArr = []
 
-  if (existing.rows.length > 0) {
-    return existing.rows[0].id
-  } else {
-    console.log('create new author id')
-    // Create new author if they don't exist
-    const result = await pool.query(
-      'INSERT INTO author (full_name) VALUES ($1) RETURNING id',
-      [name],
+  for (const author of authorArr) {
+    // Check if author exists
+    const existing = await pool.query(
+      'SELECT id FROM author WHERE full_name ILIKE $1',
+      [author],
     )
-    console.log('result author:', result)
-    return result.rows[0].id
+
+    if (existing.rows.length > 0) {
+      authorIdArr.push(existing.rows[0].id)
+    } else {
+      const result = await pool.query(
+        'INSERT INTO author (full_name) VALUES ($1) RETURNING id',
+        [author],
+      )
+      authorIdArr.push(result.rows[0].id)
+    }
   }
+
+  return authorIdArr
+  
 }
 
 module.exports = {
