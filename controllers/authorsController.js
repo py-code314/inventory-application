@@ -32,7 +32,7 @@ const validateSearch = [
 
 // Validate author data
 const validateAuthor = [
-  body('name')
+  body('full_name')
     .trim()
     .notEmpty()
     .withMessage(`Name ${emptyErr}`)
@@ -52,8 +52,8 @@ const validateAuthor = [
 async function authors_list_get(req, res) {
   const authors = await getAllAuthors()
   console.log('Authors: ', authors)
-  // res.render('pages/index', { title: 'Home', authors })
-  res.send('List all authors')
+  res.render('pages/authors/authors.ejs', { title: 'Authors', authors })
+  // res.send('List all authors')
 }
 
 // Search for author by name
