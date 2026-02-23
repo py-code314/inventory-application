@@ -7,7 +7,7 @@ const {
 } = require('express-validator')
 const {
   getAllAuthors,
-  getAuthors,
+  searchAuthors,
   addAuthor,
   getAuthorDetails,
   updateAuthor,
@@ -21,7 +21,7 @@ const dateErr = 'must be in a valid format.'
 
 // Validate author search query
 const validateSearch = [
-  query('name')
+  query('query')
     .trim()
     .notEmpty()
     .withMessage(`Name ${emptyErr}`)
@@ -51,7 +51,7 @@ const validateAuthor = [
 // Get all authors
 async function authors_list_get(req, res) {
   const authors = await getAllAuthors()
-  console.log('Authors: ', authors)
+  // console.log('Authors: ', authors)
   res.render('pages/authors/authors.ejs', { title: 'Authors', authors })
   // res.send('List all authors')
 }
@@ -66,18 +66,21 @@ const author_search_get = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/authors/authors', {
+        title: 'Search Results',
+        errors: errors.array(),
+      })
     }
 
-    const { name } = matchedData(req)
-    const filteredAuthors = await getAuthors(name)
+    const { query } = matchedData(req)
 
-    if (filteredAuthors.length > 0) {
-      res.send('Author search success')
-    } else {
-      res.send('Author not found')
-    }
+    const filteredAuthors = await searchAuthors(query)
+
+    res.render('pages/authors/authors', {
+      title: 'Search Results',
+      search: query,
+      filteredAuthors,
+    })
   },
 ]
 

@@ -7,7 +7,7 @@ async function getAllAuthors() {
 }
 
 // Get authors by name
-async function getAuthors(name) {
+async function searchAuthors(name) {
   const { rows } = await pool.query(
     "SELECT * FROM author WHERE full_name ILIKE '%' || $1 || '%'",
     [name],
@@ -69,7 +69,7 @@ async function findOrCreateAuthor(authorArr) {
 
 module.exports = {
   getAllAuthors,
-  getAuthors,
+  searchAuthors,
   addAuthor,
   getAuthorDetails,
   updateAuthor,
