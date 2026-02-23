@@ -15,7 +15,7 @@ const {
   deleteBookCopy,
   checkBookAuthorCombo,
 } = require('../db/queries/books')
-const { getAllAuthors, findOrCreateAuthor } = require('../db/queries/authors')
+const { findOrCreateAuthor } = require('../db/queries/authors')
 const { findOrCreateGenre } = require('../db/queries/genres')
 const { findOrCreatePublisher } = require('../db/queries/publishers')
 const { copy } = require('../routes/booksRoutes')
@@ -24,8 +24,7 @@ const { copy } = require('../routes/booksRoutes')
 const alphaErr = 'must only contain letters.'
 const emptyErr = 'must not be empty.'
 const isbnErr = 'must be valid 10 or 13 digit number.'
-const totalPagesErr =
-  'must be a number greater than 0. Leading zeroes are not allowed.'
+const totalPagesErr = 'must be a number greater than 0. Leading zeroes are not allowed.'
 const priceErr = 'must be a number between 0.01 and 99999999.99.'
 // const decimalErr = 'must have two decimal places.'
 const lengthErr = 'must be below 50 characters in length.'
@@ -110,7 +109,7 @@ const validateBook = [
 // Get all books
 async function books_list_get(req, res) {
   const books = await getAllBooks()
-  res.render('pages/books', { title: 'Books', books })
+  res.render('pages/books/books', { title: 'Books', books })
 }
 
 // Search for book by name
@@ -123,7 +122,7 @@ const book_search_get = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      return res.status(400).render('pages/books', {
+      return res.status(400).render('pages/books/books', {
         title: 'Search Results',
         errors: errors.array(),
       })
@@ -132,13 +131,13 @@ const book_search_get = [
     const { query } = matchedData(req)
     const filteredBooks = await searchBooks(query)
 
-    res.render('pages/books', { title: 'Search Results', filteredBooks })
+    res.render('pages/books/books', { title: 'Search Results', filteredBooks })
   },
 ]
 
 // Show new book form
 async function book_create_get(req, res) {
-  res.render('pages/book-form', { title: 'Add Book' })
+  res.render('pages/books/book-form', { title: 'Add Book' })
 }
 
 // Validate and add new book
@@ -150,7 +149,7 @@ const book_create_post = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      return res.status(400).render('pages/book-form', {
+      return res.status(400).render('pages/books/book-form', {
         title: 'Add Book',
         book: req.body,
         errors: errors.array(),
@@ -173,7 +172,7 @@ const book_create_post = [
       )
 
       if (duplicate) {
-        return res.status(409).render('pages/book-form', {
+        return res.status(409).render('pages/books/book-form', {
           title: 'Add Book',
           book: req.body,
           errors: [{ msg: 'This book combination already exists in the database.' }],
@@ -208,13 +207,13 @@ const book_create_post = [
       console.error(err)
       // Check for UNIQUE constraint violation
       if (err.code === '23505') {
-        return res.status(409).render('pages/book-form', {
+        return res.status(409).render('pages/books/book-form', {
           title: 'Add Book',
           book: req.body,
           errors: [{ msg: 'ISBN number must be unique.' }],
         })
       } else {
-        return res.status(500).render('pages/book-form', {
+        return res.status(500).render('pages/books/book-form', {
           title: 'Add Book',
           book: req.body,
           errors: [
@@ -233,7 +232,7 @@ async function book_details_get(req, res) {
   const [rows] = await getBookDetails(bookId, copyId)
   // console.log('book details:', rows)
 
-  res.render('pages/book-details', { title: 'Book Details', book: rows })
+  res.render('pages/books/book-details', { title: 'Book Details', book: rows })
 }
 
 // * Add status codes for errors
@@ -250,7 +249,7 @@ async function book_copy_delete_post(req, res) {
     console.error(err)
     // Fetch book details again
     const [rows] = await getBookDetails(bookId, copyId)
-    res.status(500).render('pages/book-details', {
+    res.status(500).render('pages/books/book-details', {
       title: 'Book Details',
       book: rows,
       errors: [{msg: 'Failed to delete the book. Please try again.'}]
@@ -265,7 +264,7 @@ async function book_update_get(req, res) {
   const [rows] = await getBookDetails(bookId, copyId)
   console.log('update book form:', rows)
 
-  res.render('pages/book-form', {
+  res.render('pages/books/book-form', {
     title: 'Update Book',
     book: rows,
     isUpdate: true,
@@ -286,7 +285,7 @@ const book_update_post = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      return res.status(400).render('pages/book-form', {
+      return res.status(400).render('pages/books/book-form', {
         title: 'Update Book',
         book: existingBookData[0],
         errors: errors.array(),
@@ -305,7 +304,7 @@ const book_update_post = [
       if (bookData.title !== existingBookData[0].title ||
         bookData.authors !== existingBookData[0].authors
       ) {
-        return res.status(500).render('pages/book-form', {
+        return res.status(500).render('pages/books/book-form', {
           title: 'Update Book',
           book: existingBookData[0],
           errors: [{ msg: 'You can not change title or authors.' }],
@@ -336,14 +335,14 @@ const book_update_post = [
       console.error(err)
       // Check for UNIQUE constraint violation
       if (err.code === '23505') {
-        return res.status(409).render('pages/book-form', {
+        return res.status(409).render('pages/books/book-form', {
           title: 'Update Book',
           book: req.body,
           errors: [{ msg: 'ISBN number must be unique.' }],
           isUpdate: true
         })
       } else {
-        return res.status(500).render('pages/book-form', {
+        return res.status(500).render('pages/books/book-form', {
           title: 'Update Book',
           book: req.body,
           errors: [{ msg: 'Failed to update the book. Please try again.' }],

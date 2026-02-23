@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <!-- Head -->
-  <%- include('../partials/head.ejs') %>
+  <%- include('../../partials/head.ejs') %>
   <body>
     <!-- Header -->
-    <%- include('../partials/header.ejs') %>
+    <%- include('../../partials/header.ejs') %>
 
     <!-- Sidebar -->
-    <%- include('../partials/sidebar.ejs') %>
+    <%- include('../../partials/sidebar.ejs') %>
 
     <main class="main">
       <h2 class="sub-title"><%= locals.isUpdate ? 'Update book' : 'Add Book' %></h2>
 
       <!-- Show validation errors -->
-      <%- include("../partials/errors.ejs") %>
+      <%- include("../../partials/errors.ejs") %>
 
       <p><%= locals.isUpdate? 'Note: Title and Author fields are not editable. They are read only.' : '' %></p>
       <!-- New book form -->
@@ -64,6 +64,6 @@
     </main>
 
     <!-- Footer -->
-    <%- include('../partials/footer.ejs') %>
+    <%- include('../../partials/footer.ejs') %>
   </body>
 </html>
