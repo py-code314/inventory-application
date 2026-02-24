@@ -33,9 +33,9 @@ async function updateGenre(id, type) {
 }
 
 // Get genre by name
-async function getGenre(type) {
+async function searchGenre(type) {
   const { rows } = await pool.query(
-    "SELECT * FROM genre WHERE name ILIKE '%' || $1 || '%'",
+    "SELECT * FROM genre WHERE type ILIKE '%' || $1 || '%'",
     [type],
   )
   return rows
@@ -67,7 +67,7 @@ async function findOrCreateGenre(type) {
 
 module.exports = {
   getAllGenres,
-  getGenre,
+  searchGenre,
   addGenre,
   getGenreDetails,
   updateGenre,

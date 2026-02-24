@@ -6,7 +6,7 @@ const {
 } = require('express-validator')
 const {
   getAllGenres,
-  getGenre,
+  searchGenre,
   addGenre,
   getGenreDetails,
   updateGenre,
@@ -30,7 +30,7 @@ const validateGenre = [
 
 // Validate Genre search query
 const validateSearch = [
-  query('type')
+  query('query')
     .trim()
     .notEmpty()
     .withMessage(`Name ${emptyErr}`)
@@ -109,18 +109,20 @@ const genre_search_get = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/genres/genres', {
+        title: 'Search Results',
+        errors: errors.array(),
+      })
     }
 
-    const { type } = matchedData(req)
-    const filteredGenres = await getGenre(type)
+    const { query } = matchedData(req)
+    const filteredGenres = await searchGenre(query)
 
-    if (filteredGenres.length > 0) {
-      res.send(filteredGenres)
-    } else {
-      res.send('Genre not found')
-    }
+    res.render('pages/genres/genres', {
+      title: 'Search Results',
+      search: query,
+      filteredGenres,
+    })
   },
 ]
 
