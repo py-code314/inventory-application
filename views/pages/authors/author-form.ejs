@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../../partials/header.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../../partials/sidebar.ejs') %>
+
+    <main class="main">
+      <h2 class="sub-title"><%= locals.isUpdate ? 'Update Author' : 'Add Author' %></h2>
+
+      <!-- Show validation errors -->
+      <%- include("../../partials/errors.ejs") %>
+
+      <!-- New author form -->
+      <form action="<%= locals.isUpdate ? '/authors/' + author.id + '/update' : '/authors/new' %>" 
+        method="post"     class="form">
+        <label for="fullName"> Full Name </label>
+        <input type="text" name="full_name" id="fullName" 
+        value="<%= locals.author?.full_name || '' %>" required />
+        <label for="birthDate"> DOB </label>
+        <input type="date" name="birth_date" id="birthDate" 
+        value="<%= locals.author?.birth_date || '' %>" required />
+        <button><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+      </form>
+    </main>
+
+    <!-- Footer -->
+    <%- include('../../partials/footer.ejs') %>
+  </body>
+</html>

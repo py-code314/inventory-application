@@ -86,7 +86,7 @@ const author_search_get = [
 
 // Show new author form
 async function author_create_get(req, res) {
-  res.send('Show new author form')
+  res.render('pages/authors/author-form', { title: 'Add Author' })
 }
 
 // Validate and add new author
