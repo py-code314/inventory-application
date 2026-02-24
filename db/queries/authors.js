@@ -2,7 +2,7 @@ const pool = require('../pool')
 
 // Get all authors from db
 async function getAllAuthors() {
-  const { rows } = await pool.query('SELECT * FROM author')
+  const { rows } = await pool.query('SELECT * FROM author ORDER BY id DESC')
   return rows
 }
 

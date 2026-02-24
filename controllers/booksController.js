@@ -262,7 +262,7 @@ async function book_update_get(req, res) {
   const bookId = Number(req.params.id)
   const copyId = Number(req.params.copyId)
   const [rows] = await getBookDetails(bookId, copyId)
-  console.log('update book form:', rows)
+  // console.log('update book form:', rows)
 
   res.render('pages/books/book-form', {
     title: 'Update Book',
@@ -278,7 +278,7 @@ const book_update_post = [
     const bookId = Number(req.params.id)
     const copyId = Number(req.params.copyId)
     const existingBookData = await getBookDetails(bookId, copyId)
-    console.log('existing book data:', existingBookData)
+    // console.log('existing book data:', existingBookData)
 
     // Validate request
     const errors = validationResult(req)
@@ -297,7 +297,7 @@ const book_update_post = [
       // const bookId = Number(req.params.id)
       // const copyId = Number(req.params.copyId)
       const bookData = matchedData(req)
-      console.log('book data:', bookData)
+      // console.log('book data:', bookData)
       // const existingBookData = await getBookDetails(bookId, copyId)
       // console.log('existing book data:', existingBookData)
 

@@ -133,43 +133,63 @@ const author_create_post = [
 ]
 
 // Show author details
-async function author_details_get(req, res) {
-  const id = Number(req.params.id)
-  const details = await getAuthorDetails(id)
+// async function author_details_get(req, res) {
+//   const id = Number(req.params.id)
+//   const details = await getAuthorDetails(id)
 
-  res.send(details)
-}
+//   res.send(details)
+// }
 
 // Show author details in a pre-populated form
 async function author_update_get(req, res) {
   const id = Number(req.params.id)
   const details = await getAuthorDetails(id)
+  console.log('book details:', details)
 
-  res.send(details)
+  res.render('pages/authors/author-form', {
+    title: 'Update Author',
+    author: details[0],
+    isUpdate: true,
+  })
 }
 
 // Validate and update author
 const author_update_post = [
   validateAuthor,
   async (req, res) => {
+    const authorId = Number(req.params.id)
+    const existingAuthorData = await getAuthorDetails(authorId)
     // Validate request
     const errors = validationResult(req)
     // console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/authors/author-form', {
+        title: 'Update Author',
+        author: existingAuthorData[0],
+        errors: errors.array(),
+        isUpdate: true,
+      })
     }
 
-    const id = Number(req.params.id)
-    const { name, date } = matchedData(req)
-    await updateAuthor(id, name, date)
-    // TODO Redirect to author details page
-    res.send('Author details updated successfully')
+    try {
+      const { full_name, birth_date } = matchedData(req)
+      await updateAuthor(authorId, full_name, birth_date)
+      res.redirect('/authors')
+    } catch (err) {
+      console.error(err)
+      return res.status(500).render('pages/authors/author-form', {
+        title: 'Update Author',
+        author: req.body,
+        errors: [{ msg: 'Failed to update author. Please try again.' }],
+        isUpdate: true,
+      })
+    }
   },
 ]
 
+// TODO ues try catch 
 // Delete author
 async function author_delete_post(req, res) {
   const id = Number(req.params.id)
@@ -182,7 +202,7 @@ module.exports = {
   author_search_get,
   author_create_get,
   author_create_post,
-  author_details_get,
+  // author_details_get,
   author_update_get,
   author_update_post,
   author_delete_post,
