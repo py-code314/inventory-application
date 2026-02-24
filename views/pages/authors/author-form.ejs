@@ -20,10 +20,10 @@
         method="post"     class="form">
         <label for="fullName"> Full Name </label>
         <input type="text" name="full_name" id="fullName" 
-        value="<%= locals.author?.full_name || '' %>" required />
+        value="<%= locals.author?.full_name || '' %>" required  />
         <label for="birthDate"> DOB </label>
         <input type="date" name="birth_date" id="birthDate" 
-        value="<%= locals.author?.birth_date || '' %>" required />
+        value="<%= locals.author?.birth_date || '' %>"/>
         <button><%= locals.isUpdate ? 'Update' : 'Add' %></button>
       </form>
     </main>

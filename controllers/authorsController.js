@@ -39,11 +39,9 @@ const validateAuthor = [
     .bail()
     .isAlpha('en-US', { ignore: ' -' })
     .withMessage(`Name ${alphaErr}`),
-  body('date')
+  body('birth_date')
     .trim()
-    .notEmpty()
-    .withMessage(`Name ${emptyErr}`)
-    .bail()
+    .optional({ values: 'falsy' })
     .isDate()
     .withMessage(`Date ${dateErr}`),
 ]
@@ -99,14 +97,38 @@ const author_create_post = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/authors/author-form', {
+        title: 'Add Author',
+        author: req.body,
+        errors: errors.array(),
+      })
     }
 
-    const { name, date } = matchedData(req)
-    // console.log('message in controller:', message)
-    await addAuthor(name, date)
-    res.send('Author added successfully')
+    try {
+      const { full_name, birth_date } = matchedData(req)
+      // console.log('message in controller:', message)
+      await addAuthor(full_name, birth_date)
+      // throw new Error('test error')
+      res.redirect('/authors')
+    } catch (err) {
+      console.error(err)
+      // Check for UNIQUE constraint violation
+      if (err.code === '23505') {
+        return res.status(409).render('pages/authors/author-form', {
+          title: 'Add Author',
+          author: req.body,
+          errors: [{ msg: 'Author name must be unique.' }],
+        })
+      } else {
+        return res.status(500).render('pages/authors/author-form', {
+          title: 'Add Author',
+          author: req.body,
+          errors: [
+            { msg: 'A database error occurred. Please try again later.' },
+          ],
+        })
+      }
+    }
   },
 ]
 
