@@ -223,6 +223,7 @@ async function getBookDetails(bookId, copyId) {
   return rows
 }
 
+
 /* Delete book copy */
 async function deleteBookCopy(bookId, copyId) {
   await pool.query('DELETE FROM book_copy WHERE book_id = $1 AND id = $2 ',
@@ -291,6 +292,7 @@ async function updateBook(
 
   
 }
+
 
 // Delete book
 async function deleteBook(id) {

@@ -358,8 +358,20 @@ const book_update_post = [
 // Delete book
 async function book_delete_post(req, res) {
   const id = Number(req.params.id)
-  await deleteBook(id)
-  res.redirect('/books')
+  
+  try {
+    await deleteBook(id)
+    res.redirect('/books')
+  } catch (err) {
+    console.error(err)
+    // Fetch book list
+    const books = await getAllBooks()
+    res.status(500).render('pages/books/books', {
+      title: 'Books',
+      books,
+      errors: [{ msg: 'Failed to delete the book. Please try again.' }],
+    })
+  }
 }
 
 

@@ -12,7 +12,6 @@ const {
   getAuthorDetails,
   updateAuthor,
   deleteAuthor,
-  checkAuthor
 } = require('../db/queries/authors')
 
 // Error messages
@@ -88,8 +87,7 @@ async function author_create_get(req, res) {
   res.render('pages/authors/author-form', { title: 'Add Author' })
 }
 
-// TODO check for duplicate before adding author
-// ? do i need to check for duplicate because it already has UNIQUE constraint
+
 // Validate and add new author
 const author_create_post = [
   validateAuthor,
@@ -197,8 +195,6 @@ const author_update_post = [
 async function author_delete_post(req, res) {
   const id = Number(req.params.id)
   try {
-    // * No need to check for existence of author because of constraint in the table written_by
-    // const isAuthor = await checkAuthor(id)
     await deleteAuthor(id)
     res.redirect('/authors')
   } catch (err) {
