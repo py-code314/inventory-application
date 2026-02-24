@@ -59,13 +59,37 @@ const genre_create_post = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/genres/genre-form', {
+        title: 'Add Genre',
+        genre: req.body,
+        errors: errors.array(),
+      })
     }
 
-    const { type } = matchedData(req)
-    await addGenre(type)
-    res.send('Genre added successfully')
+    try {
+      const { type } = matchedData(req)
+      // throw new Error()
+      await addGenre(type)
+      res.redirect('/genres')
+    } catch (err) {
+      console.error(err)
+      // Default
+      let statusCode = 500
+      let errorMsg = 'A database error occurred. Please try again later.'
+      // Update for UNIQUE constraint violation
+      if (err.code === '23505') {
+        statusCode = 409
+        errorMsg = 'Genre name must be unique.'
+      }
+        
+      return res.status(statusCode).render('pages/genres/genre-form', {
+        title: 'Add Genre',
+        genre: req.body,
+        errors: [{ msg: errorMsg }],
+      })
+        
+    }
+    
   },
 ]
 

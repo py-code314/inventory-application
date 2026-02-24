@@ -2,7 +2,7 @@ const pool = require('../pool')
 
 // Get all genres from db
 async function getAllGenres() {
-  const { rows } = await pool.query('SELECT * FROM genre')
+  const { rows } = await pool.query('SELECT * FROM genre ORDER BY id DESC')
   return rows
 }
 
@@ -15,7 +15,7 @@ async function getGenresTotal() {
 
 // Add genre to db
 async function addGenre(type) {
-  await pool.query('INSERT INTO genre (name) VALUES ($1)', [type])
+  await pool.query('INSERT INTO genre (type) VALUES ($1)', [type])
 }
 
 // Get genre details
