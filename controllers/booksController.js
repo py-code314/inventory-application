@@ -354,6 +354,7 @@ const book_update_post = [
 ]
 
 
+
 // Delete book
 async function book_delete_post(req, res) {
   const id = Number(req.params.id)
@@ -376,4 +377,5 @@ module.exports = {
   book_update_post,
   book_delete_post,
   book_copy_delete_post,
+  
 }

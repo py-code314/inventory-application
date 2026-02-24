@@ -12,6 +12,7 @@ const {
   getAuthorDetails,
   updateAuthor,
   deleteAuthor,
+  checkAuthor
 } = require('../db/queries/authors')
 
 // Error messages
@@ -50,7 +51,7 @@ const validateAuthor = [
 async function authors_list_get(req, res) {
   const authors = await getAllAuthors()
   // console.log('Authors: ', authors)
-  res.render('pages/authors/authors.ejs', { title: 'Authors', authors })
+  res.render('pages/authors/authors', { title: 'Authors', authors })
   // res.send('List all authors')
 }
 
@@ -87,6 +88,8 @@ async function author_create_get(req, res) {
   res.render('pages/authors/author-form', { title: 'Add Author' })
 }
 
+// TODO check for duplicate before adding author
+// ? do i need to check for duplicate because it already has UNIQUE constraint
 // Validate and add new author
 const author_create_post = [
   validateAuthor,
@@ -193,8 +196,29 @@ const author_update_post = [
 // Delete author
 async function author_delete_post(req, res) {
   const id = Number(req.params.id)
-  await deleteAuthor(id)
-  res.send('Author deleted successfully')
+  try {
+    // * No need to check for existence of author because of constraint in the table written_by
+    // const isAuthor = await checkAuthor(id)
+    await deleteAuthor(id)
+    res.redirect('/authors')
+  } catch (err) {
+    console.error(err)
+    const authors = await getAllAuthors()
+    // Default error message
+    let errorMsg = 'Failed to delete author. Please try again.'
+    // Update error message
+    if (err.code === '23001') {
+      errorMsg =
+        'Cannot delete author: This author has books linked to their profile. Please delete or reassign their books before removing the author.'
+    }
+      
+    return res.status(500).render('pages/authors/authors', {
+      title: 'Authors',
+      authors,
+      errors: [{msg: errorMsg}],
+    })
+      
+  }
 }
 
 module.exports = {
@@ -202,7 +226,6 @@ module.exports = {
   author_search_get,
   author_create_get,
   author_create_post,
-  // author_details_get,
   author_update_get,
   author_update_post,
   author_delete_post,

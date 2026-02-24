@@ -39,6 +39,7 @@ async function updateAuthor(id, name, date) {
 
 // Delete author
 async function deleteAuthor(id) {
+  // throw new Error('connection failure')
   await pool.query('DELETE FROM author WHERE id = $1', [id])
 }
 
@@ -67,6 +68,15 @@ async function findOrCreateAuthor(authorArr) {
   
 }
 
+// Check for author in written_by table
+async function checkAuthor(id) {
+  // let isAuthor = false
+
+  // const rows = 'SELECT wb.author_id FROM written_by wb '
+  const isAuthor = await pool.query('SELECT exists (SELECT 1 FROM written_by WHERE author_id = $1 LIMIT 1)', [id])
+  console.log('author exists:', isAuthor)
+}
+
 module.exports = {
   getAllAuthors,
   searchAuthors,
@@ -75,4 +85,5 @@ module.exports = {
   updateAuthor,
   deleteAuthor,
   findOrCreateAuthor,
+  checkAuthor,
 }
