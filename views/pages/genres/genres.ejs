@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../../partials/header.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../../partials/sidebar.ejs') %>
+
+    <!-- Main content-->
+    <main class="genres">
+      <h2>Genres</h2>
+
+      <!-- Show validation errors -->
+      <%- include("../../partials/errors.ejs") %>
+
+      <!-- Search genre -->
+      <form action="/genres/search" method="get">
+        <label class="visually-hidden" for="search">
+          Search for Genre
+        </label>
+        <input type="search" name="query" id="search"
+         value="<%= locals.search ? search : '' %>"
+         placeholder="Enter genre name">
+        <button type="submit">Search</button>
+      </form>
+
+      <!-- Add genre -->
+      <form action="/genres/new" method="get">
+        <button type="submit">Add Genre</button>
+      </form>
+
+      
+      <% if (locals.filteredGenres) { %>
+        <% if(filteredGenres.length > 0) { %>
+          <!-- Show search results -->
+          <h3>Search Results</h3>
+          <% filteredGenres.forEach(genre => { %>
+            <h3><%= genre.type %></h3>
+            <hr>
+          <% }) %>
+          <a href="/genres">Back to Genres</a>
+        <% } else { %>
+          <p>Genre not found</p>
+        <% } %>        
+      <% } else if (locals.genres) { %>
+        <% if ( genres.length > 0) { %>
+          <!-- Show all genres -->
+          <h3>All Genres List</h3>
+
+          <% genres.forEach(genre => { %>
+            <h3><%= genre.type %></h3>
+
+            <!-- Update genre -->
+            <form action="/genres/<%= genre.id %>/update" method="get" >
+              <button type="submit" >Update</button>
+            </form>
+
+            <!-- Delete genre -->
+            <form action="/genres/<%= genre.id %>/delete" method="POST" >
+              <button type="submit" onclick="return confirm('Warning: This will delete ALL data for this genre!');">Delete Genre</button>
+            </form> 
+            <hr>
+          <% }) %>
+        <% } else { %>
+          <p>Start by adding some genres</p>
+        <% } %>
+      <% } %>      
+    </main>
+
+    <!-- Footer -->
+    <%- include('../../partials/footer.ejs') %>
+  </body>
+</html>

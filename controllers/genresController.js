@@ -42,7 +42,7 @@ const validateSearch = [
 // Get all genres
 async function genres_list_get(req, res) {
   const genres = await getAllGenres()
-  res.send('List all genres')
+  res.render('pages/genres/genres', { title: 'Genres', genres })
 }
 
 // Show new genre form
