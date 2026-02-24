@@ -47,7 +47,7 @@ async function genres_list_get(req, res) {
 
 // Show new genre form
 async function genre_create_get(req, res) {
-  res.send('Show new genre form')
+  res.render('pages/genres/genre-form', { title: 'Add Genre' })
 }
 
 // Validate and add new genre

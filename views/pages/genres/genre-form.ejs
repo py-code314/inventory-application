@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../../partials/header.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../../partials/sidebar.ejs') %>
+
+    <main class="main">
+      <h2 class="sub-title"><%= locals.isUpdate ? 'Update Genre' : 'Add Genre' %></h2>
+
+      <!-- Show validation errors -->
+      <%- include("../../partials/errors.ejs") %>
+
+      <!-- New genre form -->
+      <form action="<%= locals.isUpdate ? '/genres/' + genre.id + '/update' : '/genres/new' %>" 
+        method="post"     class="form">
+        <label for="type"> Type </label>
+        <input type="text" name="type" id="type" 
+        value="<%= locals.genre?.type || '' %>" required  />
+        <button><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+      </form>
+    </main>
+
+    <!-- Footer -->
+    <%- include('../../partials/footer.ejs') %>
+  </body>
+</html>
