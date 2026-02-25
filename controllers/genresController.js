@@ -161,7 +161,6 @@ const genre_search_get = [
     const { query } = matchedData(req)
     const filteredGenres = await searchGenre(query)
 
-    // ? Should i render the page with code 404 if genre is not found
     res.render('pages/genres/genres', {
       title: 'Search Results',
       search: query,
@@ -173,8 +172,29 @@ const genre_search_get = [
 // Delete genre
 async function genre_delete_post(req, res) {
   const id = Number(req.params.id)
-  await deleteGenre(id)
-  res.send('Genre deleted successfully')
+
+  try {
+    await deleteGenre(id)
+    res.redirect('/genres')
+  } catch (err) {
+    console.error(err)
+    const genres = await getAllGenres()
+    // Default error message
+    let errorMsg = 'Failed to delete genre. Please try again.'
+    // Update error message
+    if (err.code === '23001') {
+      errorMsg =
+        'Cannot delete genre: This genre has books linked to it. Please delete or reassign the books before removing the genre.'
+    }
+
+    return res.status(500).render('pages/genres/genres', {
+      title: 'Genres',
+      genres,
+      errors: [{ msg: errorMsg }],
+    })
+  }
+  
+
 }
 
 module.exports = {
