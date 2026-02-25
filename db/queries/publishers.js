@@ -27,7 +27,7 @@ async function updatePublisher(id, name, email) {
 }
 
 // Get publisher by name
-async function getPublisher(name) {
+async function searchPublisher(name) {
   const { rows } = await pool.query(
     "SELECT * FROM publisher WHERE name ILIKE '%' || $1 || '%'",
     [name],
@@ -61,7 +61,7 @@ async function findOrCreatePublisher(name) {
 
 module.exports = {
   getAllPublishers,
-  getPublisher,
+  searchPublisher,
   addPublisher,
   getPublisherDetails,
   updatePublisher,

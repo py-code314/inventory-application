@@ -6,7 +6,7 @@ const {
 } = require('express-validator')
 const {
   getAllPublishers,
-  getPublisher,
+  searchPublisher,
   addPublisher,
   getPublisherDetails,
   updatePublisher,
@@ -100,7 +100,11 @@ async function publisher_update_get(req, res) {
   const id = Number(req.params.id)
   const details = await getPublisherDetails(id)
 
-  res.send(details)
+  res.render('pages/publishers/publisher-form', {
+    title: 'Update Publisher',
+    publisher: details[0],
+    isUpdate: true,
+  })
 }
 
 // Validate and update publisher
@@ -142,7 +146,7 @@ const publisher_search_get = [
     }
 
     const { query } = matchedData(req)
-    const filteredPublishers = await getPublisher(query)
+    const filteredPublishers = await searchPublisher(query)
 
     res.render('pages/publishers/publishers', {
       title: 'Search Results',
