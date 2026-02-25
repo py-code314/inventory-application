@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../../partials/header.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../../partials/sidebar.ejs') %>
+
+    <main class="main">
+      <h2 class="sub-title"><%= locals.isUpdate ? 'Update Publisher' : 'Add Publisher' %></h2>
+
+      <!-- Show validation errors -->
+      <%- include("../../partials/errors.ejs") %>
+
+      <!-- New publisher form -->
+      <form action="<%= locals.isUpdate ? '/publishers/' + publisher.id + '/update' : '/publishers/new' %>" 
+        method="post"     class="form">
+        <label for="name"> Name </label>
+        <input type="text" name="name" id="name" 
+        value="<%= locals.publisher?.name || '' %>" required  />
+        <label for="email"> Email </label>
+        <input type="email" name="email" id="email" 
+        value="<%= locals.publisher?.email || '' %>"/>
+        <button><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+      </form>
+    </main>
+
+    <!-- Footer -->
+    <%- include('../../partials/footer.ejs') %>
+  </body>
+</html>

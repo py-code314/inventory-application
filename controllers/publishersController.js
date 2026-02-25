@@ -44,16 +44,16 @@ async function publishers_list_get(req, res) {
 }
 
 // Show publisher details
-async function publisher_details_get(req, res) {
-  const id = Number(req.params.id)
-  const details = await getPublisherDetails(id)
+// async function publisher_details_get(req, res) {
+//   const id = Number(req.params.id)
+//   const details = await getPublisherDetails(id)
 
-  res.send(details)
-}
+//   res.send(details)
+// }
 
 // Show new publisher form
 async function publisher_create_get(req, res) {
-  res.send('Show new publisher form')
+  res.render('pages/publishers/publisher-form', { title: 'Add Publisher' })
 }
 
 // Validate and add new publisher
@@ -144,7 +144,7 @@ module.exports = {
   publisher_search_get,
   publisher_create_get,
   publisher_create_post,
-  publisher_details_get,
+  // publisher_details_get,
   publisher_update_get,
   publisher_update_post,
   publisher_delete_post,

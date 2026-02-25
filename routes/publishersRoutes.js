@@ -22,7 +22,7 @@ publishersRouter.get('/new', publisher_create_get)
 publishersRouter.post('/new', publisher_create_post)
 
 // Show publisher
-publishersRouter.get('/:id', publisher_details_get)
+// publishersRouter.get('/:id', publisher_details_get)
 
 
 // Update a publisher
