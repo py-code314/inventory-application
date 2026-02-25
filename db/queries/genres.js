@@ -27,7 +27,7 @@ async function getGenreDetails(id) {
 // Update genre details
 async function updateGenre(id, type) {
   await pool.query(
-    'UPDATE genre SET name = $1 WHERE id = $2',
+    'UPDATE genre SET type = $1 WHERE id = $2',
     [type, id],
   )
 }

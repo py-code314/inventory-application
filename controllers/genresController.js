@@ -98,28 +98,47 @@ async function genre_update_get(req, res) {
   const id = Number(req.params.id)
   const details = await getGenreDetails(id)
 
-  res.send(details)
+  res.render('pages/genres/genre-form', {
+    title: 'Update Genre',
+    genre: details[0],
+    isUpdate: true,
+  })
 }
 
 // Validate and update genre
 const genre_update_post = [
   validateGenre,
   async (req, res) => {
+    const id = Number(req.params.id)
+    // const existingGenreData = await getGenreDetails(id)
     // Validate request
     const errors = validationResult(req)
-    console.log('errors:', errors)
+    // console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/genres/genre-form', {
+        title: 'Update Genre',
+        // genre: existingGenreData[0],
+        genre: req.body,
+        errors: errors.array(),
+        isUpdate: true,
+      })
     }
 
-    const id = Number(req.params.id)
-    const { type } = matchedData(req)
-    await updateGenre(id, type)
-    // TODO Redirect to genre details page
-    res.send('Genre details updated successfully')
+    try {
+      const { type } = matchedData(req)
+      await updateGenre(id, type)
+      res.redirect('/genres')
+    } catch (err) {
+      console.error(err)
+      return res.status(500).render('pages/genres/genre-form', {
+        title: 'Update Genre',
+        genre: req.body,
+        errors: [{ msg: 'Failed to update genre. Please try again.' }],
+        isUpdate: true,
+      })
+    }
   },
 ]
 
@@ -142,6 +161,7 @@ const genre_search_get = [
     const { query } = matchedData(req)
     const filteredGenres = await searchGenre(query)
 
+    // ? Should i render the page with code 404 if genre is not found
     res.render('pages/genres/genres', {
       title: 'Search Results',
       search: query,
