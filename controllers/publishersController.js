@@ -173,8 +173,27 @@ const publisher_search_get = [
 // Delete publisher
 async function publisher_delete_post(req, res) {
   const id = Number(req.params.id)
-  await deletePublisher(id)
-  res.send('publisher deleted successfully')
+
+  try {
+    await deletePublisher(id)
+    res.redirect('/publishers')
+  } catch (err) {
+    console.error(err)
+    const publishers = await getAllPublishers()
+    // Default error message
+    let errorMsg = 'Failed to delete publisher. Please try again.'
+    // Update error message
+    if (err.code === '23001') {
+      errorMsg =
+        'Cannot delete publisher: This publisher has books linked to it. Please delete or reassign the books before removing the publisher.'
+    }
+
+    return res.status(500).render('pages/publishers/publishers', {
+      title: 'Publishers',
+      publishers,
+      errors: [{ msg: errorMsg }],
+    })
+  }
 }
 
 module.exports = {
