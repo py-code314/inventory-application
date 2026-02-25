@@ -40,7 +40,7 @@ const validateSearch = [
 // Get all publishers
 async function publishers_list_get(req, res) {
   const publishers = await getAllPublishers()
-  res.send(publishers)
+  res.render('pages/publishers/publishers', { title: 'Publishers', publishers })
 }
 
 // Show publisher details

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <!-- Header -->
+    <%- include('../../partials/header.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../../partials/sidebar.ejs') %>
+
+    <!-- Main content-->
+    <main class="publishers">
+      <h2>Publishers</h2>
+
+      <!-- Show validation errors -->
+      <%- include("../../partials/errors.ejs") %>
+
+      <!-- Search publisher -->
+      <form action="/publishers/search" method="get">
+        <label class="visually-hidden" for="search">
+          Search for Publisher
+        </label>
+        <input type="search" name="query" id="search"
+         value="<%= locals.search ? search : '' %>"
+         placeholder="Enter publisher name">
+        <button type="submit">Search</button>
+      </form>
+
+      <!-- Add publisher -->
+      <form action="/publishers/new" method="get">
+        <button type="submit">Add Publisher</button>
+      </form>
+
+      
+      <% if (locals.filteredPublishers) { %>
+        <% if(filteredPublishers.length > 0) { %>
+          <!-- Show search results -->
+          <h3>Search Results</h3>
+          <% filteredPublishers.forEach(publisher => { %>
+            <h3><%= publisher.name %></h3>
+            <p><%= publisher.email %></p>
+            <hr>
+          <% }) %>
+          <a href="/publishers">Back to Publishers</a>
+        <% } else { %>
+          <p>Publisher not found</p>
+        <% } %>        
+      <% } else if (locals.publishers) { %>
+        <% if ( publishers.length > 0) { %>
+          <!-- Show all publishers -->
+          <h3>All Publishers List</h3>
+
+          <% publishers.forEach(publisher => { %>
+            <h3><%= publisher.name %></h3>
+            <p><%= publisher.email %></p>
+
+            <!-- Update publisher -->
+            <form action="/publishers/<%= publisher.id %>/update" method="get" >
+              <button type="submit" >Update</button>
+            </form>
+
+            <!-- Delete publisher -->
+            <form action="/publishers/<%= publisher.id %>/delete" method="POST" >
+              <button type="submit" onclick="return confirm('Warning: This will delete ALL data for this publisher!');">Delete Publisher</button>
+            </form> 
+            
+            <hr>
+          <% }) %>
+        <% } else { %>
+          <p>Start by adding some publishers</p>
+        <% } %>
+      <% } %>      
+    </main>
+
+    <!-- Footer -->
+    <%- include('../../partials/footer.ejs') %>
+  </body>
+</html>
