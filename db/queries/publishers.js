@@ -2,7 +2,7 @@ const pool = require('../pool')
 
 // Get all publishers from db
 async function getAllPublishers() {
-  const { rows } = await pool.query('SELECT * FROM publisher')
+  const { rows } = await pool.query('SELECT * FROM publisher ORDER BY id DESC')
   return rows
 }
 

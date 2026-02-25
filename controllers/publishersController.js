@@ -111,21 +111,35 @@ async function publisher_update_get(req, res) {
 const publisher_update_post = [
   validatePublisher,
   async (req, res) => {
+    const id = Number(req.params.id)
     // Validate request
     const errors = validationResult(req)
-    console.log('errors:', errors)
+    // console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/publishers/publisher-form', {
+        title: 'Update Publisher',
+        // publisher: existingGenreData[0],
+        publisher: req.body,
+        errors: errors.array(),
+        isUpdate: true,
+      })
     }
 
-    const id = Number(req.params.id)
-    const { name, email } = matchedData(req)
-    await updatePublisher(id, name, email)
-    // TODO Redirect to publisher details page
-    res.send('publisher details updated successfully')
+    try {
+       const { name, email } = matchedData(req)
+      await updatePublisher(id, name, email)
+      res.redirect('/publishers')
+    } catch (err) {
+      console.error(err)
+      return res.status(500).render('pages/publishers/publisher-form', {
+        title: 'Update Publisher',
+        publisher: req.body,
+        errors: [{ msg: 'Failed to update publisher. Please try again.' }],
+        isUpdate: true,
+      })
+    }
   },
 ]
 
