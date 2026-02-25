@@ -31,7 +31,7 @@ const validatePublisher = [
 
 // Validate publisher search query
 const validateSearch = [
-  query('name')
+  query('query')
     .trim()
     .notEmpty()
     .withMessage(`Name ${emptyErr}`)
@@ -115,18 +115,20 @@ const publisher_search_get = [
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
-      res.send('Error message')
-      return
+      return res.status(400).render('pages/publishers/publishers', {
+        title: 'Search Results',
+        errors: errors.array(),
+      })
     }
 
-    const { name } = matchedData(req)
-    const filteredPublishers = await getPublisher(name)
+    const { query } = matchedData(req)
+    const filteredPublishers = await getPublisher(query)
 
-    if (filteredPublishers.length > 0) {
-      res.send(filteredPublishers)
-    } else {
-      res.send('publisher not found')
-    }
+    res.render('pages/publishers/publishers', {
+      title: 'Search Results',
+      search: query,
+      filteredPublishers,
+    })
   },
 ]
 
