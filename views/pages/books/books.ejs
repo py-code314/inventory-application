@@ -10,69 +10,74 @@
     <%- include('../../partials/sidebar.ejs') %>
 
     <!-- Main content-->
-    <main class="books">
-      <h2>Books</h2>
+    <main class="main">
+      <div class="books">
+        <div class="books__controls">
+          <h2 class="sub-title">Books</h2>
+          
+          <div class="books__actions">
+            <!-- Search book-->
+            <form class="books__form" action="/books/search" method="get">
+              <label class="visually-hidden" for="search">
+                Search for a book
+              </label>
+              <input class="books__search" type="search" name="query" id="search" placeholder="Search for a book...">
+              <button class="btn btn--search" type="submit" aria-label="Search for books" title="Search">
+                <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
+              </button>
+            </form>
 
-      <!-- Show validation errors -->
-      <%- include("../../partials/errors.ejs") %>
+            <!-- Add book -->
+            <a class="books__add" href="/books/new">
+              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Book</a>
+          </div>
+        </div>
 
-      <!-- Search book-->
-      <form action="/books/search" method="get">
-        <label class="visually-hidden" for="search">
-          Search for a Book
-        </label>
-        <input type="search" name="query" id="search" placeholder="Enter book name">
-        <button type="submit">Search</button>
-      </form>
-
-      <!-- Add book -->
-      <form action="/books/new" method="get">
-        <button type="submit">Add Book</button>
-      </form>
-
-      
-      <% if (locals.filteredBooks) { %>
-        <% if(filteredBooks.length > 0) { %>
-          <!-- Show search results -->
-          <h3>Search Results</h3>
-          <% filteredBooks.forEach(book => { %>
-            <a href="/books/<%= book.id %>/copy/<%= book.copyId %>" >
-              <h3><%= book.title %></h3>
-              <p><%= book.authors %></p>
-              <p><%= book.plot_summary %></p>
-              <p><%= book.type %></p>
-              <p><%= book.format %></p>
-              <p><%= book.edition %></p>
-            </a>
-            <hr>
-          <% }) %>
-          <a href="/books">Back to Books</a>
-        <% } else { %>
-          <p>Book not found</p>
-        <% } %>        
-      <% } else if (locals.books) { %>
-        <% if ( books.length > 0) { %>
-          <!-- Show all books -->
-          <h3>All Books List</h3>
-
-          <% books.forEach(book => { %>
-            <a href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
-              <h3><%= book.title %></h3>
-              <p><%= book.plot_summary %></p>
-              <p><%= book.authors %></p>             
-              <p><%= book.type %></p>
-              <p><%= book.format %></p>
-              <p><%= book.edition %></p>
-            </a>
-            <form action="/books/<%= book.bookId %>/delete" method="POST" >
-              <button type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">Delete Entire Book Entry</button>
-            </form> 
-            <hr>
-          <% }) %>
-        <% } else { %>
-          <p>Start by adding some books</p>
+        <!-- Show validation errors -->
+        <%- include("../../partials/errors.ejs") %>
+        
+        <% if (locals.filteredBooks) { %>
+          <% if(filteredBooks.length > 0) { %>
+            <!-- Show search results -->
+            <h3>Search Results</h3>
+            <% filteredBooks.forEach(book => { %>
+              <a href="/books/<%= book.id %>/copy/<%= book.copyId %>" >
+                <h3><%= book.title %></h3>
+                <p><%= book.authors %></p>
+                <p><%= book.plot_summary %></p>
+                <p><%= book.type %></p>
+                <p><%= book.format %></p>
+                <p><%= book.edition %></p>
+              </a>
+              <hr>
+            <% }) %>
+            <a href="/books">Back to Books</a>
+          <% } else { %>
+            <p>Book not found</p>
+          <% } %>
+        <% } else if (locals.books) { %>
+          <% if ( books.length > 0) { %>
+            <!-- Show all books -->
+            <h3>All Books List</h3>
+            <% books.forEach(book => { %>
+              <a href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
+                <h3><%= book.title %></h3>
+                <p><%= book.plot_summary %></p>
+                <p><%= book.authors %></p>
+                <p><%= book.type %></p>
+                <p><%= book.format %></p>
+                <p><%= book.edition %></p>
+              </a>
+              <form action="/books/<%= book.bookId %>/delete" method="POST" >
+                <button type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">Delete Entire Book Entry</button>
+              </form>
+              <hr>
+            <% }) %>
+          <% } else { %>
+            <p>Start by adding some books</p>
+          <% } %>
         <% } %>
-      <% } %>      
+      </div>
     </main>
 
     <!-- Footer -->
