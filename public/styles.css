@@ -148,7 +148,7 @@ a {
   --clr-primary-lighter:#484848;
   --clr-primary-light:  #303030;
   --clr-primary:        #8A2BE2;
-  --clr-primary-dark:   #090909;
+  --clr-primary-dark:   #4B04A4;
   --clr-primary-darker: #080808;
   --clr-secondary-lighter:   #FEFBF1;
   --clr-secondary-light:    #FEFBF0;
@@ -300,6 +300,8 @@ body {
   color: var(--clr-white, white);
 }
 
+
+
 .main {
   grid-area: main;
 }
@@ -333,7 +335,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-block: var(--space-16, 1rem);
+  /* margin-block: var(--space-16, 1rem); */
   gap: var(--space-16, 1rem);
 }
 
@@ -411,10 +413,12 @@ body {
   font-weight: var(--fw-bold, 700);
 }
 
-
-
 .footer {
   grid-area: footer;
+  padding: var(--space-8, 0.5rem);
+  font-weight: var(--fw-bold, 700);
+  text-align: center;
+  background-color: var(--clr-gray-2, whitesmoke);
 }
 
 
