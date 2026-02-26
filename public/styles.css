@@ -203,6 +203,7 @@ body {
   padding-inline-end: var(--space-32, 2rem);
   display: flex;
   align-items: center;
+  background-color: var(--clr-gray-2, whitesmoke);
 }
 
 .title-container {
@@ -317,7 +318,7 @@ body {
 
 .stats {
   padding: var(--space-16, 1rem);
-  background: var(--clr-gray-2);
+  background: var(--clr-gray-2, whitesmoke);
 }
 
 .stats__card {
@@ -356,7 +357,61 @@ body {
 .featured-books,
 .inventory {
   display: flex;
+  gap: var(--space-16, 1rem);
+  padding: var(--space-16, 1rem);
 }
+
+.featured-books > section,
+.inventory > section {
+  flex: 1;
+  background-color: var(--clr-gray-2, whitesmoke);
+  padding: var(--space-16, 1rem);
+  border-radius: var(--bd-radius-small, 0.3125rem);
+}
+
+.featured-books  ol {
+  padding-inline-start: 1.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8, 0.5rem);
+}
+
+.trending-books__title,
+.top-sellers__title {
+  font-weight: var(--fw-bold, 700);
+  color: var(--clr-primary, rebeccapurple);
+}
+
+.inventory > .stock {
+  flex: 1;
+}
+
+.inventory ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8, 0.5rem);
+}
+
+.stock__item,
+.warehouse__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inventory > .warehouse {
+  flex: 3;
+}
+
+.warehouse__item > p {
+  flex: 1;
+}
+
+.warehouse__location {
+  font-weight: var(--fw-bold, 700);
+}
+
+
 
 .footer {
   grid-area: footer;
