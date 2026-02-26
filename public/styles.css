@@ -85,7 +85,8 @@ a {
 
 @font-face {
   font-family: "Geist Mono Regular";
-  src: url("/fonts/geist-mono/geist-mono-regular-webfont.woff2") format("woff2");
+  src: url("/fonts/geist-mono/geistmono-variablefont_wght-webfont.woff2") format("woff2"),
+  url("/fonts/geist-mono/geistmono-variablefont_wght-webfont.woff") format("woff");
   font-weight: 400;
 }
 
@@ -99,8 +100,8 @@ a {
   /* Typography
   ============== */
   /* Fonts */
-  --ff-primary:      sans-serif;
-  --ff-secondary:    serif;
+  --ff-primary: "Averia Serif Libre Bold";
+  --ff-secondary: "Geist Mono Regular";
   
   /* Font sizes */
   --font-base-unit: var(--base-unit);
@@ -134,6 +135,7 @@ a {
   ========= */
   --space-base-unit: var(--base-unit);
   --space-8:  calc(var(--space-base-unit) * 2);
+  --space-12: calc(var(--space-base-unit) * 3);
   --space-16: calc(var(--space-base-unit) * 4);
   --space-24: calc(var(--space-base-unit) * 6);
   --space-32: calc(var(--space-base-unit) * 8);
@@ -145,7 +147,7 @@ a {
   ========= */
   --clr-primary-lighter:#484848;
   --clr-primary-light:  #303030;
-  --clr-primary:        #222222;
+  --clr-primary:        #8A2BE2;
   --clr-primary-dark:   #090909;
   --clr-primary-darker: #080808;
   --clr-secondary-lighter:   #FEFBF1;
@@ -177,7 +179,85 @@ a {
   --radius-base-unit: 0.3125rem;
   --bd-radius-small:  calc(var(--radius-base-unit) * 1);
   --bd-radius-medium: calc(var(--radius-base-unit) * 2);
-  --bd-radius-large:  calc(var(--radius-base-unit) * 2);
+  --bd-radius-large:  calc(var(--radius-base-unit) * 8);
   --bd-radius-round: 50%;
 }
+
+body {
+  padding-inline-end: var(--space-32, 2rem);
+  font-family: var(--ff-secondary), monospace;
+}
+
+.header {
+  padding: var(--space-16, 1rem);
+  display: flex;
+  align-items: center;
+}
+
+.title-container {
+  flex: 1;
+}
+
+.title {
+  font-family: var(--ff-primary), serif;
+  color: var(--clr-primary, rebeccapurple);
+}
+
+.menu {
+  flex: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Hide text */
+.visually-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+
+.menu__search-container {
+  flex: 1;
+}
+
+.menu__form {
+  width: 100%;
+  position: relative;
+}
+
+.menu__search {
+  padding: var(--space-8, 0.5rem);
+  padding-inline-start: var(--space-16, 1rem);
+  border: 1px solid var(--clr-primary, rebeccapurple);
+  border-radius: var(--bd-radius-large, 2.625rem);
+  width: 100%;
+ 
+}
+
+.btn {
+  border: transparent;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.menu__searchBtn {
+  position: absolute;
+  top: var(--space-8, 0.5rem);
+  right: var(--space-12, 0.75rem);
+}
+
+.menu__items-container {
+  flex: 2;
+  display: flex;
+  gap: var(--space-16, 1rem);
+  justify-content: end;
+}
+
+
 
