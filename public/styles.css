@@ -206,7 +206,7 @@ body {
     'header header'
     'sidebar main'
     'footer footer';
-  height: 100vh;
+  height: 100svh;
 }
 
 .header {
@@ -267,6 +267,17 @@ body {
   border: transparent;
   cursor: pointer;
   background-color: transparent;
+}
+
+.btn--primary {
+  color: var(--clr-white, white);
+  padding: var(--space-8, 0.5rem);
+  border-radius: var(--bd-radius-small, 00.3125rem);
+  font-weight: var(--fw-bold, 700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8, 0.5rem);
 }
 
 .btn--search {
@@ -480,7 +491,7 @@ body {
   flex-direction: column;
   gap: var(--space-16, 1rem);
   overflow-y: auto;
-  height: 81vh;
+  height: 81svh;
 }
 
 .gallery__list {
@@ -516,7 +527,7 @@ body {
   color: var(--clr-primary, rebeccapurple);
 }
 
-.book_summary {
+.book__summary {
   color: var(--clr-gray-7, dimgray);
 }
 
@@ -526,14 +537,6 @@ body {
 
 .btn--delete {
   background-color: var(--clr-primary-dark, indigo);
-  color: var(--clr-white, white);
-  padding: var(--space-8, 0.5rem);
-  border-radius: var(--bd-radius-small, 00.3125rem);
-  font-weight: var(--fw-bold, 700);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-8, 0.5rem);
 }
 
 .card--small {
@@ -555,6 +558,60 @@ body {
 
 .link--update {
   border-radius: var(--bd-radius-small, 00.3125rem);
+}
+
+.editor {
+  padding: var(--space-32, 2rem);
+  display: grid;
+  gap: var(--space-16, 1rem);
+}
+
+.form {
+  padding: var(--space-32, 2rem);
+  border: 2px solid var(--clr-primary, rebeccapurple);
+  border-radius: var(--bd-radius-small, 00.3125rem);
+  width: 80%;
+  display: grid;
+  gap: var(--space-24, 1.5rem);
+}
+
+.form--book {
+  height: 75svh;
+  overflow-y: auto;
+}
+
+.form__control {
+  width: 100%;
+}
+
+.form__label,
+.form__input,
+.form__textarea,
+.btn--add {
+  width: 60%;
+}
+
+.form__label {
+  display: block;
+  margin-block-end: var(--space-8, 0.5rem);
+  font-weight: var(--fw-bold, 700);
+}
+
+.form__label--hint {
+  color: var(--clr-gray-7, dimgray);
+}
+
+.form__input,
+.form__textarea {
+  display: block;
+  padding: var(--space-8, 0.5rem);
+  border: 1px solid var(--clr-black, black);
+  border-radius: var(--bd-radius-small, 00.3125rem);
+}
+
+.btn--add {
+  background-color: var(--clr-primary, rebeccapurple);
+  margin-block-start: var(--space-24, 1.5rem);
 }
 
 .footer {

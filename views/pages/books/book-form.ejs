@@ -10,57 +10,87 @@
     <%- include('../../partials/sidebar.ejs') %>
 
     <main class="main">
-      <h2 class="sub-title"><%= locals.isUpdate ? 'Update book' : 'Add Book' %></h2>
 
-      <!-- Show validation errors -->
-      <%- include("../../partials/errors.ejs") %>
+      <div class="editor">
+        <h2 class="sub-title"><%= locals.isUpdate ? 'Update Book' : 'Add Book' %></h2>
 
-      <p><%= locals.isUpdate? 'Note: Title and Author fields are not editable. They are read only.' : '' %></p>
-      <!-- New book form -->
-      <form action="<%= locals.isUpdate ? '/books/' + book.bookId + '/copy/' + book.copyId + '/update' : '/books/new' %>" method="post" class="form">
-        <label for="title"> Title </label>
-        <input type="text" name="title" id="title" 
-        value="<%= locals.book?.title || '' %>"
-        <%= locals.isUpdate ? 'readonly' : '' %> required />
-        <label for="summary"> Summary </label>
-        <textarea name="plot_summary" id="summary"><%= locals.book?.plot_summary || '' %></textarea>
-        <label for="author"> Author </label>
-        <input type="text" name="authors" id="author" 
-        value="<%= locals.book?.authors || '' %>" 
-        <%= locals.isUpdate ? 'readonly' : '' %> required />
-        <label for="genre"> Genre </label>
-        <input type="text" name="genre" id="genre" 
-        value="<%= locals.book?.genre || '' %>"required />
-         <label for="total-pages"> Total Pages </label>
-        <input type="number" name="total_pages" id="total-pages"
-        min="1"
-        value="<%= locals.book?.total_pages || '' %>" required />
-        <label for="price"> Price </label>
-        <span>$</span>
-        <input type="text" name="price" id="price" inputmode="decimal" placeholder="0.00" 
-        value="<%= locals.book?.price || '' %>"
-        required />
-        <label for="stock">Stock</label>
-        <input type="number" name="stock" id="stock" min="0"
-        value="<%= locals.book?.stock || '' %>" required>
-         <label for="format"> Format </label>
-        <input type="text" name="format" id="format"
-        value="<%= locals.book?.format || '' %>" required />
-        <label for="publish-date">Publish date</label>
-        <input type="date" name="publish_date" id="publish-date"
-        value="<%= locals.book ? new Date(book.publish_date).toISOString().split('T')[0] : '' %>">
-        <label for="publisher"> Publisher </label>
-        <input type="text" name="publisher" id="publisher"
-        value="<%= locals.book?.publisher || '' %>" required />
-        <label for="edition">Edition</label>
-        <input type="text" name="edition" id="edition"
-        value="<%= locals.book?.edition || '' %>">
-        <label for="isbn"> ISBN number </label>
-        <input type="text" name="isbn" id="isbn"
-        value="<%= locals.book?.isbn || '' %>"
-        <%= locals.isUpdate ? 'readonly' : '' %> required />  
-        <button><%= locals.isUpdate ? 'Update' : 'Add' %></button>
-    </form>
+        <!-- Show validation errors -->
+        <%- include("../../partials/errors.ejs") %>
+
+        <!-- Note -->
+        <p><%= locals.isUpdate? 'Note: Title and Author fields are not editable. They are read only.' : '' %></p>
+
+        <!-- Book form -->
+        <form action="<%= locals.isUpdate ? '/books/' + book.bookId + '/copy/' + book.copyId + '/update' : '/books/new' %>" method="post" class="form form--book">
+          <div class="form__control">
+            <label class="form__label" for="title"> Title </label>
+            <input class="form__input" type="text" name="title" id="title"
+            value="<%= locals.book?.title || '' %>"
+            <%= locals.isUpdate ? 'readonly' : '' %> required />
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="summary"> Summary <span class="form__label--hint">(in one or two sentences)</span> </label>
+            <textarea class="form__textarea" name="plot_summary" id="summary" rows="5"><%= locals.book?.plot_summary || '' %></textarea>
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="author"> Author </label>
+            <input class="form__input" type="text" name="authors" id="author"
+            value="<%= locals.book?.authors || '' %>"
+            <%= locals.isUpdate ? 'readonly' : '' %> required />
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="genre"> Genre </label>
+            <input class="form__input" type="text" name="genre" id="genre"
+            value="<%= locals.book?.genre || '' %>"required />
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="total-pages"> Total Pages </label>
+            <input class="form__input" type="number" name="total_pages" id="total-pages"
+            min="1"
+            value="<%= locals.book?.total_pages || '' %>" required />
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="price"> Price <span class="form__label--hint">(E.g. $5.49)</span> </label>
+            <input class="form__input" type="text" name="price" id="price" inputmode="decimal" placeholder="$0.00"
+            value="<%= locals.book?.price || '' %>"
+            required />
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="stock">Stock</label>
+            <input class="form__input" type="number" name="stock" id="stock" min="0"
+            value="<%= locals.book?.stock || '' %>" required>
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="format"> Format <span class="form__label--hint">(E.g. Hardcover)</span> </label>
+            <input class="form__input" type="text" name="format" id="format"
+            value="<%= locals.book?.format || '' %>" required />
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="publish-date">Publish date</label>
+            <input class="form__input" type="date" name="publish_date" id="publish-date"
+            value="<%= locals.book ? new Date(book.publish_date).toISOString().split('T')[0] : '' %>">
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="publisher"> Publisher </label>
+            <input class="form__input" type="text" name="publisher" id="publisher"
+            value="<%= locals.book?.publisher || '' %>" required />
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="edition">Edition <span class="form__label--hint">(E.g. Special Edition)</span></label>
+            <input class="form__input" type="text" name="edition" id="edition"
+            value="<%= locals.book?.edition || '' %>">
+          </div>
+          <div class="form__control">
+            <label class="form__label" for="isbn"> ISBN number <span class="form__label--hint">(E.g. 9780441172719)</span></label>
+            <input class="form__input" type="text" name="isbn" id="isbn"
+            value="<%= locals.book?.isbn || '' %>"
+            <%= locals.isUpdate ? 'readonly' : '' %> required />
+          </div>
+
+          <!-- Add or Update button -->
+          <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+            </form>
+      </div>
     </main>
 
     <!-- Footer -->

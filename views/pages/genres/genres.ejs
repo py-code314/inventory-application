@@ -73,7 +73,7 @@
 
                       <!-- Delete genre -->
                       <form action="/genres/<%= genre.id %>/delete" method="POST" >
-                        <button class="btn btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL data for this genre!');">
+                        <button class="btn btn--primary btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL data for this genre!');">
                           <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
                           Delete</button>
                       </form>

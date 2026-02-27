@@ -75,7 +75,7 @@
 
                     <!-- Delete book -->
                     <form class="book__form" action="/books/<%= book.bookId %>/delete" method="POST" >
-                      <button class="btn btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">
+                      <button class="btn btn--primary btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">
                         <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
                         Delete Entire Book Entry</button>
                     </form>
