@@ -10,65 +10,84 @@
     <%- include('../../partials/sidebar.ejs') %>
 
     <!-- Main content-->
-    <main class="genres">
-      <h2>Genres</h2>
-
-      <!-- Show validation errors -->
-      <%- include("../../partials/errors.ejs") %>
-
-      <!-- Search genre -->
-      <form action="/genres/search" method="get">
-        <label class="visually-hidden" for="search">
-          Search for Genre
-        </label>
-        <!-- ? can i add required attribute -->
-        <input type="search" name="query" id="search"
-         value="<%= locals.search ? search : '' %>"
-         placeholder="Enter genre name">
-        <button type="submit">Search</button>
-      </form>
-
-      <!-- Add genre -->
-      <form action="/genres/new" method="get">
-        <button type="submit">Add Genre</button>
-      </form>
-
-      
-      <% if (locals.filteredGenres) { %>
-        <% if(filteredGenres.length > 0) { %>
-          <!-- Show search results -->
-          <h3>Search Results</h3>
-          <% filteredGenres.forEach(genre => { %>
-            <h3><%= genre.type %></h3>
-            <hr>
-          <% }) %>
-          <a href="/genres">Back to Genres</a>
-        <% } else { %>
-          <p>Genre not found</p>
-        <% } %>        
-      <% } else if (locals.genres) { %>
-        <% if ( genres.length > 0) { %>
-          <!-- Show all genres -->
-          <h3>All Genres List</h3>
-
-          <% genres.forEach(genre => { %>
-            <h3><%= genre.type %></h3>
-
-            <!-- Update genre -->
-            <form action="/genres/<%= genre.id %>/update" method="get" >
-              <button type="submit" >Update</button>
+    <main class="main">
+      <div class="genres category">
+        <div class="genres__controls category__controls">
+          <h2 class="sub-title">Genres</h2>
+          
+          <!-- Search genre -->
+          <div class="genres__actions category__actions">
+            <form class="genres__form category__form" action="/genres/search" method="get">
+              <label class="visually-hidden" for="search">
+                Search for Genre
+              </label>
+              <!-- ? can i add required attribute -->
+              <input class="genres__search category__search" type="search" name="query" id="search"
+               value="<%= locals.search ? search : '' %>"
+               placeholder="Search for genre...">
+              <button class="btn btn--search" type="submit" aria-label="Search for genre" title="Search">
+                <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
+              </button>
             </form>
 
-            <!-- Delete genre -->
-            <form action="/genres/<%= genre.id %>/delete" method="POST" >
-              <button type="submit" onclick="return confirm('Warning: This will delete ALL data for this genre!');">Delete Genre</button>
-            </form> 
-            <hr>
-          <% }) %>
-        <% } else { %>
-          <p>Start by adding some genres</p>
+            <!-- Add genre -->
+            <a class="genres__add category__add link" href="/genres/new">
+              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Genre</a>
+          </div>
+        </div>
+
+        <!-- Show validation errors -->
+        <%- include("../../partials/errors.ejs") %>
+        
+        <% if (locals.filteredGenres) { %>
+          <% if(filteredGenres.length > 0) { %>
+            <!-- Show search results -->
+            <h3>Search Results</h3>
+            <% filteredGenres.forEach(genre => { %>
+              <h3><%= genre.type %></h3>
+              <hr>
+            <% }) %>
+            <a href="/genres">Back to Genres</a>
+          <% } else { %>
+            <p>Genre not found</p>
+          <% } %>
+        <% } else if (locals.genres) { %>
+          <% if ( genres.length > 0) { %>
+            <!-- Show all genres -->
+            <div class="gallery">
+              <h3>All Genres List</h3>
+              <ul class="genres__list gallery__list">
+                <% genres.forEach(genre => { %>
+                  <li class="genre">
+                    <div class="genre__image"></div>
+                    <div class="genre__info">
+                      <h4><%= genre.type %></h4>
+                      <!-- TODO:  add total number -->
+                      <p>dummy text</p>
+                    </div>
+
+                    <!-- Update genre -->
+                    <div class="btn-group">
+                      <a class="link genre__update"  href="/genres/<%= genre.id %>/update">
+                        <img src="/icons/icon-update.svg" alt="" width="25" height="25" />Update</a>
+
+                      <!-- Delete genre -->
+                      <form action="/genres/<%= genre.id %>/delete" method="POST" >
+                        <button class="btn btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL data for this genre!');">
+                          <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
+                          Delete</button>
+                      </form>
+                    </div>
+                  </li>
+                  
+                <% }) %>
+              </ul>
+            </div>
+          <% } else { %>
+            <p>Start by adding some genres</p>
+          <% } %>
         <% } %>
-      <% } %>      
+      </div>
     </main>
 
     <!-- Footer -->

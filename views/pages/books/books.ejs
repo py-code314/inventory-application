@@ -11,24 +11,25 @@
 
     <!-- Main content-->
     <main class="main">
-      <div class="books">
-        <div class="books__controls">
+      <div class="books category">
+        <div class="books__controls category__controls">
           <h2 class="sub-title">Books</h2>
           
-          <div class="books__actions">
+          <div class="books__actions category__actions">
             <!-- Search book-->
-            <form class="books__form" action="/books/search" method="get">
+            <form class="books__form category__form" action="/books/search" method="get">
               <label class="visually-hidden" for="search">
                 Search for a book
               </label>
-              <input class="books__search" type="search" name="query" id="search" placeholder="Search for a book...">
-              <button class="btn btn--search" type="submit" aria-label="Search for books" title="Search">
+              <!-- TODO add value -->
+              <input class="books__search category__search" type="search" name="query" id="search" placeholder="Search for a book...">
+              <button class="btn btn--search" type="submit" aria-label="Search for a book" title="Search">
                 <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
               </button>
             </form>
 
             <!-- Add book -->
-            <a class="books__add" href="/books/new">
+            <a class="books__add category__add link" href="/books/new">
               <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Book</a>
           </div>
         </div>
@@ -58,9 +59,9 @@
         <% } else if (locals.books) { %>
           <% if ( books.length > 0) { %>
             <!-- Show all books -->
-            <div class="books__gallery">
+            <div class="books__all gallery">
               <h3>All Books List</h3>
-              <ul class="books__list">
+              <ul class="books__list gallery__list">
                 <% books.forEach(book => { %>
                   <li class="book">
                     <a class="book__link" href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
@@ -71,13 +72,16 @@
                       <p><%= book.format %></p>
                       <p><%= book.edition %></p>
                     </a>
-                    <form action="/books/<%= book.bookId %>/delete" method="POST" >
-                      <button class="btn btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">Delete Entire Book Entry</button>
+
+                    <!-- Delete book -->
+                    <form class="book__form" action="/books/<%= book.bookId %>/delete" method="POST" >
+                      <button class="btn btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">
+                        <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
+                        Delete Entire Book Entry</button>
                     </form>
                   </li>
                 <% }) %>
               </ul>
-              
             </div>
           <% } else { %>
             <p>Start by adding some books</p>
