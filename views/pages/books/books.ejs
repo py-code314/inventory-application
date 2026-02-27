@@ -58,21 +58,27 @@
         <% } else if (locals.books) { %>
           <% if ( books.length > 0) { %>
             <!-- Show all books -->
-            <h3>All Books List</h3>
-            <% books.forEach(book => { %>
-              <a href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
-                <h3><%= book.title %></h3>
-                <p><%= book.plot_summary %></p>
-                <p><%= book.authors %></p>
-                <p><%= book.type %></p>
-                <p><%= book.format %></p>
-                <p><%= book.edition %></p>
-              </a>
-              <form action="/books/<%= book.bookId %>/delete" method="POST" >
-                <button type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">Delete Entire Book Entry</button>
-              </form>
-              <hr>
-            <% }) %>
+            <div class="books__gallery">
+              <h3>All Books List</h3>
+              <ul class="books__list">
+                <% books.forEach(book => { %>
+                  <li class="book">
+                    <a class="book__link" href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
+                      <h4 class="book__title"><%= book.title %></h4>
+                      <p class="book__summary"><%= book.plot_summary %></p>
+                      <p><%= book.authors %></p>
+                      <p><%= book.type %></p>
+                      <p><%= book.format %></p>
+                      <p><%= book.edition %></p>
+                    </a>
+                    <form action="/books/<%= book.bookId %>/delete" method="POST" >
+                      <button class="btn btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">Delete Entire Book Entry</button>
+                    </form>
+                  </li>
+                <% }) %>
+              </ul>
+              
+            </div>
           <% } else { %>
             <p>Start by adding some books</p>
           <% } %>
