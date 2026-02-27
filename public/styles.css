@@ -560,7 +560,8 @@ body {
   border-radius: var(--bd-radius-small, 00.3125rem);
 }
 
-.editor {
+.editor,
+.book__details {
   padding: var(--space-32, 2rem);
   display: grid;
   gap: var(--space-16, 1rem);
@@ -612,6 +613,16 @@ body {
 .btn--add {
   background-color: var(--clr-primary, rebeccapurple);
   margin-block-start: var(--space-24, 1.5rem);
+}
+
+.card--details {
+  width: 60%;
+  height: 75svh;
+  overflow-y: auto;
+}
+
+.book__summary--details {
+  color: var(--clr-black, black)
 }
 
 .footer {
