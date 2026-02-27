@@ -469,7 +469,7 @@ body {
   font-weight: var(--fw-bold, 700);
 }
 
-.category__add {
+.link--add {
   flex: 1;
   border-radius: var(--bd-radius-large, 2.625rem);
 }

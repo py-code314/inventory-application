@@ -10,67 +10,84 @@
     <%- include('../../partials/sidebar.ejs') %>
 
     <!-- Main content-->
-    <main class="publishers">
-      <h2>Publishers</h2>
-
-      <!-- Show validation errors -->
-      <%- include("../../partials/errors.ejs") %>
-
-      <!-- Search publisher -->
-      <form action="/publishers/search" method="get">
-        <label class="visually-hidden" for="search">
-          Search for Publisher
-        </label>
-        <input type="search" name="query" id="search"
-         value="<%= locals.search ? search : '' %>"
-         placeholder="Enter publisher name">
-        <button type="submit">Search</button>
-      </form>
-
-      <!-- Add publisher -->
-      <form action="/publishers/new" method="get">
-        <button type="submit">Add Publisher</button>
-      </form>
-
-      
-      <% if (locals.filteredPublishers) { %>
-        <% if(filteredPublishers.length > 0) { %>
-          <!-- Show search results -->
-          <h3>Search Results</h3>
-          <% filteredPublishers.forEach(publisher => { %>
-            <h3><%= publisher.name %></h3>
-            <p><%= publisher.email %></p>
-            <hr>
-          <% }) %>
-          <a href="/publishers">Back to Publishers</a>
-        <% } else { %>
-          <p>Publisher not found</p>
-        <% } %>        
-      <% } else if (locals.publishers) { %>
-        <% if ( publishers.length > 0) { %>
-          <!-- Show all publishers -->
-          <h3>All Publishers List</h3>
-
-          <% publishers.forEach(publisher => { %>
-            <h3><%= publisher.name %></h3>
-            <p><%= publisher.email %></p>
-
-            <!-- Update publisher -->
-            <form action="/publishers/<%= publisher.id %>/update" method="get" >
-              <button type="submit" >Update</button>
+    <main class="main">
+      <div class="category">
+        <div class="category__controls">
+          <h2 class="sub-title">Publishers</h2>
+         
+            <!-- Search publisher -->
+          <div class="category__actions">
+            <form class="category__form" action="/publishers/search" method="get">
+              <label class="visually-hidden" for="search">
+                Search for Publisher
+              </label>
+              <input class="category__search" type="search" name="query" id="search"
+               value="<%= locals.search ? search : '' %>"
+               placeholder="Search for publisher...">
+              <button class="btn btn--search" type="submit"
+              aria-label="Search for publisher" title="Search">
+                <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
+              </button>
             </form>
 
-            <!-- Delete publisher -->
-            <form action="/publishers/<%= publisher.id %>/delete" method="POST" >
-              <button type="submit" onclick="return confirm('Warning: This will delete ALL data for this publisher!');">Delete Publisher</button>
-            </form> 
-            
-            <hr>
-          <% }) %>
-        <% } else { %>
-          <p>Start by adding some publishers</p>
+            <!-- Add publisher -->
+            <a class="link--add link" href="/publishers/new">
+              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Publisher</a>
+          </div>
+        </div>
+
+         <!-- Show validation errors -->
+        <%- include("../../partials/errors.ejs") %>
+        
+        
+        <% if (locals.filteredPublishers) { %>
+          <% if(filteredPublishers.length > 0) { %>
+            <!-- Show search results -->
+            <h3>Search Results</h3>
+            <% filteredPublishers.forEach(publisher => { %>
+              <h3><%= publisher.name %></h3>
+              <p><%= publisher.email %></p>
+              <hr>
+            <% }) %>
+            <a href="/publishers">Back to Publishers</a>
+          <% } else { %>
+            <p>Publisher not found</p>
+          <% } %>
+        <% } else if (locals.publishers) { %>
+          <% if ( publishers.length > 0) { %>
+            <!-- Show all publishers -->
+            <div class="gallery">
+              <h3>All Publishers List</h3>
+              <ul class="gallery__list">
+                <% publishers.forEach(publisher => { %>
+                  <li class="card card--small">
+                    <div class="genre__image img-container"></div>
+                    <div class="publisher__info">
+                      <h3><%= publisher.name %></h3>
+                      <p><%= publisher.email %></p>
+                    </div>
+
+                    <!-- Update publisher -->
+                    <div class="btn-group">
+                      <a class="link link--update"  href="/publishers/<%= publisher.id %>/update">
+                        <img src="/icons/icon-update.svg" alt="" width="25" height="25" />Update</a>
+
+                      <!-- Delete publisher -->
+                      <form action="/publishers/<%= publisher.id %>/delete" method="POST" >
+                        <button class="btn btn--delete"  type="submit" onclick="return confirm('Warning: This will delete ALL data for this publisher!');">
+                          <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
+                          Delete</button>
+                      </form>
+                    </div>
+                  </li>
+                <% }) %>
+              </ul>
+            </div>
+          <% } else { %>
+            <p>Start by adding some publishers</p>
+          <% } %>
         <% } %>
-      <% } %>      
+      </div>
     </main>
 
     <!-- Footer -->
