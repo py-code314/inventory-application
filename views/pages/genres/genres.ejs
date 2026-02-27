@@ -58,8 +58,8 @@
               <h3>All Genres List</h3>
               <ul class="genres__list gallery__list">
                 <% genres.forEach(genre => { %>
-                  <li class="genre">
-                    <div class="genre__image"></div>
+                  <li class="genre card card--small">
+                    <div class="genre__image img-container"></div>
                     <div class="genre__info">
                       <h4><%= genre.type %></h4>
                       <!-- TODO:  add total number -->
@@ -68,7 +68,7 @@
 
                     <!-- Update genre -->
                     <div class="btn-group">
-                      <a class="link genre__update"  href="/genres/<%= genre.id %>/update">
+                      <a class="link link--update genre__update"  href="/genres/<%= genre.id %>/update">
                         <img src="/icons/icon-update.svg" alt="" width="25" height="25" />Update</a>
 
                       <!-- Delete genre -->
@@ -79,7 +79,6 @@
                       </form>
                     </div>
                   </li>
-                  
                 <% }) %>
               </ul>
             </div>

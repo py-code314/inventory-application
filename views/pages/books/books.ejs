@@ -63,7 +63,7 @@
               <h3>All Books List</h3>
               <ul class="books__list gallery__list">
                 <% books.forEach(book => { %>
-                  <li class="book">
+                  <li class="book card card--book">
                     <a class="book__link" href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
                       <h4 class="book__title"><%= book.title %></h4>
                       <p class="book__summary"><%= book.plot_summary %></p>
