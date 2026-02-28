@@ -176,6 +176,7 @@ a {
 
   --clr-white: #fff;
   --clr-black: #000;
+  --clr-red: #DC143C;
 
   /* Border
   ========== */
@@ -485,11 +486,20 @@ body {
   border-radius: var(--bd-radius-large, 2.625rem);
 }
 
+.link--update {
+  border-radius: var(--bd-radius-small, 00.3125rem);
+}
+
+.link--back {
+  align-self: start;
+  border-radius: var(--bd-radius-small, 00.3125rem);
+}
+
 .gallery {
   padding: var(--space-32, 2rem);
   display: flex;
   flex-direction: column;
-  gap: var(--space-16, 1rem);
+  gap: var(--space-32, 2rem);
   overflow-y: auto;
   height: 81svh;
 }
@@ -540,7 +550,7 @@ body {
 }
 
 .card--small {
-  grid-template-rows: 150px auto auto;
+  grid-template-rows: 150px 1fr auto;
 }
 
 .img-container {
@@ -556,9 +566,7 @@ body {
   justify-content: center;
 }
 
-.link--update {
-  border-radius: var(--bd-radius-small, 00.3125rem);
-}
+
 
 .editor,
 .book__details {
@@ -623,6 +631,15 @@ body {
 
 .book__summary--details {
   color: var(--clr-black, black)
+}
+
+.errors {
+  padding: var(--space-32, 2rem);
+}
+
+.errors__msg {
+  color: var(--clr-red, red);
+  font-weight: var(--fw-bold, 700);
 }
 
 .footer {

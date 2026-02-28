@@ -42,12 +42,25 @@
         <% if (locals.filteredGenres) { %>
           <% if(filteredGenres.length > 0) { %>
             <!-- Show search results -->
-            <h3>Search Results</h3>
-            <% filteredGenres.forEach(genre => { %>
-              <h3><%= genre.type %></h3>
-              <hr>
-            <% }) %>
-            <a href="/genres">Back to Genres</a>
+            <div class="gallery">
+              <h3>Search Results</h3>
+              <ul class="gallery__list">
+                <% filteredGenres.forEach(genre => { %>
+                  <li class="card card--small">
+                    <div class="genre__image img-container"></div>
+                    <div class="genre__info">
+                      <h4><%= genre.type %></h4>
+                      <!-- TODO:  add total number -->
+                      <p>dummy text</p>
+                    </div>
+                  </li>
+                <% }) %>
+              </ul>
+              <a class="link link--back" href="/genres">
+                <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
+                Back to Genres</a>
+            </div>
+            
           <% } else { %>
             <p>Genre not found</p>
           <% } %>

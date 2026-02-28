@@ -35,28 +35,39 @@
           </div>
         </div>
 
-         <!-- Show validation errors -->
-          <%- include("../../partials/errors.ejs") %>
+        <!-- Show validation errors -->
+        <%- include("../../partials/errors.ejs") %>
         
         <% if (locals.filteredAuthors) { %>
           <% if(filteredAuthors.length > 0) { %>
             <!-- Show search results -->
-            <h3>Search Results</h3>
-            <% filteredAuthors.forEach(author => { %>
-              <h3><%= author.full_name %></h3>
-              <p>
-                <% if (author.birth_date) { %>
-                  <% const date = new Date(author.birth_date) %>
-                  <time datetime="<%= date.toISOString().split('T')[0] %>">
-                    DOB: <%= date.toLocaleDateString()  %>
-                  </time>
-                <% } else { %>
-                  DOB: Unknown
-                <% } %>
-              </p>
-              <hr>
-            <% }) %>
-            <a href="/authors">Back to Authors</a>
+            <div class="gallery">
+              <h3>Search Results</h3>
+              <ul class="gallery__list">
+                <% filteredAuthors.forEach(author => { %>
+                  <li class="card card--small">
+                    <div class="author__image img-container"></div>
+                    <div class="author__info">
+                      <h3><%= author.full_name %></h3>
+                      <p>
+                        <% if (author.birth_date) { %>
+                          <% const date = new Date(author.birth_date) %>
+                          <time datetime="<%= date.toISOString().split('T')[0] %>">
+                            DOB: <%= date.toLocaleDateString()  %>
+                          </time>
+                        <% } else { %>
+                          DOB: Unknown
+                        <% } %>
+                      </p>
+                    </div>
+                  </li>
+                <% }) %>
+              </ul>
+              <a class="link link--back" href="/authors">
+                <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
+                Back to Authors</a>
+            </div>
+            
           <% } else { %>
             <p>Author not found</p>
           <% } %>

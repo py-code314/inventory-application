@@ -40,19 +40,27 @@
         <% if (locals.filteredBooks) { %>
           <% if(filteredBooks.length > 0) { %>
             <!-- Show search results -->
-            <h3>Search Results</h3>
-            <% filteredBooks.forEach(book => { %>
-              <a href="/books/<%= book.id %>/copy/<%= book.copyId %>" >
-                <h3><%= book.title %></h3>
-                <p><%= book.authors %></p>
-                <p><%= book.plot_summary %></p>
-                <p><%= book.type %></p>
-                <p><%= book.format %></p>
-                <p><%= book.edition %></p>
-              </a>
-              <hr>
-            <% }) %>
-            <a href="/books">Back to Books</a>
+            <div class="gallery">
+              <h3>Search Results</h3>
+              <ul class="gallery__list">
+                <% filteredBooks.forEach(book => { %>
+                  <li class="card card--book">
+                    <a class="book__link" href="/books/<%= book.id %>/copy/<%= book.copyId %>" >
+                      <h4 class="book__title"><%= book.title %></h4>
+                      <p class="book__summary"><%= book.plot_summary %></p>
+                      <p><%= book.authors %></p>
+                      <p><%= book.type %></p>
+                      <p><%= book.format %></p>
+                      <p><%= book.edition %></p>
+                    </a>
+                  </li>
+                <% }) %>
+              </ul>
+              <a class="link link--back" href="/books">
+                <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
+                Back to Books</a>
+            </div>
+            
           <% } else { %>
             <p>Book not found</p>
           <% } %>

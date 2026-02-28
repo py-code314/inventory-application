@@ -1,11 +1,13 @@
-<!-- Show errors -->
-<% if (locals.errors) {%>
-  <ul>
-    <% errors.forEach(function(error) { %>
-      <li><%= error.msg %></li>
-    <% }); %>
-  </ul>
-  <a href="/books">Back to Books</a>
-<% } %>
+
+<div class="errors">
+  <% if (locals.errors) {%>
+    <ul class="errors__list">
+      <% errors.forEach(function(error) { %>
+        <li class="errors__msg"><%= error.msg %></li>
+      <% }); %>
+    </ul>
+    <a href="/books">Back to Books</a>
+  <% } %>
+</div>
 
 

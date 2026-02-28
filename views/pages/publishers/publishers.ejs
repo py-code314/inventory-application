@@ -43,13 +43,24 @@
         <% if (locals.filteredPublishers) { %>
           <% if(filteredPublishers.length > 0) { %>
             <!-- Show search results -->
-            <h3>Search Results</h3>
-            <% filteredPublishers.forEach(publisher => { %>
-              <h3><%= publisher.name %></h3>
-              <p><%= publisher.email %></p>
-              <hr>
-            <% }) %>
-            <a href="/publishers">Back to Publishers</a>
+            <div class="gallery">
+              <h3>Search Results</h3>
+              <ul class="gallery__list">
+                <% filteredPublishers.forEach(publisher => { %>
+                  <li class="card card--small">
+                    <div class="genre__image img-container"></div>
+                    <div class="publisher__info">
+                      <h4><%= publisher.name %></h4>
+                      <p><%= publisher.email %></p>
+                    </div>
+                  </li>
+                <% }) %>
+              </ul>
+              <a class="link link--back" href="/publishers">
+                <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
+                Back to Publishers</a>
+            </div>
+            
           <% } else { %>
             <p>Publisher not found</p>
           <% } %>
@@ -63,7 +74,7 @@
                   <li class="card card--small">
                     <div class="genre__image img-container"></div>
                     <div class="publisher__info">
-                      <h3><%= publisher.name %></h3>
+                      <h4><%= publisher.name %></h4>
                       <p><%= publisher.email %></p>
                     </div>
 
