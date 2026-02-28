@@ -13,7 +13,7 @@
     <main class="main">
       <div class="category">
         <div class="category__controls">
-          <h2 class="sub-title">Publishers</h2>
+          <h2 class="sub-title"><a href="/publishers" class="link--sub-title">Publishers</a></h2>
          
             <!-- Search publisher -->
           <div class="category__actions">
@@ -21,7 +21,7 @@
               <label class="visually-hidden" for="search">
                 Search for Publisher
               </label>
-              <input class="category__search" type="search" name="query" id="search"
+              <input class="category__search" type="text" name="query" id="search"
                value="<%= locals.search ? search : '' %>"
                placeholder="Search for publisher...">
               <button class="btn btn--search" type="submit"
@@ -37,14 +37,16 @@
         </div>
 
          <!-- Show validation errors -->
-        <%- include("../../partials/errors.ejs") %>
+        <%  if(locals.errors) {%>
+          <%- include("../../partials/errors.ejs") %>
+        <% } %> 
         
         
         <% if (locals.filteredPublishers) { %>
+          <div class="gallery">
+            <h3>Search Results</h3>
           <% if(filteredPublishers.length > 0) { %>
             <!-- Show search results -->
-            <div class="gallery">
-              <h3>Search Results</h3>
               <ul class="gallery__list">
                 <% filteredPublishers.forEach(publisher => { %>
                   <li class="card card--small">
@@ -62,7 +64,9 @@
             </div>
             
           <% } else { %>
-            <p>Publisher not found</p>
+            <div class="status">
+              <p>Publisher not found</p>
+            </div>
           <% } %>
         <% } else if (locals.publishers) { %>
           <% if ( publishers.length > 0) { %>
@@ -95,7 +99,9 @@
               </ul>
             </div>
           <% } else { %>
-            <p>Start by adding some publishers</p>
+            <div class="status">
+              <p>Start by adding some publishers</p>
+            </div>
           <% } %>
         <% } %>
       </div>

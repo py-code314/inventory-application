@@ -13,7 +13,7 @@
     <main class="main">
       <div class="genres category">
         <div class="genres__controls category__controls">
-          <h2 class="sub-title">Genres</h2>
+          <h2 class="sub-title"><a href="/genres" class="link--sub-title">Genres</a></h2>
           
           <!-- Search genre -->
           <div class="genres__actions category__actions">
@@ -22,7 +22,7 @@
                 Search for Genre
               </label>
               <!-- ? can i add required attribute -->
-              <input class="genres__search category__search" type="search" name="query" id="search"
+              <input class="genres__search category__search" type="text" name="query" id="search"
                value="<%= locals.search ? search : '' %>"
                placeholder="Search for genre...">
               <button class="btn btn--search" type="submit" aria-label="Search for genre" title="Search">
@@ -37,13 +37,15 @@
         </div>
 
         <!-- Show validation errors -->
-        <%- include("../../partials/errors.ejs") %>
+        <%  if(locals.errors) {%>
+          <%- include("../../partials/errors.ejs") %>
+        <% } %> 
         
         <% if (locals.filteredGenres) { %>
+          <div class="gallery">
+            <h3>Search Results</h3>
           <% if(filteredGenres.length > 0) { %>
             <!-- Show search results -->
-            <div class="gallery">
-              <h3>Search Results</h3>
               <ul class="gallery__list">
                 <% filteredGenres.forEach(genre => { %>
                   <li class="card card--small">
@@ -62,7 +64,9 @@
             </div>
             
           <% } else { %>
-            <p>Genre not found</p>
+            <div class="status">
+              <p>Genre not found</p>
+            </div>
           <% } %>
         <% } else if (locals.genres) { %>
           <% if ( genres.length > 0) { %>
@@ -96,7 +100,9 @@
               </ul>
             </div>
           <% } else { %>
-            <p>Start by adding some genres</p>
+            <div class="status">
+              <p>Start by adding some genres</p>
+            </div>
           <% } %>
         <% } %>
       </div>

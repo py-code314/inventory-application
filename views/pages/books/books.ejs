@@ -13,7 +13,7 @@
     <main class="main">
       <div class="books category">
         <div class="books__controls category__controls">
-          <h2 class="sub-title">Books</h2>
+          <h2 class="sub-title"><a href="/books" class="link--sub-title">Books</a></h2>
           
           <div class="books__actions category__actions">
             <!-- Search book-->
@@ -22,7 +22,7 @@
                 Search for a book
               </label>
               <!-- TODO add value -->
-              <input class="books__search category__search" type="search" name="query" id="search" placeholder="Search for a book...">
+              <input class="books__search category__search" type="text" name="query" id="search" placeholder="Search for a book...">
               <button class="btn btn--search" type="submit" aria-label="Search for a book" title="Search">
                 <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
               </button>
@@ -35,13 +35,16 @@
         </div>
 
         <!-- Show validation errors -->
-        <%- include("../../partials/errors.ejs") %>
+        <%  if(locals.errors) {%>
+          <%- include("../../partials/errors.ejs") %>
+        <% } %> 
+        
         
         <% if (locals.filteredBooks) { %>
-          <% if(filteredBooks.length > 0) { %>
-            <!-- Show search results -->
-            <div class="gallery">
-              <h3>Search Results</h3>
+          <div class="gallery">
+            <h3>Search Results</h3>
+              <% if(filteredBooks.length > 0) { %>
+              <!-- Show search results -->
               <ul class="gallery__list">
                 <% filteredBooks.forEach(book => { %>
                   <li class="card card--book">
@@ -62,7 +65,9 @@
             </div>
             
           <% } else { %>
-            <p>Book not found</p>
+            <div class="status">
+              <p>Book not found</p>
+            </div>
           <% } %>
         <% } else if (locals.books) { %>
           <% if ( books.length > 0) { %>
@@ -92,7 +97,9 @@
               </ul>
             </div>
           <% } else { %>
-            <p>Start by adding some books</p>
+            <div class="status">
+              <p>Start by adding some books</p>
+            </div>
           <% } %>
         <% } %>
       </div>

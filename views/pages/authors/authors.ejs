@@ -13,7 +13,7 @@
     <main class="main">
       <div class="authors category">
         <div class="category__controls">
-          <h2 class="sub-title">Authors</h2>
+          <h2 class="sub-title"><a href="/authors" class="link--sub-title">Authors</a></h2>
          
           <!-- Search author-->
           <div class="category__actions">
@@ -21,7 +21,7 @@
               <label class="visually-hidden" for="search">
                 Search for Author
               </label>
-              <input class="category__search" type="search" name="query" id="search"
+              <input class="category__search" type="text" name="query" id="search"
                value="<%= locals.search ? search : '' %>"
                placeholder="Search for author...">
               <button class="btn btn--search" type="submit" aria-label="Search for author" title="Search">
@@ -36,13 +36,15 @@
         </div>
 
         <!-- Show validation errors -->
-        <%- include("../../partials/errors.ejs") %>
+        <%  if(locals.errors) {%>
+          <%- include("../../partials/errors.ejs") %>
+        <% } %> 
         
         <% if (locals.filteredAuthors) { %>
+          <div class="gallery">
+            <h3>Search Results</h3>
           <% if(filteredAuthors.length > 0) { %>
             <!-- Show search results -->
-            <div class="gallery">
-              <h3>Search Results</h3>
               <ul class="gallery__list">
                 <% filteredAuthors.forEach(author => { %>
                   <li class="card card--small">
@@ -69,7 +71,9 @@
             </div>
             
           <% } else { %>
-            <p>Author not found</p>
+            <div class="status">
+              <p>Author not found</p>
+            </div>
           <% } %>
         <% } else if (locals.authors) { %>
           <% if ( authors.length > 0) { %>
@@ -111,7 +115,9 @@
               </ul>
             </div>
           <% } else { %>
-            <p>Start by adding some authors</p>
+            <div class="status">
+              <p>Start by adding some authors</p>
+            </div>
           <% } %>
         <% } %>
       </div>

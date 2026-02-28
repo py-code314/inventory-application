@@ -495,6 +495,10 @@ body {
   border-radius: var(--bd-radius-small, 00.3125rem);
 }
 
+.link--sub-title:hover {
+  color: var(--clr-primary, rebeccapurple)
+}
+
 .gallery {
   padding: var(--space-32, 2rem);
   display: flex;
@@ -543,6 +547,11 @@ body {
 
 .book__form {
   text-align: center;
+}
+
+.status {
+  padding: var(--space-16, 1rem);
+  font-weight: var(--fw-bold, 700);
 }
 
 .btn--delete {
