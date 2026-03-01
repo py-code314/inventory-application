@@ -1,4 +1,4 @@
-// const db = require('../db/queries/authors')
+/* Imports */
 const {
   body,
   query,
@@ -14,12 +14,12 @@ const {
   deleteAuthor,
 } = require('../db/queries/authors')
 
-// Error messages
+/* Error messages */
 const alphaErr = 'must only contain letters.'
 const emptyErr = 'must not be empty.'
 const dateErr = 'must be in a valid format.'
 
-// Validate author search query
+/* Validate author search term */
 const validateSearch = [
   query('query')
     .trim()
@@ -30,7 +30,7 @@ const validateSearch = [
     .withMessage(`Name ${alphaErr}`),
 ]
 
-// Validate author data
+/* Validate author data */
 const validateAuthor = [
   body('full_name')
     .trim()
@@ -46,15 +46,14 @@ const validateAuthor = [
     .withMessage(`Date ${dateErr}`),
 ]
 
-// Get all authors
+/* List all authors */
 async function authors_list_get(req, res) {
   const authors = await getAllAuthors()
-  // console.log('Authors: ', authors)
+
   res.render('pages/authors/authors', { title: 'Authors', authors })
-  // res.send('List all authors')
 }
 
-// Search for author by name
+/* Search for author by name */
 const author_search_get = [
   validateSearch,
 
@@ -71,7 +70,7 @@ const author_search_get = [
     }
 
     const { query } = matchedData(req)
-
+    // Filter authors
     const filteredAuthors = await searchAuthors(query)
 
     res.render('pages/authors/authors', {
@@ -82,19 +81,18 @@ const author_search_get = [
   },
 ]
 
-// Show new author form
+/* Show author form */
 async function author_create_get(req, res) {
   res.render('pages/authors/author-form', { title: 'Add Author' })
 }
 
-
-// Validate and add new author
+/* Validate and add new author */
 const author_create_post = [
   validateAuthor,
+
   async (req, res) => {
     // Validate request
     const errors = validationResult(req)
-    // console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
@@ -107,9 +105,8 @@ const author_create_post = [
 
     try {
       const { full_name, birth_date } = matchedData(req)
-      // console.log('message in controller:', message)
+      // Add author to db
       await addAuthor(full_name, birth_date)
-      // throw new Error('test error')
       res.redirect('/authors')
     } catch (err) {
       console.error(err)
@@ -133,19 +130,11 @@ const author_create_post = [
   },
 ]
 
-// Show author details
-// async function author_details_get(req, res) {
-//   const id = Number(req.params.id)
-//   const details = await getAuthorDetails(id)
-
-//   res.send(details)
-// }
-
-// Show author details in a pre-populated form
+/* Show author details in a pre-populated form */
 async function author_update_get(req, res) {
   const id = Number(req.params.id)
+  // Get author data from db
   const details = await getAuthorDetails(id)
-  console.log('book details:', details)
 
   res.render('pages/authors/author-form', {
     title: 'Update Author',
@@ -154,15 +143,16 @@ async function author_update_get(req, res) {
   })
 }
 
-// Validate and update author
+/* Validate and update author */
 const author_update_post = [
   validateAuthor,
+
   async (req, res) => {
     const authorId = Number(req.params.id)
+    // Get author data
     const existingAuthorData = await getAuthorDetails(authorId)
     // Validate request
     const errors = validationResult(req)
-    // console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
@@ -176,6 +166,7 @@ const author_update_post = [
 
     try {
       const { full_name, birth_date } = matchedData(req)
+      // Update author
       await updateAuthor(authorId, full_name, birth_date)
       res.redirect('/authors')
     } catch (err) {
@@ -190,30 +181,32 @@ const author_update_post = [
   },
 ]
 
-// TODO ues try catch 
-// Delete author
+/* Delete author */
 async function author_delete_post(req, res) {
   const id = Number(req.params.id)
+
   try {
+    // Delete author
     await deleteAuthor(id)
     res.redirect('/authors')
   } catch (err) {
     console.error(err)
     const authors = await getAllAuthors()
+
     // Default error message
     let errorMsg = 'Failed to delete author. Please try again.'
+
     // Update error message
     if (err.code === '23001') {
       errorMsg =
         'Cannot delete author: This author has books linked to their profile. Please delete or reassign their books before removing the author.'
     }
-      
+
     return res.status(500).render('pages/authors/authors', {
       title: 'Authors',
       authors,
-      errors: [{msg: errorMsg}],
+      errors: [{ msg: errorMsg }],
     })
-      
   }
 }
 

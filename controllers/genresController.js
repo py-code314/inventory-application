@@ -1,3 +1,4 @@
+/* Imports */
 const {
   body,
   query,
@@ -11,14 +12,14 @@ const {
   getGenreDetails,
   updateGenre,
   deleteGenre,
-  booksPerGenre
+  booksPerGenre,
 } = require('../db/queries/genres')
 
-// Error messages
+/* Error messages */
 const alphaErr = 'must only contain letters.'
 const emptyErr = 'must not be empty.'
 
-// Validate genre data
+/* Validate genre data */
 const validateGenre = [
   body('type')
     .trim()
@@ -29,7 +30,7 @@ const validateGenre = [
     .withMessage(`Name ${alphaErr}`),
 ]
 
-// Validate Genre search query
+/* Validate Genre search query */
 const validateSearch = [
   query('query')
     .trim()
@@ -40,11 +41,13 @@ const validateSearch = [
     .withMessage(`Name ${alphaErr}`),
 ]
 
-// Get all genres
+/* Show all genres */
 async function genres_list_get(req, res) {
+  // Get genres
   const genres = await getAllGenres()
   const counts = {}
 
+  // Get book count for each genre
   for (const genre of genres) {
     const count = await booksPerGenre(genre.id)
     if (!count) {
@@ -57,14 +60,15 @@ async function genres_list_get(req, res) {
   res.render('pages/genres/genres', { title: 'Genres', genres, counts })
 }
 
-// Show new genre form
+/* Show  genre form */
 async function genre_create_get(req, res) {
   res.render('pages/genres/genre-form', { title: 'Add Genre' })
 }
 
-// Validate and add new genre
+/* Validate and add new genre */
 const genre_create_post = [
   validateGenre,
+
   async (req, res) => {
     // Validate request
     const errors = validationResult(req)
@@ -80,12 +84,12 @@ const genre_create_post = [
 
     try {
       const { type } = matchedData(req)
-      // throw new Error()
+      // Add genre to db
       await addGenre(type)
       res.redirect('/genres')
     } catch (err) {
       console.error(err)
-      // Default
+      // Default error details
       let statusCode = 500
       let errorMsg = 'A database error occurred. Please try again later.'
       // Update for UNIQUE constraint violation
@@ -93,21 +97,20 @@ const genre_create_post = [
         statusCode = 409
         errorMsg = 'Genre name must be unique.'
       }
-        
+
       return res.status(statusCode).render('pages/genres/genre-form', {
         title: 'Add Genre',
         genre: req.body,
         errors: [{ msg: errorMsg }],
       })
-        
     }
-    
   },
 ]
 
-// Show genre details in a pre-populated form
+/* Show genre details in a pre-populated form */
 async function genre_update_get(req, res) {
   const id = Number(req.params.id)
+  // Get genre data
   const details = await getGenreDetails(id)
 
   res.render('pages/genres/genre-form', {
@@ -117,21 +120,20 @@ async function genre_update_get(req, res) {
   })
 }
 
-// Validate and update genre
+/* Validate and update genre */
 const genre_update_post = [
   validateGenre,
+
   async (req, res) => {
     const id = Number(req.params.id)
-    // const existingGenreData = await getGenreDetails(id)
+
     // Validate request
     const errors = validationResult(req)
-    // console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
       return res.status(400).render('pages/genres/genre-form', {
         title: 'Update Genre',
-        // genre: existingGenreData[0],
         genre: req.body,
         errors: errors.array(),
         isUpdate: true,
@@ -140,6 +142,7 @@ const genre_update_post = [
 
     try {
       const { type } = matchedData(req)
+      // Update genre data
       await updateGenre(id, type)
       res.redirect('/genres')
     } catch (err) {
@@ -154,7 +157,7 @@ const genre_update_post = [
   },
 ]
 
-// Search for genre by name
+/* Search for genre by name */
 const genre_search_get = [
   validateSearch,
 
@@ -171,9 +174,11 @@ const genre_search_get = [
     }
 
     const { query } = matchedData(req)
+    // Filter genres
     const filteredGenres = await searchGenre(query)
     const counts = {}
 
+    // Get book count for each genre
     for (const genre of filteredGenres) {
       const count = await booksPerGenre(genre.id)
       if (!count) {
@@ -187,16 +192,17 @@ const genre_search_get = [
       title: 'Search Results',
       search: query,
       filteredGenres,
-      counts
+      counts,
     })
   },
 ]
 
-// Delete genre
+/* Delete genre */
 async function genre_delete_post(req, res) {
   const id = Number(req.params.id)
 
   try {
+    // Delete genre
     await deleteGenre(id)
     res.redirect('/genres')
   } catch (err) {
@@ -216,8 +222,6 @@ async function genre_delete_post(req, res) {
       errors: [{ msg: errorMsg }],
     })
   }
-  
-
 }
 
 module.exports = {
@@ -225,7 +229,6 @@ module.exports = {
   genre_search_get,
   genre_create_get,
   genre_create_post,
-  // genre_details_get,
   genre_update_get,
   genre_update_post,
   genre_delete_post,

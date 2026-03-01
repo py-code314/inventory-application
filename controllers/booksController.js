@@ -1,3 +1,4 @@
+/* Imports */
 const {
   body,
   query,
@@ -18,28 +19,24 @@ const {
 const { findOrCreateAuthor } = require('../db/queries/authors')
 const { findOrCreateGenre } = require('../db/queries/genres')
 const { findOrCreatePublisher } = require('../db/queries/publishers')
-const { copy } = require('../routes/booksRoutes')
 
-// Error messages
+/* Error messages */
 const alphaErr = 'must only contain letters.'
 const emptyErr = 'must not be empty.'
 const isbnErr = 'must be valid 10 or 13 digit number.'
-const totalPagesErr = 'must be a number greater than 0. Leading zeroes are not allowed.'
+const totalPagesErr =
+  'must be a number greater than 0. Leading zeroes are not allowed.'
 const priceErr = 'must be a number between 0.01 and 99999999.99.'
-// const decimalErr = 'must have two decimal places.'
 const lengthErr = 'must be below 50 characters in length.'
 const dateErr = 'must be in a valid format.'
 const intErr = 'must be a number.'
-// const genreErr = 'must be in Genres list.'
-// const authorErr = 'must be in Authors list.'
-// const publisherErr = 'must be in Publishers list.'
 
-// Validate book search query
+/* Validate book search query */
 const validateSearch = [
   query('query').trim().notEmpty().withMessage(`Query ${emptyErr}`),
 ]
 
-// Validate book data
+/* Validate book data */
 const validateBook = [
   body('title').trim().notEmpty().withMessage(`Title ${emptyErr}`),
   body('plot_summary').trim().optional({ values: 'falsy' }),
@@ -106,13 +103,13 @@ const validateBook = [
   body('edition').trim().optional({ values: 'falsy' }),
 ]
 
-// Get all books
+/* Show all books */
 async function books_list_get(req, res) {
   const books = await getAllBooks()
   res.render('pages/books/books', { title: 'Books', books })
 }
 
-// Search for book by name
+/* Search for book by name */
 const book_search_get = [
   validateSearch,
 
@@ -129,24 +126,26 @@ const book_search_get = [
     }
 
     const { query } = matchedData(req)
+    // Filter books
     const filteredBooks = await searchBooks(query)
 
     res.render('pages/books/books', {
       title: 'Search Results',
       search: query,
-      filteredBooks
+      filteredBooks,
     })
   },
 ]
 
-// Show new book form
+/* Show book form */
 async function book_create_get(req, res) {
   res.render('pages/books/book-form', { title: 'Add Book' })
 }
 
-// Validate and add new book
+/* Validate and add new book */
 const book_create_post = [
   validateBook,
+
   async (req, res) => {
     // Validate request
     const errors = validationResult(req)
@@ -161,10 +160,11 @@ const book_create_post = [
     }
 
     try {
-      const  bookData  = matchedData(req)
-      // console.log('authors:', bookData.authors)
+      const bookData = matchedData(req)
 
+      // Split authors into an array
       const authorArr = bookData.authors.split(/,\s*/)
+      // Get author ids
       const authorIdArr = await findOrCreateAuthor(authorArr)
 
       // Duplicate book check
@@ -179,17 +179,20 @@ const book_create_post = [
         return res.status(409).render('pages/books/book-form', {
           title: 'Add Book',
           book: req.body,
-          errors: [{ msg: 'This book combination already exists in the database.' }],
+          errors: [
+            { msg: 'This book combination already exists in the database.' },
+          ],
         })
       }
 
+      // Get genre and publishers ids
       const genreId = await findOrCreateGenre(bookData.genre)
       const publisherId = await findOrCreatePublisher(bookData.publisher)
 
       // Check if book title and author combo already exists in db
       const bookId = await checkBookAuthorCombo(bookData.title, authorIdArr)
 
-
+      // Add book to db
       await addBook(
         bookData.title,
         bookData.plot_summary,
@@ -229,44 +232,43 @@ const book_create_post = [
   },
 ]
 
-// Show book details
+/* Show book details */
 async function book_details_get(req, res) {
   const bookId = Number(req.params.id)
   const copyId = Number(req.params.copyId)
+  // Get book data
   const [rows] = await getBookDetails(bookId, copyId)
-  // console.log('book details:', rows)
 
   res.render('pages/books/book-details', { title: 'Book Details', book: rows })
 }
 
-// * Add status codes for errors
-// * Check other functions to add try...catch
-// Delete book copy
+/* Delete book copy */
 async function book_copy_delete_post(req, res) {
   const bookId = Number(req.params.id)
   const copyId = Number(req.params.copyId)
 
   try {
+    // Delete book copy
     await deleteBookCopy(bookId, copyId)
     res.redirect('/books')
   } catch (err) {
     console.error(err)
-    // Fetch book details again
+    // Fetch book copy details
     const [rows] = await getBookDetails(bookId, copyId)
     res.status(500).render('pages/books/book-details', {
       title: 'Book Details',
       book: rows,
-      errors: [{msg: 'Failed to delete the book. Please try again.'}]
+      errors: [{ msg: 'Failed to delete the book. Please try again.' }],
     })
   }
 }
 
-// Show book details form with filled in book data
+/* Show book details form with filled in book data */
 async function book_update_get(req, res) {
   const bookId = Number(req.params.id)
   const copyId = Number(req.params.copyId)
+  // Get book copy data
   const [rows] = await getBookDetails(bookId, copyId)
-  // console.log('update book form:', rows)
 
   res.render('pages/books/book-form', {
     title: 'Update Book',
@@ -275,14 +277,15 @@ async function book_update_get(req, res) {
   })
 }
 
-// Validate and update book
+/* Validate and update book */
 const book_update_post = [
   validateBook,
+
   async (req, res) => {
     const bookId = Number(req.params.id)
     const copyId = Number(req.params.copyId)
+    // Get book copy data
     const existingBookData = await getBookDetails(bookId, copyId)
-    // console.log('existing book data:', existingBookData)
 
     // Validate request
     const errors = validationResult(req)
@@ -298,14 +301,11 @@ const book_update_post = [
     }
 
     try {
-      // const bookId = Number(req.params.id)
-      // const copyId = Number(req.params.copyId)
       const bookData = matchedData(req)
-      // console.log('book data:', bookData)
-      // const existingBookData = await getBookDetails(bookId, copyId)
-      // console.log('existing book data:', existingBookData)
 
-      if (bookData.title !== existingBookData[0].title ||
+      // User can't change book title or authors
+      if (
+        bookData.title !== existingBookData[0].title ||
         bookData.authors !== existingBookData[0].authors
       ) {
         return res.status(500).render('pages/books/book-form', {
@@ -316,9 +316,11 @@ const book_update_post = [
         })
       }
 
+      // Get genre and publisher ids
       const genreId = await findOrCreateGenre(bookData.genre)
       const publisherId = await findOrCreatePublisher(bookData.publisher)
 
+      // Update book with updated data
       await updateBook(
         bookId,
         copyId,
@@ -343,31 +345,31 @@ const book_update_post = [
           title: 'Update Book',
           book: req.body,
           errors: [{ msg: 'ISBN number must be unique.' }],
-          isUpdate: true
+          isUpdate: true,
         })
       } else {
         return res.status(500).render('pages/books/book-form', {
           title: 'Update Book',
           book: req.body,
           errors: [{ msg: 'Failed to update the book. Please try again.' }],
-          isUpdate: true
+          isUpdate: true,
         })
       }
     }
   },
 ]
 
-
-
-// Delete book
+/* Delete book and book copies */
 async function book_delete_post(req, res) {
   const id = Number(req.params.id)
-  
+
   try {
+    // Delete entire book entry
     await deleteBook(id)
     res.redirect('/books')
   } catch (err) {
     console.error(err)
+
     // Fetch book list
     const books = await getAllBooks()
     res.status(500).render('pages/books/books', {
@@ -377,11 +379,6 @@ async function book_delete_post(req, res) {
     })
   }
 }
-
-
-
-
-
 
 module.exports = {
   books_list_get,
@@ -393,5 +390,4 @@ module.exports = {
   book_update_post,
   book_delete_post,
   book_copy_delete_post,
-  
 }

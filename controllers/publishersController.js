@@ -1,3 +1,4 @@
+/* Imports */
 const {
   body,
   query,
@@ -13,50 +14,41 @@ const {
   deletePublisher,
 } = require('../db/queries/publishers')
 
-// Error messages
+/* Error messages */
 const emailErr = 'must be in a valid format.'
 const emptyErr = 'must not be empty.'
 
-// Validate publisher data
+/* Validate publisher data */
 const validatePublisher = [
   body('name').trim().notEmpty().withMessage(`Name ${emptyErr}`),
   body('email')
     .trim()
-    .optional({values: 'falsy'})
+    .optional({ values: 'falsy' })
     .isEmail()
     .withMessage(`Email ${emailErr}`),
 ]
 
-// Validate publisher search query
+/* Validate publisher search query */
 const validateSearch = [
-  query('query')
-    .trim()
-    .notEmpty()
-    .withMessage(`Name ${emptyErr}`)
+  query('query').trim().notEmpty().withMessage(`Name ${emptyErr}`),
 ]
 
-// Get all publishers
+/* Show all publishers */
 async function publishers_list_get(req, res) {
+  // Get all publishers data
   const publishers = await getAllPublishers()
   res.render('pages/publishers/publishers', { title: 'Publishers', publishers })
 }
 
-// Show publisher details
-// async function publisher_details_get(req, res) {
-//   const id = Number(req.params.id)
-//   const details = await getPublisherDetails(id)
-
-//   res.send(details)
-// }
-
-// Show new publisher form
+/* Show publisher form */
 async function publisher_create_get(req, res) {
   res.render('pages/publishers/publisher-form', { title: 'Add Publisher' })
 }
 
-// Validate and add new publisher
+/* Validate and add new publisher */
 const publisher_create_post = [
   validatePublisher,
+
   async (req, res) => {
     // Validate request
     const errors = validationResult(req)
@@ -72,14 +64,16 @@ const publisher_create_post = [
 
     try {
       const { name, email } = matchedData(req)
+      // Add new publisher to db
       await addPublisher(name, email)
       res.redirect('/publishers')
     } catch (err) {
       console.error(err)
 
-      // Default
+      // Default error details
       let statusCode = 500
       let errorMsg = 'A database error occurred. Please try again later.'
+
       // Update for UNIQUE constraint violation
       if (err.code === '23505') {
         statusCode = 409
@@ -90,14 +84,15 @@ const publisher_create_post = [
         title: 'Add Publisher',
         publisher: req.body,
         errors: [{ msg: errorMsg }],
-      })     
-    }    
+      })
+    }
   },
 ]
 
-// Show publisher details in a pre-populated form
+/* Show publisher details in a pre-populated form */
 async function publisher_update_get(req, res) {
   const id = Number(req.params.id)
+  // Get publisher data
   const details = await getPublisherDetails(id)
 
   res.render('pages/publishers/publisher-form', {
@@ -107,20 +102,19 @@ async function publisher_update_get(req, res) {
   })
 }
 
-// Validate and update publisher
+/* Validate and update publisher */
 const publisher_update_post = [
   validatePublisher,
+
   async (req, res) => {
     const id = Number(req.params.id)
     // Validate request
     const errors = validationResult(req)
-    // console.log('errors:', errors)
 
     // Show errors if validation fails
     if (!errors.isEmpty()) {
       return res.status(400).render('pages/publishers/publisher-form', {
         title: 'Update Publisher',
-        // publisher: existingGenreData[0],
         publisher: req.body,
         errors: errors.array(),
         isUpdate: true,
@@ -128,7 +122,8 @@ const publisher_update_post = [
     }
 
     try {
-       const { name, email } = matchedData(req)
+      const { name, email } = matchedData(req)
+      // Update publisher data
       await updatePublisher(id, name, email)
       res.redirect('/publishers')
     } catch (err) {
@@ -143,7 +138,7 @@ const publisher_update_post = [
   },
 ]
 
-// Search for publisher by name
+/* Search for publisher by name */
 const publisher_search_get = [
   validateSearch,
 
@@ -160,6 +155,7 @@ const publisher_search_get = [
     }
 
     const { query } = matchedData(req)
+    // Filter publishers
     const filteredPublishers = await searchPublisher(query)
 
     res.render('pages/publishers/publishers', {
@@ -170,18 +166,22 @@ const publisher_search_get = [
   },
 ]
 
-// Delete publisher
+/* Delete publisher */
 async function publisher_delete_post(req, res) {
   const id = Number(req.params.id)
 
   try {
+    // Delete publisher from db
     await deletePublisher(id)
     res.redirect('/publishers')
   } catch (err) {
     console.error(err)
+    // Get all publishers
     const publishers = await getAllPublishers()
+
     // Default error message
     let errorMsg = 'Failed to delete publisher. Please try again.'
+
     // Update error message
     if (err.code === '23001') {
       errorMsg =
@@ -201,7 +201,6 @@ module.exports = {
   publisher_search_get,
   publisher_create_get,
   publisher_create_post,
-  // publisher_details_get,
   publisher_update_get,
   publisher_update_post,
   publisher_delete_post,
