@@ -11,8 +11,11 @@
 
     <!-- Main content -->
     <main class="main">
+      <!-- Genres subheader -->
+      <%- include('./genres-header.ejs') %>
+
       <div class="editor">
-        <h2 class="sub-title"><%= locals.isUpdate ? 'Update Genre' : 'Add Genre' %></h2>
+        <h3 class="sub-title"><%= locals.isUpdate ? 'Update Genre' : 'Add Genre' %></h3>
 
         <!-- Show validation errors -->
         <%  if(locals.errors) {%>

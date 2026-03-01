@@ -1,0 +1,37 @@
+<div class="genres__controls category__controls">
+  <h2 class="sub-title">
+    <a href="/genres" class="link--sub-title">Genres</a>
+  </h2>
+
+  <div class="genres__actions category__actions">
+    <!-- Search genre -->
+    <form
+      class="genres__form category__form"
+      action="/genres/search"
+      method="get">
+      <label class="visually-hidden" for="search"> Search for Genre </label>
+      <input
+        class="genres__search category__search"
+        type="text"
+        name="query"
+        id="search"
+        value="<%= locals.search ? search : '' %>"
+        placeholder="Search for genre..."
+        required />
+      <!-- Search button -->
+      <button
+        class="btn btn--search"
+        type="submit"
+        aria-label="Search for genre"
+        title="Search">
+        <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
+      </button>
+    </form>
+
+    <!-- Add genre -->
+    <a class="genres__add link--add link" href="/genres/new">
+      <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add
+      Genre</a
+    >
+  </div>
+</div>

@@ -11,9 +11,12 @@
 
     <!-- Main content -->
     <main class="main">
+      <!-- Authors subheader -->
+      <%- include("./authors-header.ejs") %>
+
       <div class="editor">
         <!-- Subtitle -->
-        <h2 class="sub-title"><%= locals.isUpdate ? 'Update Author' : 'Add Author' %></h2>
+        <h3 class="sub-title"><%= locals.isUpdate ? 'Update Author' : 'Add Author' %></h3>
 
         <!-- Show validation errors -->
         <%  if(locals.errors) {%>

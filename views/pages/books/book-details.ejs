@@ -12,15 +12,15 @@
     <!-- Main content-->
     <main>
       <!-- Books subheader -->
-      <%- include("./book-header.ejs") %>
+      <%- include("./books-header.ejs") %>
       
       <div class="book__details">
-        <h2 class="sub-title"">Book Details</h2>
+        <h3 class="sub-title"">Book Details</h3>
         
         <!-- Book details -->
         <% if (locals.book) { %>
           <div class="book card card--details">
-            <h3 class="book__title"><%= book.title %></h3>
+            <h4 class="book__title"><%= book.title %></h4>
             <p class="book__summary--details">Summary: <%= book.plot_summary %></p>
             <p class="book__author">Author: <%= book.authors %></p>
             <p class="book__genre">Genre: <%= book.genre %></p>

@@ -1,0 +1,34 @@
+<div class="category__controls">
+  <h2 class="sub-title">
+    <a href="/publishers" class="link--sub-title">Publishers</a>
+  </h2>
+
+  <div class="category__actions">
+    <!-- Search publisher -->
+    <form class="category__form" action="/publishers/search" method="get">
+      <label class="visually-hidden" for="search"> Search for Publisher </label>
+      <input
+        class="category__search"
+        type="text"
+        name="query"
+        id="search"
+        value="<%= locals.search ? search : '' %>"
+        placeholder="Search for publisher..."
+        required />
+      <!-- Search button -->
+      <button
+        class="btn btn--search"
+        type="submit"
+        aria-label="Search for publisher"
+        title="Search">
+        <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
+      </button>
+    </form>
+
+    <!-- Add publisher -->
+    <a class="link--add link" href="/publishers/new">
+      <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add
+      Publisher</a
+    >
+  </div>
+</div>

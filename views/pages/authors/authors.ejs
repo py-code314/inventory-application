@@ -11,34 +11,9 @@
 
     <!-- Main content-->
     <main class="main">
-      <div class="authors category">
         <!-- Authors subheader -->
-        <div class="category__controls">
-          <!--  Subtitle -->
-          <h2 class="sub-title"><a href="/authors" class="link--sub-title">Authors</a></h2>
-         
-          <div class="category__actions">
-            <!-- Search author -->
-            <form class="category__form" action="/authors/search" method="get">
-              <label class="visually-hidden" for="search">
-                Search for Author
-              </label>
-              <input class="category__search" type="text" name="query" id="search"
-               value="<%= locals.search ? search : '' %>"
-               placeholder="Search for author..." required>
-               <!-- Search button -->
-              <button class="btn btn--search" type="submit" aria-label="Search for author" title="Search">
-                <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
-              </button>
-            </form>
-
-            <!-- Add author -->
-            <a class="link--add link" href="/authors/new">
-              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />
-              Add Author
-            </a>
-          </div>
-        </div>
+        <%- include("./authors-header.ejs") %>
+        
 
         <!-- Show validation errors -->
         <%  if(locals.errors) {%>
@@ -130,7 +105,6 @@
             <% } %>
           <% } %>
         </div>
-      </div>
     </main>
 
     <!-- Footer -->
