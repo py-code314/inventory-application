@@ -9,12 +9,17 @@
     <!-- Sidebar -->
     <%- include('../../partials/sidebar.ejs') %>
 
+    <!-- Main content -->
     <main class="main">
       <div class="editor">
         <h2 class="sub-title"><%= locals.isUpdate ? 'Update Genre' : 'Add Genre' %></h2>
+
         <!-- Show validation errors -->
-        <%- include("../../partials/errors.ejs") %>
-        <!-- New genre form -->
+        <%  if(locals.errors) {%>
+          <%- include("../../partials/errors.ejs") %>
+        <% } %> 
+
+        <!-- Genre form -->
         <form action="<%= locals.isUpdate ? '/genres/' + genre.id + '/update' : '/genres/new' %>"
           method="post"     class="form">
           <div class="form__control">

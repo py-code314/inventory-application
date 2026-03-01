@@ -12,6 +12,7 @@
     <!-- Main content-->
     <main class="main">
       <div class="books category">
+        <!-- Books subheader -->
         <div class="books__controls category__controls">
           <h2 class="sub-title"><a href="/books" class="link--sub-title">Books</a></h2>
           
@@ -21,8 +22,8 @@
               <label class="visually-hidden" for="search">
                 Search for a book
               </label>
-              <!-- TODO add value -->
-              <input class="books__search category__search" type="text" name="query" id="search" placeholder="Search for a book...">
+              <input class="books__search category__search" type="text" name="query" id="search" value="<%= locals.search ? search : '' %>" placeholder="Search for a book..." required>
+              <!-- Search button -->
               <button class="btn btn--search" type="submit" aria-label="Search for a book" title="Search">
                 <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
               </button>
@@ -30,7 +31,8 @@
 
             <!-- Add book -->
             <a class="books__add link--add link" href="/books/new">
-              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Book</a>
+              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Book
+            </a>
           </div>
         </div>
 
@@ -39,69 +41,70 @@
           <%- include("../../partials/errors.ejs") %>
         <% } %> 
         
-        
-        <% if (locals.filteredBooks) { %>
-          <div class="gallery">
+        <div class="gallery">
+          <% if (locals.filteredBooks) { %>
             <h3>Search Results</h3>
               <% if(filteredBooks.length > 0) { %>
-              <!-- Show search results -->
-              <ul class="gallery__list">
-                <% filteredBooks.forEach(book => { %>
-                  <li class="card card--book">
-                    <a class="book__link" href="/books/<%= book.id %>/copy/<%= book.copyId %>" >
-                      <h4 class="book__title"><%= book.title %></h4>
-                      <p class="book__summary"><%= book.plot_summary %></p>
-                      <p><%= book.authors %></p>
-                      <p><%= book.type %></p>
-                      <p><%= book.format %></p>
-                      <p><%= book.edition %></p>
-                    </a>
-                  </li>
-                <% }) %>
-              </ul>
-              <a class="link link--back" href="/books">
-                <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
-                Back to Books</a>
-            </div>
-            
-          <% } else { %>
-            <div class="status">
-              <p>Book not found</p>
-            </div>
-          <% } %>
-        <% } else if (locals.books) { %>
-          <% if ( books.length > 0) { %>
-            <!-- Show all books -->
-            <div class="books__all gallery">
-              <h3>All Books List</h3>
-              <ul class="books__list gallery__list">
-                <% books.forEach(book => { %>
-                  <li class="book card card--book">
-                    <a class="book__link" href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
-                      <h4 class="book__title"><%= book.title %></h4>
-                      <p class="book__summary"><%= book.plot_summary %></p>
-                      <p><%= book.authors %></p>
-                      <p><%= book.type %></p>
-                      <p><%= book.format %></p>
-                      <p><%= book.edition %></p>
-                    </a>
+                <!-- Search results -->
+                <ul class="gallery__list">
+                  <% filteredBooks.forEach(book => { %>
+                    <!-- Book -->
+                    <li class="card card--book">
+                      <a class="book__link" href="/books/<%= book.id %>/copy/<%= book.copyId %>" >
+                        <h4 class="book__title"><%= book.title %></h4>
+                        <p class="book__summary"><%= book.plot_summary %></p>
+                        <p><%= book.authors %></p>
+                        <p><%= book.type %></p>
+                        <p><%= book.format %></p>
+                        <p><%= book.edition %></p>
+                      </a>
+                    </li>
+                  <% }) %>
+                </ul>
+                <!-- Back to books -->
+                <a class="link link--back" href="/books">
+                  <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
+                  Back to Books
+                </a>
+              <% } else { %>
+                <div class="status">
+                  <p>Book not found</p>
+                </div>
+              <% } %>
+          <% } else if (locals.books) { %>
+            <h3>All Books List</h3>
+              <% if ( books.length > 0) { %>
+                <!-- Show all books -->
+                  <ul class="books__list gallery__list">
+                    <% books.forEach(book => { %>
+                      <!-- Book -->
+                      <li class="book card card--book">
+                        <a class="book__link" href="/books/<%= book.bookId %>/copy/<%= book.copyId %>" >
+                          <h4 class="book__title"><%= book.title %></h4>
+                          <p class="book__summary"><%= book.plot_summary %></p>
+                          <p><%= book.authors %></p>
+                          <p><%= book.type %></p>
+                          <p><%= book.format %></p>
+                          <p><%= book.edition %></p>
+                        </a>
 
-                    <!-- Delete book -->
-                    <form class="book__form" action="/books/<%= book.bookId %>/delete" method="POST" >
-                      <button class="btn btn--primary btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">
-                        <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
-                        Delete Entire Book Entry</button>
-                    </form>
-                  </li>
-                <% }) %>
-              </ul>
-            </div>
-          <% } else { %>
-            <div class="status">
-              <p>Start by adding some books</p>
-            </div>
+                        <!-- Delete book -->
+                        <form class="book__form" action="/books/<%= book.bookId %>/delete" method="POST" >
+                          <button class="btn btn--primary btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL copies and records for this book!');">
+                            <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
+                            Delete Entire Book Entry</button>
+                        </form>
+                      </li>
+                    <% }) %>
+                  </ul>
+                </div>
+              <% } else { %>
+                <div class="status">
+                  <p>Start by adding some books</p>
+                </div>
+              <% } %>
           <% } %>
-        <% } %>
+        </div>
       </div>
     </main>
 

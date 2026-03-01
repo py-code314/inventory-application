@@ -65,6 +65,15 @@ async function findOrCreateGenre(type) {
   }
 }
 
+async function booksPerGenre(id) {
+  const {rows} = await pool.query(
+    'SELECT COUNT(id) FROM book WHERE genre_id = $1 GROUP BY genre_id;',
+    [id]
+  )
+  console.log('total:', rows[0])
+  return rows[0]
+}
+
 module.exports = {
   getAllGenres,
   searchGenre,
@@ -74,4 +83,5 @@ module.exports = {
   deleteGenre,
   getGenresTotal,
   findOrCreateGenre,
+  booksPerGenre
 }

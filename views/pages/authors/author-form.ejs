@@ -9,19 +9,27 @@
     <!-- Sidebar -->
     <%- include('../../partials/sidebar.ejs') %>
 
+    <!-- Main content -->
     <main class="main">
       <div class="editor">
+        <!-- Subtitle -->
         <h2 class="sub-title"><%= locals.isUpdate ? 'Update Author' : 'Add Author' %></h2>
+
         <!-- Show validation errors -->
-        <%- include("../../partials/errors.ejs") %>
-        <!-- New author form -->
+        <%  if(locals.errors) {%>
+          <%- include("../../partials/errors.ejs") %>
+        <% } %> 
+
+        <!-- Author form -->
         <form action="<%= locals.isUpdate ? '/authors/' + author.id + '/update' : '/authors/new' %>"
           method="post" class="form">
+          <!-- Name -->
           <div class="form__control">
             <label class="form__label" for="fullName"> Full Name </label>
             <input class="form__input" type="text" name="full_name" id="fullName"
             value="<%= locals.author?.full_name || '' %>" required  />
           </div>
+          <!-- Date of birth -->
           <div class="form__control">
             <label class="form__label" for="birthDate"> DOB </label>
             <input class="form__input" type="date" name="birth_date" id="birthDate"

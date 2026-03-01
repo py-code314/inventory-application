@@ -12,19 +12,20 @@
     <!-- Main content-->
     <main class="main">
       <div class="genres category">
+        <!-- Genres subheader -->
         <div class="genres__controls category__controls">
           <h2 class="sub-title"><a href="/genres" class="link--sub-title">Genres</a></h2>
           
-          <!-- Search genre -->
           <div class="genres__actions category__actions">
+            <!-- Search genre -->
             <form class="genres__form category__form" action="/genres/search" method="get">
               <label class="visually-hidden" for="search">
                 Search for Genre
               </label>
-              <!-- ? can i add required attribute -->
               <input class="genres__search category__search" type="text" name="query" id="search"
                value="<%= locals.search ? search : '' %>"
-               placeholder="Search for genre...">
+               placeholder="Search for genre..." required>
+              <!-- Search button -->
               <button class="btn btn--search" type="submit" aria-label="Search for genre" title="Search">
                 <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
               </button>
@@ -41,19 +42,25 @@
           <%- include("../../partials/errors.ejs") %>
         <% } %> 
         
-        <% if (locals.filteredGenres) { %>
-          <div class="gallery">
+        <div class="gallery">
+          <% if (locals.filteredGenres) { %>
             <h3>Search Results</h3>
-          <% if(filteredGenres.length > 0) { %>
-            <!-- Show search results -->
+            <% if(filteredGenres.length > 0) { %>
+              <!-- Show search results -->
               <ul class="gallery__list">
                 <% filteredGenres.forEach(genre => { %>
+                  <!-- Genre -->
                   <li class="card card--small">
                     <div class="genre__image img-container"></div>
                     <div class="genre__info">
                       <h4><%= genre.type %></h4>
-                      <!-- TODO:  add total number -->
-                      <p>dummy text</p>
+                      <p>
+                        <% if(Number(counts[genre.id]) === 1) { %>
+                          <%= counts[genre.id] %> Book
+                        <% } else { %>
+                          <%= counts[genre.id] %> Books
+                        <% } %>
+                      </p>
                     </div>
                   </li>
                 <% }) %>
@@ -61,26 +68,29 @@
               <a class="link link--back" href="/genres">
                 <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
                 Back to Genres</a>
-            </div>
-            
-          <% } else { %>
-            <div class="status">
-              <p>Genre not found</p>
-            </div>
-          <% } %>
-        <% } else if (locals.genres) { %>
-          <% if ( genres.length > 0) { %>
-            <!-- Show all genres -->
-            <div class="gallery">
-              <h3>All Genres List</h3>
+            <% } else { %>
+              <div class="status">
+                <p>Genre not found</p>
+              </div>
+            <% } %>
+          <% } else if (locals.genres) { %>
+            <h3>All Genres List</h3>
+            <% if ( genres.length > 0) { %>
+              <!-- Show all genres -->
               <ul class="genres__list gallery__list">
-                <% genres.forEach(genre => { %>
+                <% for (const genre of genres) { %>
+                  <!-- Genre -->
                   <li class="genre card card--small">
                     <div class="genre__image img-container"></div>
                     <div class="genre__info">
                       <h4><%= genre.type %></h4>
-                      <!-- TODO:  add total number -->
-                      <p>dummy text</p>
+                      <p>
+                        <% if(Number(counts[genre.id]) === 1) { %>
+                          <%= counts[genre.id] %> Book
+                        <% } else { %>
+                          <%= counts[genre.id] %> Books
+                        <% } %>
+                      </p>
                     </div>
 
                     <!-- Update genre -->
@@ -96,15 +106,15 @@
                       </form>
                     </div>
                   </li>
-                <% }) %>
+                <% } %>
               </ul>
-            </div>
-          <% } else { %>
-            <div class="status">
-              <p>Start by adding some genres</p>
-            </div>
+            <% } else { %>
+              <div class="status">
+                <p>Start by adding some genres</p>
+              </div>
+            <% } %>
           <% } %>
-        <% } %>
+        </div>
       </div>
     </main>
 

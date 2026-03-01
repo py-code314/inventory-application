@@ -12,18 +12,21 @@
     <!-- Main content-->
     <main class="main">
       <div class="authors category">
+        <!-- Authors subheader -->
         <div class="category__controls">
+          <!--  Subtitle -->
           <h2 class="sub-title"><a href="/authors" class="link--sub-title">Authors</a></h2>
          
-          <!-- Search author-->
           <div class="category__actions">
+            <!-- Search author -->
             <form class="category__form" action="/authors/search" method="get">
               <label class="visually-hidden" for="search">
                 Search for Author
               </label>
               <input class="category__search" type="text" name="query" id="search"
                value="<%= locals.search ? search : '' %>"
-               placeholder="Search for author...">
+               placeholder="Search for author..." required>
+               <!-- Search button -->
               <button class="btn btn--search" type="submit" aria-label="Search for author" title="Search">
                 <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
               </button>
@@ -31,7 +34,9 @@
 
             <!-- Add author -->
             <a class="link--add link" href="/authors/new">
-              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Author</a>
+              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />
+              Add Author
+            </a>
           </div>
         </div>
 
@@ -39,14 +44,15 @@
         <%  if(locals.errors) {%>
           <%- include("../../partials/errors.ejs") %>
         <% } %> 
-        
-        <% if (locals.filteredAuthors) { %>
-          <div class="gallery">
+
+        <div class="gallery">
+          <% if (locals.filteredAuthors) { %>
             <h3>Search Results</h3>
-          <% if(filteredAuthors.length > 0) { %>
-            <!-- Show search results -->
+            <% if(filteredAuthors.length > 0) { %>
+              <!-- Search results -->
               <ul class="gallery__list">
                 <% filteredAuthors.forEach(author => { %>
+                  <!-- Author -->
                   <li class="card card--small">
                     <div class="author__image img-container"></div>
                     <div class="author__info">
@@ -65,23 +71,24 @@
                   </li>
                 <% }) %>
               </ul>
+
+              <!-- Back to authors -->
               <a class="link link--back" href="/authors">
                 <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
-                Back to Authors</a>
-            </div>
-            
-          <% } else { %>
-            <div class="status">
-              <p>Author not found</p>
-            </div>
-          <% } %>
-        <% } else if (locals.authors) { %>
-          <% if ( authors.length > 0) { %>
-            <!-- Show all authors -->
-            <div class="gallery">
-              <h3>All Authors List</h3>
+                Back to Authors
+              </a>
+            <% } else { %>
+              <div class="status">
+                <p>Author not found</p>
+              </div>
+            <% } %>
+          <% } else if (locals.authors) { %>
+            <h3>All Authors List</h3>
+            <% if(authors.length > 0) { %>
+              <!-- Authors list -->
               <ul class="gallery__list">
                 <% authors.forEach(author => { %>
+                  <!-- Author -->
                   <li class="author card card--small">
                     <div class="author__image img-container"></div>
                     <div class="author__info">
@@ -98,28 +105,31 @@
                       </p>
                     </div>
 
-                    <!-- Update author -->
+                    
                     <div class="btn-group">
+                      <!-- Update author -->
                       <a class="link link--update author__update"  href="/authors/<%= author.id %>/update">
-                        <img src="/icons/icon-update.svg" alt="" width="25" height="25" />Update</a>
+                        <img src="/icons/icon-update.svg" alt="" width="25" height="25" />Update
+                      </a>
 
                       <!-- Delete author -->
                       <form action="/authors/<%= author.id %>/delete" method="POST" >
                         <button class="btn btn--primary btn--delete" type="submit" onclick="return confirm('Warning: This will delete ALL data for this author!');">
                           <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
-                          Delete</button>
+                          Delete
+                        </button>
                       </form>
                     </div>
-                    <% }) %>
                   </li>
+                <% }) %>
               </ul>
-            </div>
-          <% } else { %>
-            <div class="status">
-              <p>Start by adding some authors</p>
-            </div>
+            <% } else { %>
+              <div class="status">
+                <p>Start by adding some authors</p>
+              </div>
+            <% } %>
           <% } %>
-        <% } %>
+        </div>
       </div>
     </main>
 

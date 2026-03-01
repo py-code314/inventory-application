@@ -131,7 +131,11 @@ const book_search_get = [
     const { query } = matchedData(req)
     const filteredBooks = await searchBooks(query)
 
-    res.render('pages/books/books', { title: 'Search Results', filteredBooks })
+    res.render('pages/books/books', {
+      title: 'Search Results',
+      search: query,
+      filteredBooks
+    })
   },
 ]
 

@@ -292,6 +292,13 @@ body {
   display: flex;
   gap: var(--space-16, 1rem);
   justify-content: end;
+  align-items: center;
+}
+
+.menu__profile {
+  background-color: var(--clr-primary, rebeccapurple);
+  padding: var(--space-12, 0.75rem);
+  border-radius: var(--bd-radius-round, 50%);
 }
 
 .sidebar {
@@ -493,6 +500,10 @@ body {
 .link--back {
   align-self: start;
   border-radius: var(--bd-radius-small, 00.3125rem);
+}
+
+.link--sub-title {
+  color: var(--clr-black, black);
 }
 
 .link--sub-title:hover {

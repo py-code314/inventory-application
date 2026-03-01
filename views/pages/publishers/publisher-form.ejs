@@ -9,14 +9,19 @@
     <!-- Sidebar -->
     <%- include('../../partials/sidebar.ejs') %>
 
+    <!-- Main content -->
     <main class="main">
       <div class="editor">
         <h2 class="sub-title"><%= locals.isUpdate ? 'Update Publisher' : 'Add Publisher' %></h2>
+
         <!-- Show validation errors -->
-        <%- include("../../partials/errors.ejs") %>
-        <!-- New publisher form -->
+        <%  if(locals.errors) {%>
+          <%- include("../../partials/errors.ejs") %>
+        <% } %> 
+
+        <!-- Publisher form -->
         <form action="<%= locals.isUpdate ? '/publishers/' + publisher.id + '/update' : '/publishers/new' %>"
-          method="post"     class="form">
+          method="post" class="form">
           <div class="form__control">
             <label class="form__label" for="name"> Name </label>
             <input class="form__input" type="text" name="name" id="name"
@@ -27,6 +32,7 @@
             <input class="form__input" type="email" name="email" id="email"
             value="<%= locals.publisher?.email || '' %>"/>
           </div>
+          <!-- Update or Add button -->
           <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
         </form>
       </div>

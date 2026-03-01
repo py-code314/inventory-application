@@ -15,15 +15,17 @@
         <div class="category__controls">
           <h2 class="sub-title"><a href="/publishers" class="link--sub-title">Publishers</a></h2>
          
-            <!-- Search publisher -->
+          <!-- Publisher subheader -->
           <div class="category__actions">
+            <!-- Search publisher -->
             <form class="category__form" action="/publishers/search" method="get">
               <label class="visually-hidden" for="search">
                 Search for Publisher
               </label>
               <input class="category__search" type="text" name="query" id="search"
                value="<%= locals.search ? search : '' %>"
-               placeholder="Search for publisher...">
+               placeholder="Search for publisher..." required>
+              <!-- Search button -->
               <button class="btn btn--search" type="submit"
               aria-label="Search for publisher" title="Search">
                 <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
@@ -41,14 +43,14 @@
           <%- include("../../partials/errors.ejs") %>
         <% } %> 
         
-        
-        <% if (locals.filteredPublishers) { %>
-          <div class="gallery">
+        <div class="gallery">
+          <% if (locals.filteredPublishers) { %>
             <h3>Search Results</h3>
-          <% if(filteredPublishers.length > 0) { %>
-            <!-- Show search results -->
+            <% if(filteredPublishers.length > 0) { %>
+              <!-- Show search results -->
               <ul class="gallery__list">
                 <% filteredPublishers.forEach(publisher => { %>
+                  <!-- Publisher -->
                   <li class="card card--small">
                     <div class="genre__image img-container"></div>
                     <div class="publisher__info">
@@ -61,20 +63,18 @@
               <a class="link link--back" href="/publishers">
                 <img src="/icons/icon-back.svg" alt="" width="25" height="25" />
                 Back to Publishers</a>
-            </div>
-            
-          <% } else { %>
-            <div class="status">
-              <p>Publisher not found</p>
-            </div>
-          <% } %>
-        <% } else if (locals.publishers) { %>
-          <% if ( publishers.length > 0) { %>
+            <% } else { %>
+              <div class="status">
+                <p>Publisher not found</p>
+              </div>
+            <% } %>
+          <% } else if (locals.publishers) { %>
+            <h3>All Publishers List</h3>
+            <% if ( publishers.length > 0) { %>
             <!-- Show all publishers -->
-            <div class="gallery">
-              <h3>All Publishers List</h3>
               <ul class="gallery__list">
                 <% publishers.forEach(publisher => { %>
+                  <!-- Publisher -->
                   <li class="card card--small">
                     <div class="genre__image img-container"></div>
                     <div class="publisher__info">
@@ -82,8 +82,8 @@
                       <p><%= publisher.email %></p>
                     </div>
 
-                    <!-- Update publisher -->
                     <div class="btn-group">
+                      <!-- Update publisher -->
                       <a class="link link--update"  href="/publishers/<%= publisher.id %>/update">
                         <img src="/icons/icon-update.svg" alt="" width="25" height="25" />Update</a>
 
@@ -97,13 +97,13 @@
                   </li>
                 <% }) %>
               </ul>
-            </div>
-          <% } else { %>
-            <div class="status">
-              <p>Start by adding some publishers</p>
-            </div>
+            <% } else { %>
+              <div class="status">
+                <p>Start by adding some publishers</p>
+              </div>
+            <% } %>
           <% } %>
-        <% } %>
+        </div>
       </div>
     </main>
 

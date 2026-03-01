@@ -1,4 +1,4 @@
-<!-- Header -->
+
 <header class="header">
   <div class="title-container">
     <!-- Title -->
@@ -7,35 +7,40 @@
     </a>
   </div>
 
-  <!-- TODO add settings icon and bg color to profile icon -->
+  <!-- Menu -->
   <ul class="menu">
     <li class="menu__item menu__search-container">
+      <!-- Search bar -->
       <form class="menu__form" action="#">
-        <label class="visually-hidden" for="search"> Search for books </label>
+        <label class="visually-hidden" for="search"> Search </label>
         <input
           class="menu__search"
-          type="search"
+          type="text"
           name="search"
           id="search"
           placeholder="Search..." />
         <button
           class="btn--search btn"
           type="submit"
-          aria-label="Search for books"
+          aria-label="Search"
           title="Search">
           <img src="/icons/icon-search.svg" alt="" width="25" height="25" />
         </button>
       </form>
     </li>
+    <!-- Menu action items -->
     <ul class="menu__items-container">
       <li class="menu__item">
-        <img src="/icons/icon-message.svg" alt="" width="25" height="25" />
+        <img src="/icons/icon-message.svg" alt="Open messages" width="25" height="25" />
       </li>
       <li class="menu__item">
-        <img src="/icons/icon-notifications.svg" alt="" width="25" height="25" />
+        <img src="/icons/icon-notifications.svg" alt="Open notifications" width="25" height="25" />
       </li>
       <li class="menu__item">
-        <img src="/icons/icon-profile.svg" alt="" width="20" height="20" />
+        <img src="/icons/icon-settings-1.svg" alt="Open settings" width="27" height="27" />
+      </li>
+      <li class="menu__item menu__profile">
+        <img  src="/icons/icon-profile.svg" alt="Open profile" width="20" height="20" />
       </li>
     </ul>
   </ul>

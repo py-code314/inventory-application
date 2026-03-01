@@ -11,6 +11,7 @@ const {
   getGenreDetails,
   updateGenre,
   deleteGenre,
+  booksPerGenre
 } = require('../db/queries/genres')
 
 // Error messages
@@ -42,7 +43,18 @@ const validateSearch = [
 // Get all genres
 async function genres_list_get(req, res) {
   const genres = await getAllGenres()
-  res.render('pages/genres/genres', { title: 'Genres', genres })
+  const counts = {}
+
+  for (const genre of genres) {
+    const count = await booksPerGenre(genre.id)
+    if (!count) {
+      counts[genre.id] = 0
+    } else {
+      counts[genre.id] = count.count
+    }
+  }
+
+  res.render('pages/genres/genres', { title: 'Genres', genres, counts })
 }
 
 // Show new genre form
@@ -160,11 +172,22 @@ const genre_search_get = [
 
     const { query } = matchedData(req)
     const filteredGenres = await searchGenre(query)
+    const counts = {}
+
+    for (const genre of filteredGenres) {
+      const count = await booksPerGenre(genre.id)
+      if (!count) {
+        counts[genre.id] = 0
+      } else {
+        counts[genre.id] = count.count
+      }
+    }
 
     res.render('pages/genres/genres', {
       title: 'Search Results',
       search: query,
       filteredGenres,
+      counts
     })
   },
 ]
