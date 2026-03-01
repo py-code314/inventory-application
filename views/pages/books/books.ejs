@@ -13,28 +13,7 @@
     <main class="main">
 
         <!-- Books subheader -->
-        <div class="books__controls category__controls">
-          <h2 class="sub-title"><a href="/books" class="link--sub-title">Books</a></h2>
-          
-          <div class="books__actions category__actions">
-            <!-- Search book-->
-            <form class="books__form category__form" action="/books/search" method="get">
-              <label class="visually-hidden" for="search">
-                Search for a book
-              </label>
-              <input class="books__search category__search" type="text" name="query" id="search" value="<%= locals.search ? search : '' %>" placeholder="Search for a book..." required>
-              <!-- Search button -->
-              <button class="btn btn--search" type="submit" aria-label="Search for a book" title="Search">
-                <img src="/icons/icon-search-1.svg" alt="" width="25" height="25" />
-              </button>
-            </form>
-
-            <!-- Add book -->
-            <a class="books__add link--add link" href="/books/new">
-              <img src="/icons/icon-plus.svg" alt="" width="25" height="25" />Add Book
-            </a>
-          </div>
-        </div>
+        <%- include("./book-header.ejs") %>
 
         <!-- Show validation errors -->
         <%  if(locals.errors) {%>

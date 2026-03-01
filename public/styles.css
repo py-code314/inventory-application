@@ -627,6 +627,11 @@ body {
   gap: var(--space-16, 1rem);
 }
 
+.book__details {
+  height: 81svh;
+  overflow-y: auto;
+}
+
 /* Default styles for add form */
 .form {
   padding: var(--space-32, 2rem);
@@ -639,7 +644,7 @@ body {
 
 /* Add new book form */
 .form--book {
-  height: 75svh;
+  height: 67svh;
   overflow-y: auto;
 }
 
