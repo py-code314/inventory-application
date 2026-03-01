@@ -312,7 +312,8 @@ body {
 
 .btn--add {
   background-color: var(--clr-primary, rebeccapurple);
-  margin-block-start: var(--space-24, 1.5rem);
+  /* margin-block-start: var(--space-24, 1.5rem); */
+  flex: 1;
 }
 
 .sidebar {
@@ -522,6 +523,12 @@ body {
   color: var(--clr-primary, rebeccapurple);
 }
 
+.link--cancel {
+  background-color: var(--clr-primary-dark, indigo);
+  border-radius: var(--bd-radius-small, 00.3125rem);
+  flex: 1;
+}
+
 .gallery {
   padding: var(--space-32, 2rem);
   display: flex;
@@ -606,6 +613,11 @@ body {
   display: flex;
   gap: var(--space-16, 1rem);
   justify-content: center;
+  align-items: center;
+}
+
+.btn-group--form {
+  width: 60%;
 }
 
 .editor,
@@ -637,8 +649,7 @@ body {
 
 .form__label,
 .form__input,
-.form__textarea,
-.btn--add {
+.form__textarea {
   width: 60%;
 }
 

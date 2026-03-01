@@ -32,8 +32,13 @@
             <input class="form__input" type="email" name="email" id="email"
             value="<%= locals.publisher?.email || '' %>"/>
           </div>
-          <!-- Update or Add button -->
-          <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+
+          <div class="btn-group btn-group--form">
+            <!-- Cancel link -->
+            <a href="/publishers" class="link link--cancel">Cancel</a>
+            <!-- Update or Add button -->
+            <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+          </div>
         </form>
       </div>
     </main>

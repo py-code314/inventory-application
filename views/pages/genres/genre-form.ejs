@@ -27,7 +27,13 @@
             <input class="form__input" type="text" name="type" id="type"
             value="<%= locals.genre?.type || '' %>" required  />
           </div>
-          <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+
+          <div class="btn-group btn-group--form">
+            <!-- Cancel link -->
+            <a href="/genres" class="link link--cancel">Cancel</a>
+            <!-- Add or Update button -->
+            <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+          </div>
         </form>
       </div>
     </main>

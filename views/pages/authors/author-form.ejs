@@ -35,7 +35,13 @@
             <input class="form__input" type="date" name="birth_date" id="birthDate"
             value="<%= locals.author ? new Date(author.birth_date).toISOString().split('T')[0] : '' %>"/>
           </div>
-          <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+
+          <div class="btn-group btn-group--form">
+            <!-- Cancel link -->
+            <a href="/authors" class="link link--cancel">Cancel</a>
+            <!-- Add or Update button -->
+            <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+          </div>
         </form>
       </div>
     </main>

@@ -217,7 +217,7 @@ const book_create_post = [
         return res.status(409).render('pages/books/book-form', {
           title: 'Add Book',
           book: req.body,
-          errors: [{ msg: 'ISBN number must be unique.' }],
+          errors: [{ msg: 'ISBN number already exists. It must be unique.' }],
         })
       } else {
         return res.status(500).render('pages/books/book-form', {

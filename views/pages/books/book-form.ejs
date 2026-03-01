@@ -70,6 +70,7 @@
           <div class="form__control">
             <label class="form__label" for="publish-date">Publish date</label>
             <input class="form__input" type="date" name="publish_date" id="publish-date"
+            max="<%= new Date().toISOString().split('T')[0] %>"
             value="<%= locals.book ? new Date(book.publish_date).toISOString().split('T')[0] : '' %>">
           </div>
           <div class="form__control">
@@ -89,9 +90,13 @@
             <%= locals.isUpdate ? 'readonly' : '' %> required />
           </div>
 
-          <!-- Add or Update button -->
-          <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %>
-          </button>
+          <div class="btn-group btn-group--form">
+            <!-- Cancel link -->
+            <a href="/books" class="link link--cancel">Cancel</a>
+            <!-- Add or Update button -->
+            <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %>
+            </button>
+          </div>
         </form>
       </div>
     </main>
