@@ -1,12 +1,12 @@
 const pool = require('../pool')
 
-// Get all authors from db
+/* Get all authors from db */
 async function getAllAuthors() {
   const { rows } = await pool.query('SELECT * FROM author ORDER BY id DESC')
   return rows
 }
 
-// Get authors by name
+/* Get author by name */
 async function searchAuthors(name) {
   const { rows } = await pool.query(
     "SELECT * FROM author WHERE full_name ILIKE '%' || $1 || '%'",
@@ -15,7 +15,7 @@ async function searchAuthors(name) {
   return rows
 }
 
-// Add author to db
+/* Add author data to db */
 async function addAuthor(name, date) {
   await pool.query(
     'INSERT INTO author (full_name, birth_date) VALUES ($1, $2)',
@@ -23,13 +23,13 @@ async function addAuthor(name, date) {
   )
 }
 
-// Get author details
+/* Get author details */
 async function getAuthorDetails(id) {
   const { rows } = await pool.query('SELECT * FROM author WHERE id =  $1', [id])
   return rows
 }
 
-// Update author details
+/* Update author details */
 async function updateAuthor(id, name, date) {
   await pool.query(
     'UPDATE author SET full_name = $1, birth_date = $2 WHERE id = $3',
@@ -37,12 +37,12 @@ async function updateAuthor(id, name, date) {
   )
 }
 
-// Delete author
+/* Delete author */
 async function deleteAuthor(id) {
-  // throw new Error('connection failure')
   await pool.query('DELETE FROM author WHERE id = $1', [id])
 }
 
+/* Find author id or add new author if it doesn't exist */
 async function findOrCreateAuthor(authorArr) {
   const authorIdArr = []
 
@@ -65,15 +65,14 @@ async function findOrCreateAuthor(authorArr) {
   }
 
   return authorIdArr
-  
 }
 
-// Check for author in written_by table
+/* Check for author in written_by table */
 async function checkAuthor(id) {
-  // let isAuthor = false
-
-  // const rows = 'SELECT wb.author_id FROM written_by wb '
-  const isAuthor = await pool.query('SELECT exists (SELECT 1 FROM written_by WHERE author_id = $1 LIMIT 1)', [id])
+  const isAuthor = await pool.query(
+    'SELECT exists (SELECT 1 FROM written_by WHERE author_id = $1 LIMIT 1)',
+    [id],
+  )
   console.log('author exists:', isAuthor)
 }
 

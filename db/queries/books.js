@@ -1,6 +1,6 @@
 const pool = require('../pool')
 
-// Get all books from db
+/* Get all books from db */
 async function getAllBooks() {
   const text = `
     SELECT bc.book_id AS "bookId", bc.id AS "copyId", title,
@@ -16,11 +16,11 @@ async function getAllBooks() {
     ORDER BY bc.id DESC;
   `
   const { rows } = await pool.query(text)
-  // console.log('allBooks:', rows)
+
   return rows
 }
 
-// Get books by name
+/* Get books by name */
 async function searchBooks(query) {
   const text = `
     SELECT bc.book_id AS "bookId", bc.id AS "copyId", title,
@@ -42,14 +42,11 @@ async function searchBooks(query) {
   return rows
 }
 
-// Check for a duplicate book
+/* Check for a duplicate book */
 async function checkDuplicate(title, authorIdArr, format, edition) {
-  // console.log('author id arr:', authorIdArr)
-
   let isDuplicate = true
 
   for (const authorId of authorIdArr) {
-    // console.log('author id:', authorId)
     const text = `
       SELECT bc.id
       FROM book_copy bc
@@ -65,13 +62,16 @@ async function checkDuplicate(title, authorIdArr, format, edition) {
     const values = [title, authorId, format, edition]
     const { rows } = await pool.query(text, values)
 
+    // No duplicate if any of the four values doesn't match
     if (!rows.length) {
       isDuplicate = false
     }
   }
+
   return isDuplicate
 }
 
+/* Check for book and author combo */
 async function checkBookAuthorCombo(title, authorIdArr) {
   let bookId
 
@@ -87,6 +87,7 @@ async function checkBookAuthorCombo(title, authorIdArr) {
     const values = [title, authorId]
     const { rows } = await pool.query(text, values)
 
+    // Get book id if both title and author id matches
     if (rows.length) {
       bookId = rows[0].id
     } else {
@@ -94,10 +95,9 @@ async function checkBookAuthorCombo(title, authorIdArr) {
     }
   }
   return bookId
-  
 }
 
-// Add book to db
+/* Add book data to db */
 async function addBook(
   title,
   summary,
@@ -113,15 +113,15 @@ async function addBook(
   isbn,
   comboBookId,
 ) {
-  // console.log('add book')
   const client = await pool.connect()
 
   try {
-    // console.log('try adding a book')
+    // Transaction
     await client.query('BEGIN')
 
     let bookId = comboBookId
 
+    // Add new book data only if title and author combo doesn't exists
     if (!comboBookId) {
       // Insert into book table
       const insertBookText = `
@@ -131,7 +131,7 @@ async function addBook(
     `
       const insertBookValues = [title, summary, genreId]
       const res = await client.query(insertBookText, insertBookValues)
-       bookId = res.rows[0].id
+      bookId = res.rows[0].id
 
       // Insert each author into written_by table
       if (authorIdArr && authorIdArr.length > 0) {
@@ -145,9 +145,6 @@ async function addBook(
         }
       }
     }
-    
-
-    // throw new Error('transaction error')
 
     // Insert into book_copy table
     const insertBookCopyText = `
@@ -167,10 +164,8 @@ async function addBook(
     ]
     await client.query(insertBookCopyText, insertBookCopyValues)
     await client.query('COMMIT')
-    console.log('add book id:', bookId)
     return bookId
   } catch (err) {
-    // console.error(err)
     await client.query('ROLLBACK')
     throw err
   } finally {
@@ -178,10 +173,8 @@ async function addBook(
   }
 }
 
-// Get book details
+/* Get book details */
 async function getBookDetails(bookId, copyId) {
-  console.log('book id:', bookId)
-  console.log('copy id:', copyId)
   const text = `
   SELECT
     b.id AS "bookId",
@@ -219,18 +212,19 @@ async function getBookDetails(bookId, copyId) {
   const values = [bookId, copyId]
 
   const { rows } = await pool.query(text, values)
-  // console.log('book details:', rows)
+
   return rows
 }
 
-
 /* Delete book copy */
 async function deleteBookCopy(bookId, copyId) {
-  await pool.query('DELETE FROM book_copy WHERE book_id = $1 AND id = $2 ',
-    [bookId, copyId,])
+  await pool.query('DELETE FROM book_copy WHERE book_id = $1 AND id = $2 ', [
+    bookId,
+    copyId,
+  ])
 }
 
-// Update book details
+/* Update book details */
 async function updateBook(
   bookId,
   copyId,
@@ -248,8 +242,9 @@ async function updateBook(
   const client = await pool.connect()
 
   try {
+    // Transaction
     await client.query('BEGIN')
-    // Update book data
+    // Update book table (but not title to prevent duplicates)
     const updateBookText = `
       UPDATE book
       SET plot_summary = $1, genre_id = $2
@@ -282,30 +277,20 @@ async function updateBook(
 
     await client.query(updateBookCopyText, updateBookCopyValues)
     await client.query('COMMIT')
-
   } catch (err) {
     await client.query('ROLLBACK')
     throw err
   } finally {
     client.release()
   }
-
-  
 }
 
-
-// Delete book
+/* Delete entire book entry */
 async function deleteBook(id) {
   await pool.query('DELETE FROM book WHERE id = $1', [id])
 }
 
-
-
-
-
-
-
-// Get inventory stats for books
+/* Get inventory stats for books */
 async function getInventoryStats() {
   const text = `
     SELECT 
