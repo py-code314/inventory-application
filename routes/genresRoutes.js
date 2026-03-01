@@ -5,7 +5,6 @@ const {
   genre_search_get,
   genre_create_get,
   genre_create_post,
-  // genre_details_get,
   genre_update_get,
   genre_update_post,
   genre_delete_post,
@@ -27,17 +26,5 @@ genresRouter.post('/:id/update', genre_update_post)
 
 // Delete a genre
 genresRouter.post('/:id/delete', genre_delete_post)
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = genresRouter

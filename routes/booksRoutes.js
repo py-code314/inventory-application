@@ -12,7 +12,6 @@ const {
   book_copy_delete_post,
 } = require('../controllers/booksController')
 
-
 // Show all books
 booksRouter.get('/', books_list_get)
 
@@ -33,8 +32,5 @@ booksRouter.get('/:id/copy/:copyId/update', book_update_get)
 booksRouter.post('/:id/copy/:copyId/update', book_update_post)
 // Delete entire book entry
 booksRouter.post('/:id/delete', book_delete_post)
-
-
-
 
 module.exports = booksRouter

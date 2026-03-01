@@ -8,13 +8,9 @@ const path = require('node:path')
 // Import routers
 const indexRouter = require('./routes/indexRoutes')
 const genresRouter = require('./routes/genresRoutes')
-// const addGenreRouter = require('./routes/addGenreRoutes')
 const booksRouter = require('./routes/booksRoutes')
-// const addBookRouter = require('./routes/addBookRoutes')
 const authorsRouter = require('./routes/authorsRoutes')
 const publishersRouter = require('./routes/publishersRoutes')
-
-
 
 // EJS setup
 app.set('views', path.join(__dirname, 'views'))
@@ -28,19 +24,12 @@ app.use(express.static(assetsPath))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-
 // Routes
 app.use('/', indexRouter)
 app.use('/genres', genresRouter)
-// app.use('/new-genre', addGenreRouter)
 app.use('/books', booksRouter)
-// app.use('/new-book', addBookRouter)
 app.use('/authors', authorsRouter)
 app.use('/publishers', publishersRouter)
-
-
-
-
 
 // Port to listen on
 const PORT = process.env.PORT || 3000
