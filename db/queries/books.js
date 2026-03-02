@@ -1,6 +1,6 @@
 const pool = require('../pool')
 
-/* Get all books from db */
+/* Get all book copies from db */
 async function getAllBooks() {
   const text = `
     SELECT bc.book_id AS "bookId", bc.id AS "copyId", title,
