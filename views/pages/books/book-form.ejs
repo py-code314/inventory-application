@@ -38,7 +38,7 @@
             <textarea class="form__textarea" name="plot_summary" id="summary" rows="5"><%= locals.book?.plot_summary || '' %></textarea>
           </div>
           <div class="form__control">
-            <label class="form__label" for="author"> Author </label>
+            <label class="form__label" for="author"> Author/s <span class="form__label--hint">(separate author names with a comma)</span></label>
             <input class="form__input" type="text" name="authors" id="author"
             value="<%= locals.book?.authors || '' %>"
             <%= locals.isUpdate ? 'readonly' : '' %> required />
