@@ -3,14 +3,6 @@ const { argv } = require('node:process')
 
 // Create tables and add some initial data
 const SQL = `
-/* WARNING: Use this only during development */
-
-DROP TABLE IF EXISTS written_by CASCADE;
-DROP TABLE IF EXISTS book_copy CASCADE;
-DROP TABLE IF EXISTS book CASCADE;
-DROP TABLE IF EXISTS genre CASCADE;
-DROP TABLE IF EXISTS author CASCADE;
-DROP TABLE IF EXISTS publisher CASCADE;
 
 /* Genre table */
 CREATE TABLE IF NOT EXISTS genre (
