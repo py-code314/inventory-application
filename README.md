@@ -104,7 +104,7 @@ The application has the following sections: Home page, Books, Authors, Genres, a
 
 ### Useful resources
 
-- Naming strategy for CSS variables is from this Medium [article] - (https://medium.com/design-bootcamp/simple-design-tokens-with-css-custom-properties-7ab69b71d8ad)
+- Naming strategy for CSS variables is from this Medium [article](https://medium.com/design-bootcamp/simple-design-tokens-with-css-custom-properties-7ab69b71d8ad)
 - Box shadows generator - [getcssscan.com](https://getcssscan.com/css-box-shadow-examples)
-- PostgreSQL [tutorial] - (https://neon.com/postgresql/tutorial)
+- PostgreSQL [tutorial](https://neon.com/postgresql/tutorial)
 
