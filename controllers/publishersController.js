@@ -94,10 +94,12 @@ async function publisher_update_get(req, res) {
   const id = Number(req.params.id)
   // Get publisher data
   const details = await getPublisherDetails(id)
+  // console.log('details:', details)
 
   res.render('pages/publishers/publisher-form', {
     title: 'Update Publisher',
     publisher: details[0],
+    publisherId: id,
     isUpdate: true,
   })
 }
@@ -108,6 +110,19 @@ const publisher_update_post = [
 
   async (req, res) => {
     const id = Number(req.params.id)
+    const { password } = req.body
+
+    // Don't update if admin password doesn't match
+    if (password !== process.env.ADMIN_PASSWORD) {
+      return res.status(403).render('pages/publishers/publisher-form', {
+        title: 'Update Publisher',
+        publisher: req.body,
+        publisherId: id,
+        errors: [{ msg: 'Incorrect Admin Password' }],
+        isUpdate: true,
+      })
+    }
+
     // Validate request
     const errors = validationResult(req)
 
@@ -116,6 +131,7 @@ const publisher_update_post = [
       return res.status(400).render('pages/publishers/publisher-form', {
         title: 'Update Publisher',
         publisher: req.body,
+        publisherId: id,
         errors: errors.array(),
         isUpdate: true,
       })
@@ -131,6 +147,7 @@ const publisher_update_post = [
       return res.status(500).render('pages/publishers/publisher-form', {
         title: 'Update Publisher',
         publisher: req.body,
+        publisherId: id,
         errors: [{ msg: 'Failed to update publisher. Please try again.' }],
         isUpdate: true,
       })
