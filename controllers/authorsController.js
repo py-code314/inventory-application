@@ -213,6 +213,17 @@ const author_update_post = [
 /* Delete author */
 async function author_delete_post(req, res) {
   const id = Number(req.params.id)
+  const { password } = req.body
+  const authors = await getAllAuthors()
+
+  // Don't update if admin password doesn't match
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(403).render('pages/authors/authors', {
+      title: 'Authors',
+      authors,
+      errors: [{ msg: 'Incorrect Admin Password' }],
+    })
+  }
 
   try {
     // Delete author
@@ -220,7 +231,7 @@ async function author_delete_post(req, res) {
     res.redirect('/authors')
   } catch (err) {
     console.error(err)
-    const authors = await getAllAuthors()
+    // const authors = await getAllAuthors()
 
     // Default error message
     let errorMsg = 'Failed to delete author. Please try again.'

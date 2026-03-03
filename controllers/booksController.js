@@ -246,6 +246,17 @@ async function book_details_get(req, res) {
 async function book_copy_delete_post(req, res) {
   const bookId = Number(req.params.id)
   const copyId = Number(req.params.copyId)
+  const { password } = req.body
+  const [rows] = await getBookDetails(bookId, copyId)
+
+  // Don't update if admin password doesn't match
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(403).render('pages/books/book-details', {
+      title: 'Books',
+      book: rows,
+      errors: [{ msg: 'Incorrect Admin Password' }],
+    })
+  }
 
   try {
     // Delete book copy
@@ -254,7 +265,7 @@ async function book_copy_delete_post(req, res) {
   } catch (err) {
     console.error(err)
     // Fetch book copy details
-    const [rows] = await getBookDetails(bookId, copyId)
+    // const [rows] = await getBookDetails(bookId, copyId)
     res.status(500).render('pages/books/book-details', {
       title: 'Book Details',
       book: rows,
@@ -374,6 +385,17 @@ const book_update_post = [
 /* Delete book and book copies */
 async function book_delete_post(req, res) {
   const id = Number(req.params.id)
+  const { password } = req.body
+  const books = await getAllBooks()
+
+  // Don't update if admin password doesn't match
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(403).render('pages/books/books', {
+      title: 'Books',
+      books,
+      errors: [{ msg: 'Incorrect Admin Password' }],
+    })
+  }
 
   try {
     // Delete entire book entry
@@ -383,7 +405,7 @@ async function book_delete_post(req, res) {
     console.error(err)
 
     // Fetch book list
-    const books = await getAllBooks()
+    // const books = await getAllBooks()
     res.status(500).render('pages/books/books', {
       title: 'Books',
       books,
