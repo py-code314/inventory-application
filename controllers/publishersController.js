@@ -144,11 +144,21 @@ const publisher_update_post = [
       res.redirect('/publishers')
     } catch (err) {
       console.error(err)
-      return res.status(500).render('pages/publishers/publisher-form', {
+
+      // Default
+      let statusCode = 500
+      let errorMsg = 'A database error occurred. Please try again later.'
+      // Update for UNIQUE constraint violation
+      if (err.code === '23505') {
+        statusCode = 409
+        errorMsg = 'Publisher name must be unique.'
+      }
+
+      return res.status(statusCode).render('pages/publishers/publisher-form', {
         title: 'Update Publisher',
         publisher: req.body,
         publisherId: id,
-        errors: [{ msg: 'Failed to update publisher. Please try again.' }],
+        errors: [{ msg: errorMsg }],
         isUpdate: true,
       })
     }

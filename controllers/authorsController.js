@@ -188,13 +188,24 @@ const author_update_post = [
       res.redirect('/authors')
     } catch (err) {
       console.error(err)
-      return res.status(500).render('pages/authors/author-form', {
+
+      // Default
+      let statusCode = 500
+      let errorMsg = 'A database error occurred. Please try again later.'
+      // Update for UNIQUE constraint violation
+      if (err.code === '23505') {
+        statusCode = 409
+        errorMsg = 'Author name must be unique.'
+      }
+
+      return res.status(statusCode).render('pages/authors/author-form', {
         title: 'Update Author',
         author: req.body,
         authorId,
-        errors: [{ msg: 'Failed to update author. Please try again.' }],
+        errors: [{ msg: errorMsg }],
         isUpdate: true,
       })
+      
     }
   },
 ]
