@@ -284,8 +284,20 @@ const book_update_post = [
   async (req, res) => {
     const bookId = Number(req.params.id)
     const copyId = Number(req.params.copyId)
-    // Get book copy data
+    // Get book copy data and pass it to rendering page so that 
+    // title and author don't change in case of errors
     const existingBookData = await getBookDetails(bookId, copyId)
+    const { password } = req.body
+
+    // Don't update if admin password doesn't match
+    if (password !== process.env.ADMIN_PASSWORD) {
+      return res.status(403).render('pages/books/book-form', {
+        title: 'Update Book',
+        book: existingBookData[0],
+        errors: [{ msg: 'Incorrect Admin Password' }],
+        isUpdate: true,
+      })
+    }
 
     // Validate request
     const errors = validationResult(req)

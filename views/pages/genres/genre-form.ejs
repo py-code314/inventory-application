@@ -29,16 +29,16 @@
             <div class="form__control">
               <label class="form__label form__label--modal" for="admin-pw">Admin password</label>
               <!-- Connect input and Confirm button to form with form attribute-->
-              <input form="author-form" class="form__input form__input--modal" type="password" name="password" id="admin-pw" required>
+              <input form="genre-form" class="form__input form__input--modal" type="password" name="password" id="admin-pw" required>
             </div>
             <div class="btn-group">
               <button class="btn btn--primary btn--cancel" type="button" onclick="closeModal()">Cancel</button>
-              <button form="author-form" class="btn btn--primary btn--confirm" type="submit">Confirm</button>
+              <button form="genre-form" class="btn btn--primary btn--confirm" type="submit">Confirm</button>
             </div>
         </dialog>
 
         <!-- Genre form -->
-        <form id="author-form" action="<%= locals.isUpdate ? '/genres/' + genre.id + '/update' : '/genres/new' %>"
+        <form id="genre-form" action="<%= locals.isUpdate ? '/genres/' + genre.id + '/update' : '/genres/new' %>"
           method="post"     class="form">
           <div class="form__control">
             <label class="form__label" for="type"> Type </label>

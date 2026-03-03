@@ -25,8 +25,23 @@
         <!-- Note -->
         <p><%= locals.isUpdate? 'Note: Title and Author fields are not editable. They are read only.' : '' %></p>
 
+        <!-- Dialog modal -->
+        <!-- closedby attribute is not supported in Safari -->
+        <dialog class="modal" closedby="any">
+          <p class="modal__text">Enter Admin password to <%= isUpdate ? 'update' : 'delete' %> </p>
+            <div class="form__control">
+              <label class="form__label form__label--modal" for="admin-pw">Admin password</label>
+              <!-- Connect input and Confirm button to form with form attribute-->
+              <input form="book-form" class="form__input form__input--modal" type="password" name="password" id="admin-pw" required>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn--primary btn--cancel" type="button" onclick="closeModal()">Cancel</button>
+              <button form="book-form" class="btn btn--primary btn--confirm" type="submit">Confirm</button>
+            </div>
+        </dialog>
+
         <!-- Book form -->
-        <form action="<%= locals.isUpdate ? '/books/' + book.bookId + '/copy/' + book.copyId + '/update' : '/books/new' %>" method="post" class="form form--book">
+        <form id="book-form" action="<%= locals.isUpdate ? '/books/' + book.bookId + '/copy/' + book.copyId + '/update' : '/books/new' %>" method="post" class="form form--book">
           <div class="form__control">
             <label class="form__label" for="title"> Title </label>
             <input class="form__input" type="text" name="title" id="title"
@@ -46,7 +61,7 @@
           <div class="form__control">
             <label class="form__label" for="genre"> Genre </label>
             <input class="form__input" type="text" name="genre" id="genre"
-            value="<%= locals.book?.genre || '' %>"required />
+            value="<%= locals.book?.genre || '' %>" required />
           </div>
           <div class="form__control">
             <label class="form__label" for="total-pages"> Total Pages </label>
@@ -95,8 +110,10 @@
           <div class="btn-group btn-group--form">
             <!-- Cancel link -->
             <a href="<%= locals.isUpdate ? '/books/' + book.bookId + '/copy/' + book.copyId : '/books' %>" class="link link--cancel">Cancel</a>
+
             <!-- Add or Update button -->
-            <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %>
+            <button class="btn btn--primary btn--add"
+            onclick="openModal(event)"><%= locals.isUpdate ? 'Update' : 'Add' %>
             </button>
           </div>
         </form>
@@ -124,6 +141,19 @@
     today = yyyy + '-' + mm + '-' + dd;
 
     document.querySelector('#publish-date').setAttribute('max', today)
+
+    const modal = document.querySelector('.modal')
+
+    /* Open update modal */
+    function openModal(event) {
+      event.preventDefault()
+      modal.showModal()
+    }
+
+    /* Close update modal */
+    function closeModal() {
+      modal.close()
+    }
     </script>
   </body>
 </html>
