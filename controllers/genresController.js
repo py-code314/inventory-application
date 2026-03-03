@@ -226,6 +226,29 @@ const genre_search_get = [
 /* Delete genre */
 async function genre_delete_post(req, res) {
   const id = Number(req.params.id)
+  const { password } = req.body
+  const genres = await getAllGenres()
+  const counts = {}
+
+  // Get book count for each genre
+  for (const genre of genres) {
+    const count = await booksPerGenre(genre.id)
+    if (!count) {
+      counts[genre.id] = 0
+    } else {
+      counts[genre.id] = count.count
+    }
+  }
+
+  // Don't update if admin password doesn't match
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(403).render('pages/genres/genres', {
+      title: 'Genres',
+      genres,
+      counts,
+      errors: [{ msg: 'Incorrect Admin Password' }],
+    })
+  }
 
   try {
     // Delete genre
@@ -233,7 +256,7 @@ async function genre_delete_post(req, res) {
     res.redirect('/genres')
   } catch (err) {
     console.error(err)
-    const genres = await getAllGenres()
+    // const genres = await getAllGenres()
     // Default error message
     let errorMsg = 'Failed to delete genre. Please try again.'
     // Update error message

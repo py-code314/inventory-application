@@ -19,6 +19,21 @@
         <%  if(locals.errors) {%>
           <%- include("../../partials/errors.ejs") %>
         <% } %> 
+
+        <!-- Dialog modal -->
+        <!-- closedby attribute is not supported in Safari -->
+        <dialog class="modal" closedby="any">
+          <p class="modal__text">Enter Admin password to delete </p>
+            <div class="form__control">
+              <label class="form__label form__label--modal" for="admin-pw">Admin password</label>
+              <!-- Connect input and Confirm button to form with form attribute-->
+              <input form="publisher-form" class="form__input form__input--modal" type="password" name="password" id="admin-pw" required>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn--primary btn--cancel" type="button" onclick="closeModal()">Cancel</button>
+              <button form="publisher-form" class="btn btn--primary btn--confirm" type="submit">Confirm</button>
+            </div>
+        </dialog>
         
         <div class="gallery">
           <% if (locals.filteredPublishers) { %>
@@ -65,8 +80,8 @@
                         <img src="/icons/icon-update.svg" alt="" width="25" height="25" />Update</a>
 
                       <!-- Delete publisher -->
-                      <form action="/publishers/<%= publisher.id %>/delete" method="POST" >
-                        <button class="btn btn--primary btn--delete"  type="submit" onclick="return confirm('Warning: This will delete ALL data for this publisher!');">
+                      <form id="publisher-form" action="/publishers/<%= publisher.id %>/delete" method="POST" >
+                        <button class="btn btn--primary btn--delete"  type="submit" onclick="openModal(event)">
                           <img src="/icons/icon-delete.svg" alt="" width="25" height="25" />
                           Delete</button>
                       </form>
@@ -86,5 +101,20 @@
 
     <!-- Footer -->
     <%- include('../../partials/footer.ejs') %>
+
+    <script>
+      const modal = document.querySelector('.modal')
+
+      /* Open update modal */
+      function openModal(event) {
+        event.preventDefault()
+        modal.showModal()
+      }
+
+      /* Close update modal */
+      function closeModal() {
+        modal.close()
+      }
+    </script>
   </body>
 </html>

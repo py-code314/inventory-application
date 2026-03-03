@@ -196,6 +196,17 @@ const publisher_search_get = [
 /* Delete publisher */
 async function publisher_delete_post(req, res) {
   const id = Number(req.params.id)
+  const { password } = req.body
+  const publishers = await getAllPublishers()
+
+  // Don't update if admin password doesn't match
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(403).render('pages/publishers/publishers', {
+      title: 'Publishers',
+      publishers,
+      errors: [{ msg: 'Incorrect Admin Password' }],
+    })
+  }
 
   try {
     // Delete publisher from db
@@ -204,7 +215,7 @@ async function publisher_delete_post(req, res) {
   } catch (err) {
     console.error(err)
     // Get all publishers
-    const publishers = await getAllPublishers()
+    // const publishers = await getAllPublishers()
 
     // Default error message
     let errorMsg = 'Failed to delete publisher. Please try again.'
