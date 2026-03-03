@@ -127,7 +127,6 @@ const genre_update_post = [
 
   async (req, res) => {
     const genreId = Number(req.params.id)
-
     const { password } = req.body
 
     // Don't update if admin password doesn't match
@@ -240,7 +239,7 @@ async function genre_delete_post(req, res) {
     }
   }
 
-  // Don't update if admin password doesn't match
+  // Don't delete if admin password doesn't match
   if (password !== process.env.ADMIN_PASSWORD) {
     return res.status(403).render('pages/genres/genres', {
       title: 'Genres',
@@ -256,7 +255,7 @@ async function genre_delete_post(req, res) {
     res.redirect('/genres')
   } catch (err) {
     console.error(err)
-    // const genres = await getAllGenres()
+    
     // Default error message
     let errorMsg = 'Failed to delete genre. Please try again.'
     // Update error message

@@ -264,8 +264,6 @@ async function book_copy_delete_post(req, res) {
     res.redirect('/books')
   } catch (err) {
     console.error(err)
-    // Fetch book copy details
-    // const [rows] = await getBookDetails(bookId, copyId)
     res.status(500).render('pages/books/book-details', {
       title: 'Book Details',
       book: rows,
@@ -296,7 +294,7 @@ const book_update_post = [
     const bookId = Number(req.params.id)
     const copyId = Number(req.params.copyId)
     // Get book copy data and pass it to rendering page so that 
-    // title and author don't change in case of errors
+    // title and author don't change in case of error
     const existingBookData = await getBookDetails(bookId, copyId)
     const { password } = req.body
 
@@ -388,7 +386,7 @@ async function book_delete_post(req, res) {
   const { password } = req.body
   const books = await getAllBooks()
 
-  // Don't update if admin password doesn't match
+  // Don't delete if admin password doesn't match
   if (password !== process.env.ADMIN_PASSWORD) {
     return res.status(403).render('pages/books/books', {
       title: 'Books',
@@ -404,8 +402,6 @@ async function book_delete_post(req, res) {
   } catch (err) {
     console.error(err)
 
-    // Fetch book list
-    // const books = await getAllBooks()
     res.status(500).render('pages/books/books', {
       title: 'Books',
       books,

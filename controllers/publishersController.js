@@ -94,7 +94,6 @@ async function publisher_update_get(req, res) {
   const id = Number(req.params.id)
   // Get publisher data
   const details = await getPublisherDetails(id)
-  // console.log('details:', details)
 
   res.render('pages/publishers/publisher-form', {
     title: 'Update Publisher',
@@ -199,7 +198,7 @@ async function publisher_delete_post(req, res) {
   const { password } = req.body
   const publishers = await getAllPublishers()
 
-  // Don't update if admin password doesn't match
+  // Don't delete if admin password doesn't match
   if (password !== process.env.ADMIN_PASSWORD) {
     return res.status(403).render('pages/publishers/publishers', {
       title: 'Publishers',
@@ -214,8 +213,6 @@ async function publisher_delete_post(req, res) {
     res.redirect('/publishers')
   } catch (err) {
     console.error(err)
-    // Get all publishers
-    // const publishers = await getAllPublishers()
 
     // Default error message
     let errorMsg = 'Failed to delete publisher. Please try again.'
