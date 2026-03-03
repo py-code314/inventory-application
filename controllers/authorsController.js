@@ -148,9 +148,23 @@ const author_update_post = [
   validateAuthor,
 
   async (req, res) => {
+    
     const authorId = Number(req.params.id)
     // Get author data
     const existingAuthorData = await getAuthorDetails(authorId)
+
+    const { password } = req.body
+
+    // Don't update if admin password doesn't match
+    if (password !== process.env.ADMIN_PASSWORD) {
+      return res.status(403).render('pages/authors/author-form', {
+        title: 'Update Author',
+        author: existingAuthorData[0],
+        errors: [{msg: 'Incorrect Admin Password'}],
+        isUpdate: true,
+      })
+    }
+
     // Validate request
     const errors = validationResult(req)
 

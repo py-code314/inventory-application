@@ -132,9 +132,9 @@ a {
   /* Font weights */
   /* --fw-thin: 100;
   --fw-extra-light: 200;
-  --fw-light: 300;
+  --fw-light: 300;*/
   --fw-regular: 400;
-  --fw-medium: 500;
+  /*--fw-medium: 500;
   --fw-semibold: 600; */
   --fw-bold: 700;
   /* --fw-extra-bold: 800;
@@ -306,15 +306,20 @@ body {
   right: 5%;
 }
 
-.btn--delete {
+.btn--delete,
+.btn--cancel {
   background-color: var(--clr-primary-dark, indigo);
 }
 
 .btn--add {
   background-color: var(--clr-primary, rebeccapurple);
-  /* margin-block-start: var(--space-24, 1.5rem); */
   flex: 1;
 }
+
+.btn--confirm {
+  background-color: var(--clr-primary, rebeccapurple);
+}
+
 
 .sidebar {
   grid-area: sidebar;
@@ -658,6 +663,15 @@ body {
   width: 60%;
 }
 
+.form__label--modal,
+.form__input--modal {
+  width: 100%;
+}
+
+.form__label--modal {
+  font-weight: var(--fw-regular, 400);
+}
+
 .form__label {
   display: block;
   margin-block-end: var(--space-8, 0.5rem);
@@ -691,4 +705,61 @@ body {
   font-weight: var(--fw-bold, 700);
   text-align: center;
   background-color: var(--clr-gray-2, whitesmoke);
+}
+
+.modal {
+  width: 400px;
+  border: none;
+  border-radius: var(--bd-radius-small);
+  box-shadow: var(
+    --box-shadow-1,
+    rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+    rgba(255, 255, 255, 0.8) -6px -2px 16px 0px
+  );
+  padding: var(--space-32, 2rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: popup 0.8s ease-in-out;
+}
+
+/* Animate dialog popup */
+@keyframes popup {
+  0% {
+    transform: translate(-50%, -60%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.modal::backdrop {
+  background-image: linear-gradient(
+    45deg,
+    hsl(203, 100%, 50%),
+    hsl(162, 50%, 40%),
+    hsl(210, 100%, 56%),
+    hsl(120, 100%, 25%)
+  );
+  opacity: 0.75;
+}
+
+.modal > * {
+  margin-block-end: var(--space-16, 1rem);
+}
+
+.modal__text {
+  font-size: var(--fs-18, 1.125rem);
+  font-weight: var(--fw-bold, 700);
+}
+
+.modal__form {
+  display: grid;
+  gap: var(--space-16, 1rem);
 }
