@@ -127,6 +127,18 @@ const genre_update_post = [
   async (req, res) => {
     const id = Number(req.params.id)
 
+    const { password } = req.body
+
+    // Don't update if admin password doesn't match
+    if (password !== process.env.ADMIN_PASSWORD) {
+      return res.status(403).render('pages/genres/genre-form', {
+        title: 'Update Genre',
+        genre: req.body,
+        errors: [{ msg: 'Incorrect Admin Password' }],
+        isUpdate: true,
+      })
+    }
+
     // Validate request
     const errors = validationResult(req)
 

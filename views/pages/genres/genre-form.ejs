@@ -22,8 +22,23 @@
           <%- include("../../partials/errors.ejs") %>
         <% } %> 
 
+        <!-- Dialog modal -->
+        <!-- closedby attribute is not supported in Safari -->
+        <dialog class="modal" closedby="any">
+          <p class="modal__text">Enter Admin password to <%= isUpdate ? 'update' : 'delete' %> </p>
+            <div class="form__control">
+              <label class="form__label form__label--modal" for="admin-pw">Admin password</label>
+              <!-- Connect input and Confirm button to form with form attribute-->
+              <input form="author-form" class="form__input form__input--modal" type="password" name="password" id="admin-pw" required>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn--primary btn--cancel" type="button" onclick="closeModal()">Cancel</button>
+              <button form="author-form" class="btn btn--primary btn--confirm" type="submit">Confirm</button>
+            </div>
+        </dialog>
+
         <!-- Genre form -->
-        <form action="<%= locals.isUpdate ? '/genres/' + genre.id + '/update' : '/genres/new' %>"
+        <form id="author-form" action="<%= locals.isUpdate ? '/genres/' + genre.id + '/update' : '/genres/new' %>"
           method="post"     class="form">
           <div class="form__control">
             <label class="form__label" for="type"> Type </label>
@@ -34,8 +49,10 @@
           <div class="btn-group btn-group--form">
             <!-- Cancel link -->
             <a href="/genres" class="link link--cancel">Cancel</a>
+
             <!-- Add or Update button -->
-            <button class="btn btn--primary btn--add"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+            <button class="btn btn--primary btn--add"
+            onclick="openModal(event)"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
           </div>
         </form>
       </div>
@@ -43,5 +60,20 @@
 
     <!-- Footer -->
     <%- include('../../partials/footer.ejs') %>
+
+    <script>
+      const modal = document.querySelector('.modal')
+
+      /* Open update modal */
+      function openModal(event) {
+        event.preventDefault()
+        modal.showModal()
+      }
+
+      /* Close update modal */
+      function closeModal() {
+        modal.close()
+      }
+    </script>
   </body>
 </html>
