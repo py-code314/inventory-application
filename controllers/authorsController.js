@@ -132,13 +132,14 @@ const author_create_post = [
 
 /* Show author details in a pre-populated form */
 async function author_update_get(req, res) {
-  const id = Number(req.params.id)
+  const authorId = Number(req.params.id)
   // Get author data from db
-  const details = await getAuthorDetails(id)
+  const details = await getAuthorDetails(authorId)
 
   res.render('pages/authors/author-form', {
     title: 'Update Author',
     author: details[0],
+    authorId,
     isUpdate: true,
   })
 }
@@ -151,7 +152,7 @@ const author_update_post = [
     
     const authorId = Number(req.params.id)
     // Get author data
-    const existingAuthorData = await getAuthorDetails(authorId)
+    // const existingAuthorData = await getAuthorDetails(authorId)
 
     const { password } = req.body
 
@@ -159,7 +160,8 @@ const author_update_post = [
     if (password !== process.env.ADMIN_PASSWORD) {
       return res.status(403).render('pages/authors/author-form', {
         title: 'Update Author',
-        author: existingAuthorData[0],
+        author: req.body,
+        authorId,
         errors: [{msg: 'Incorrect Admin Password'}],
         isUpdate: true,
       })
@@ -172,7 +174,8 @@ const author_update_post = [
     if (!errors.isEmpty()) {
       return res.status(400).render('pages/authors/author-form', {
         title: 'Update Author',
-        author: existingAuthorData[0],
+        author: req.body,
+        authorId,
         errors: errors.array(),
         isUpdate: true,
       })
@@ -188,6 +191,7 @@ const author_update_post = [
       return res.status(500).render('pages/authors/author-form', {
         title: 'Update Author',
         author: req.body,
+        authorId,
         errors: [{ msg: 'Failed to update author. Please try again.' }],
         isUpdate: true,
       })

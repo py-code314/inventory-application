@@ -38,7 +38,7 @@
         </dialog>
 
         <!-- Genre form -->
-        <form id="genre-form" action="<%= locals.isUpdate ? '/genres/' + genre.id + '/update' : '/genres/new' %>"
+        <form id="genre-form" action="<%= locals.isUpdate ? '/genres/' + genreId + '/update' : '/genres/new' %>"
           method="post"     class="form">
           <div class="form__control">
             <label class="form__label" for="type"> Type </label>

@@ -109,13 +109,14 @@ const genre_create_post = [
 
 /* Show genre details in a pre-populated form */
 async function genre_update_get(req, res) {
-  const id = Number(req.params.id)
+  const genreId = Number(req.params.id)
   // Get genre data
-  const details = await getGenreDetails(id)
+  const details = await getGenreDetails(genreId)
 
   res.render('pages/genres/genre-form', {
     title: 'Update Genre',
     genre: details[0],
+    genreId,
     isUpdate: true,
   })
 }
@@ -125,7 +126,7 @@ const genre_update_post = [
   validateGenre,
 
   async (req, res) => {
-    const id = Number(req.params.id)
+    const genreId = Number(req.params.id)
 
     const { password } = req.body
 
@@ -134,6 +135,7 @@ const genre_update_post = [
       return res.status(403).render('pages/genres/genre-form', {
         title: 'Update Genre',
         genre: req.body,
+        genreId,
         errors: [{ msg: 'Incorrect Admin Password' }],
         isUpdate: true,
       })
@@ -147,6 +149,7 @@ const genre_update_post = [
       return res.status(400).render('pages/genres/genre-form', {
         title: 'Update Genre',
         genre: req.body,
+        genreId,
         errors: errors.array(),
         isUpdate: true,
       })
@@ -155,15 +158,26 @@ const genre_update_post = [
     try {
       const { type } = matchedData(req)
       // Update genre data
-      await updateGenre(id, type)
+      await updateGenre(genreId, type)
       res.redirect('/genres')
     } catch (err) {
       console.error(err)
-      return res.status(500).render('pages/genres/genre-form', {
+
+      // Default
+      let statusCode = 500
+      let errorMsg = 'A database error occurred. Please try again later.'
+      // Update for UNIQUE constraint violation
+      if (err.code === '23505') {
+        statusCode = 409
+        errorMsg = 'Genre name must be unique.'
+      }
+
+      return res.status(statusCode).render('pages/genres/genre-form', {
         title: 'Update Genre',
         genre: req.body,
-        errors: [{ msg: 'Failed to update genre. Please try again.' }],
-        isUpdate: true,
+        genreId,
+        errors: [{ msg: errorMsg }],
+        isUpdate: true
       })
     }
   },
