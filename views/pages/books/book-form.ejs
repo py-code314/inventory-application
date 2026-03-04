@@ -59,7 +59,7 @@
             <%= locals.isUpdate ? 'readonly' : '' %> required />
           </div>
           <div class="form__control">
-            <label class="form__label" for="genre"> Genre </label>
+            <label class="form__label" for="genre"> Genre (add only one genre per book) </label>
             <input class="form__input" type="text" name="genre" id="genre"
             value="<%= locals.book?.genre || '' %>" required />
           </div>

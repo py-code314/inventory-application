@@ -12,8 +12,8 @@ const {
   getGenreDetails,
   updateGenre,
   deleteGenre,
-  booksPerGenre,
 } = require('../db/queries/genres')
+const { booksPerGenre } = require('../db/queries/books')
 
 /* Error messages */
 const alphaErr = 'must only contain letters.'
@@ -225,6 +225,7 @@ const genre_search_get = [
 /* Delete genre */
 async function genre_delete_post(req, res) {
   const id = Number(req.params.id)
+  console.log('id:', id)
   const { password } = req.body
   const genres = await getAllGenres()
   const counts = {}
@@ -268,6 +269,7 @@ async function genre_delete_post(req, res) {
       title: 'Genres',
       genres,
       errors: [{ msg: errorMsg }],
+      counts
     })
   }
 }

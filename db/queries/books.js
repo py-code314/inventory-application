@@ -303,6 +303,16 @@ async function getInventoryStats() {
   return rows[0]
 }
 
+/* Count total number of books per genre */
+async function booksPerGenre(id) {
+  const { rows } = await pool.query(
+    'SELECT COUNT(book_id) FROM book_copy JOIN book ON book.id = book_copy.book_id WHERE genre_id = $1 GROUP BY genre_id;',
+    [id],
+  )
+
+  return rows[0]
+}
+
 module.exports = {
   getAllBooks,
   searchBooks,
@@ -314,4 +324,5 @@ module.exports = {
   checkDuplicate,
   deleteBookCopy,
   checkBookAuthorCombo,
+  booksPerGenre,
 }

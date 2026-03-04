@@ -15,9 +15,10 @@ const {
   checkDuplicate,
   deleteBookCopy,
   checkBookAuthorCombo,
+  booksPerGenre,
 } = require('../db/queries/books')
 const { findOrCreateAuthor } = require('../db/queries/authors')
-const { findOrCreateGenre } = require('../db/queries/genres')
+const { findOrCreateGenre, getGenreId,  } = require('../db/queries/genres')
 const { findOrCreatePublisher } = require('../db/queries/publishers')
 
 /* Error messages */
@@ -248,6 +249,12 @@ async function book_copy_delete_post(req, res) {
   const copyId = Number(req.params.copyId)
   const { password } = req.body
   const [rows] = await getBookDetails(bookId, copyId)
+  const genreType = rows.genre
+
+  // Get book count per genre
+  const genreId = await getGenreId(genreType)
+  const {count} = await booksPerGenre(genreId)
+
 
   // Don't update if admin password doesn't match
   if (password !== process.env.ADMIN_PASSWORD) {
@@ -259,9 +266,15 @@ async function book_copy_delete_post(req, res) {
   }
 
   try {
-    // Delete book copy
-    await deleteBookCopy(bookId, copyId)
-    res.redirect('/books')
+    // Delete entire book entry if deleting last book copy
+    // This makes possible to delete a genre with 0 book count
+    if (Number(count) > 1) {
+      await deleteBookCopy(bookId, copyId)
+      res.redirect('/books')
+    } else {
+      await deleteBook(bookId)
+      res.redirect('/books')
+    }
   } catch (err) {
     console.error(err)
     res.status(500).render('pages/books/book-details', {

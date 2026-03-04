@@ -26,10 +26,7 @@ async function getGenreDetails(id) {
 
 /* Update genre details */
 async function updateGenre(id, type) {
-  await pool.query(
-    'UPDATE genre SET type = $1 WHERE id = $2',
-    [type, id],
-  )
+  await pool.query('UPDATE genre SET type = $1 WHERE id = $2', [type, id])
 }
 
 /* Get genre by name */
@@ -66,14 +63,13 @@ async function findOrCreateGenre(type) {
   }
 }
 
-/* Count total number of books per genre */
-async function booksPerGenre(id) {
-  const {rows} = await pool.query(
-    'SELECT COUNT(id) FROM book WHERE genre_id = $1 GROUP BY genre_id;',
-    [id]
-  )
-  
-  return rows[0]
+/* Get genre id by type */
+async function getGenreId(type) {
+  const { rows } = await pool.query('SELECT id FROM genre WHERE type = $1', [
+    type,
+  ])
+
+  return rows[0].id
 }
 
 module.exports = {
@@ -85,5 +81,5 @@ module.exports = {
   deleteGenre,
   getGenresTotal,
   findOrCreateGenre,
-  booksPerGenre
+  getGenreId,
 }

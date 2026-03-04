@@ -77,12 +77,13 @@
                     <div class="genre__info">
                       <h4><%= genre.type %></h4>
                       <p>
-                        <% if(Number(counts[genre.id]) === 1) { %>
-                          <%= counts[genre.id] %> Book
+                        <% if(Number(locals.counts[genre.id]) === 1) { %>
+                          <%= locals.counts[genre.id] %> Book
                         <% } else { %>
-                          <%= counts[genre.id] %> Books
+                          <%= locals.counts[genre.id] %> Books
                         <% } %>
                       </p>
+                      
                     </div>
 
                     <!-- Update genre -->
