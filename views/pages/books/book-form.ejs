@@ -41,7 +41,7 @@
         </dialog>
 
         <!-- Book form -->
-        <form id="book-form" action="<%= locals.isUpdate ? '/books/' + book.bookId + '/copy/' + book.copyId + '/update' : '/books/new' %>" method="post" class="form form--book">
+        <form id="<%= locals.isUpdate ? 'book-form' : '' %>" action="<%= locals.isUpdate ? '/books/' + book.bookId + '/copy/' + book.copyId + '/update' : '/books/new' %>" method="post" class="form form--book">
           <div class="form__control">
             <label class="form__label" for="title"> Title </label>
             <input class="form__input" type="text" name="title" id="title"
@@ -113,7 +113,7 @@
 
             <!-- Add or Update button -->
             <button class="btn btn--primary btn--add"
-            onclick="openModal(event)"><%= locals.isUpdate ? 'Update' : 'Add' %>
+            <%- locals.isUpdate ? 'onclick="openModal(event)"' : '' %>><%= locals.isUpdate ? 'Update' : 'Add' %>
             </button>
           </div>
         </form>

@@ -38,7 +38,7 @@
         </dialog>
 
         <!-- Genre form -->
-        <form id="genre-form" action="<%= locals.isUpdate ? '/genres/' + genreId + '/update' : '/genres/new' %>"
+        <form id="<%= locals.isUpdate ? 'genre-form' : '' %>" action="<%= locals.isUpdate ? '/genres/' + genreId + '/update' : '/genres/new' %>"
           method="post"     class="form">
           <div class="form__control">
             <label class="form__label" for="type"> Type </label>
@@ -52,7 +52,7 @@
 
             <!-- Add or Update button -->
             <button class="btn btn--primary btn--add"
-            onclick="openModal(event)"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+            <%- locals.isUpdate ? 'onclick="openModal(event)"' : '' %>><%= locals.isUpdate ? 'Update' : 'Add' %></button>
           </div>
         </form>
       </div>

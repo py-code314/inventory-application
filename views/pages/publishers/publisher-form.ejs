@@ -38,7 +38,7 @@
         </dialog>
 
         <!-- Publisher form -->
-        <form id="publisher-form" action="<%= locals.isUpdate ? '/publishers/' + publisherId + '/update' : '/publishers/new' %>"
+        <form id="<%= locals.isUpdate ? 'publisher-form' : '' %>" action="<%= locals.isUpdate ? '/publishers/' + publisherId + '/update' : '/publishers/new' %>"
           method="post" class="form">
           <div class="form__control">
             <label class="form__label" for="name"> Name </label>
@@ -57,7 +57,7 @@
 
             <!-- Update or Add button -->
             <button class="btn btn--primary btn--add"
-            onclick="openModal(event)"><%= locals.isUpdate ? 'Update' : 'Add' %></button>
+            <%- locals.isUpdate ? 'onclick="openModal(event)"' : '' %>><%= locals.isUpdate ? 'Update' : 'Add' %></button>
           </div>
         </form>
       </div>

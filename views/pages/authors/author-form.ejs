@@ -39,7 +39,7 @@
         </dialog>
 
         <!-- Author form -->
-        <form id="author-form" action="<%= locals.isUpdate ? '/authors/' + authorId + '/update' : '/authors/new' %>"
+        <form id="<%= locals.isUpdate ? 'author-form' : '' %>" action="<%= locals.isUpdate ? '/authors/' + authorId + '/update' : '/authors/new' %>"
           method="post" class="form">
           <!-- Name -->
           <div class="form__control">
@@ -59,7 +59,9 @@
             <a href="/authors" class="link link--cancel">Cancel</a>
 
             <!-- Add or Update button -->
-            <button class="btn btn--primary btn--add" onclick="openModal(event)" >
+            <button class="btn btn--primary btn--add"
+              type="<%= locals.isUpdate ? 'button' : 'submit' %>" 
+              <%- locals.isUpdate ? 'onclick="openModal(event)"' : '' %> >
               <%= locals.isUpdate ? 'Update' : 'Add' %>
             </button>
           </div>

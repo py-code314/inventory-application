@@ -52,7 +52,7 @@ const validateBook = [
     .withMessage(`Genre ${emptyErr}`)
     .bail()
     .isAlpha('en-US', { ignore: ' &-' })
-    .withMessage(`Author ${alphaErr}`),
+    .withMessage(`Genre ${alphaErr}`),
   body('publisher').trim().notEmpty().withMessage(`Publisher ${emptyErr}`),
   body('isbn')
     .trim()
